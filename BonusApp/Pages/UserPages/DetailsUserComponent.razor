@@ -3,7 +3,7 @@
 @inject NavigationManager navManager
 
 <h3>User Details</h3>
-<p><strong>Usuario   : </strong>@user.Email</p>
+<p><strong>Usuario: </strong>@user.Email</p>
 
 @if (user.UserBonus.Count == 0)
 {
@@ -13,13 +13,19 @@ else
 {
     @foreach (var item in user.UserBonus)
     {
-        <p>Bono: @item.TRCId</p>
-        <p>Bono: @item.Bonus.Name</p>
-        <p>Spent pages: @item.SpentPages</p>
-        <p>Date: @item.Date</p>
-        <hr />
+        <div class="content">
+            <p class="is-marginless"><strong>Bonus Id: </strong>@item.TRCId</p>
+            <p class="is-marginless"><strong>Bonus Name: </strong>  @item.Bonus.Name</p>
+            <p class="is-marginless"><strong>Spent pages: </strong>@item.SpentPages</p>
+            <p class="is-marginless"><strong>Purchase day:     </strong>@item.Date</p>
+            <hr />
+        </div>
     }
 }
+
+<AddBonusComponent />
+<hr />
+<a href="users" style="text-decoration: none;" class="button is-info is-light">Back to List</a>
 
 
 

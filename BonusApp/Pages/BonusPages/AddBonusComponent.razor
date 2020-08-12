@@ -1,0 +1,51 @@
+﻿@inject BonusServices bonusServices
+
+<div class="field is-horizontal">
+    <label class="label" for="BonusInput">Bonus:</label>
+    <div class="control">
+        <select name="bonus" id="BonusInput" @onchange="((arg)=> selectedValue = Convert.ToInt32(arg.Value))">
+            <option value="0">Select bonus</option>
+            @foreach (var bonus in bonuses)
+            {
+                <option value="@bonus.Id">@bonus.Name</option>
+            }
+        </select>
+    </div>
+    <a class="button is-success is-small is-light" @onclick="AddBonusAsync">Add</a>
+    <select name="bonus-selected" size="5" style="width:100px;" multiple>
+        @foreach (var bonus in strBonusesToAddToUser)
+        {
+            <option>@bonus</option>
+        }
+    </select>
+    <a class="button is-danger is-small is-light" @onclick="Clear">Clear</a>
+</div>
+
+@code {
+    List<Bonus> bonuses = new List<Bonus>();
+    private int selectedValue;
+    private List<string> strBonusesToAddToUser = new List<string>();
+    private List<int> intBonusesToAddToUser = new List<int>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        bonuses = await bonusServices.GetAllBonusAsync();
+    }
+
+    private void Clear()
+    {
+        intBonusesToAddToUser = new List<int>();
+        strBonusesToAddToUser = new List<string>();
+    }
+
+    private async Task AddBonusAsync()
+    {
+        //if (selectedValue != 0 && intBonusesToAddToUser.Contains(selectedValue) == false)
+        //{
+        //    intBonusesToAddToUser.Add(selectedValue);
+        //    Bonus bonusToAddToUser = await bonusServices.GetBonusAsync(selectedValue);
+        //    bonusesToAddToUser.Add(bonusToAddToUser);
+        //    strBonusesToAddToUser.Add(bonusToAddToUser.Name);
+        //}
+    }
+}

@@ -24,7 +24,7 @@ else
             <tbody>
                 @foreach (var bonus in bonuses)
                 {
-                    url = $"bonus/edit/{bonus.Id}";
+                    url = $"bonus/edit/{bonus.Id.ToString()}";
                     <tr>
                         <td>@(index++)</td>
                         <td>@bonus.Name</td>

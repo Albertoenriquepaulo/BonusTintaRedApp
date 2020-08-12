@@ -1,6 +1,7 @@
 ﻿@page "/users"
 @inject UserServices userServices
 @inject IModalService myModal
+@inject IJSRuntime JSRuntime
 
 <h3>Users List</h3>
 
@@ -13,7 +14,7 @@ else
 {
     <a href="users/create" style="text-decoration: none;" class="button is-primary is-outlined is-small">Add User</a>
     <div class="table-container">
-        <table class="table is-striped">
+        <table class="table is-striped" id="myTable">
             <thead>
                 <tr class="th">
                     <th></th>
@@ -30,6 +31,7 @@ else
                         <td>@(index++)</td>
                         <td>@user.Email</td>
                         <td>
+                            <a href="@url[1]" class="button is-primary is-light is-small" style="text-decoration: none;">Add Bonus</a>
                             <a href="@url[0]" class="button is-success is-light is-small" style="text-decoration: none;">Edit</a>
                             <a href="@url[1]" class="button is-info is-light is-small" style="text-decoration: none;">Details</a>
                             <a class="button is-danger is-light is-small" style="text-decoration: none;" @onclick="@(()=>HandleDelete(user))">Delete</a>
@@ -69,5 +71,10 @@ else
             users = await userServices.GetAllUserAsync();
         }
 
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeAsync<object>("DataTable");
     }
 }

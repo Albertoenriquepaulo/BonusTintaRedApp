@@ -1,6 +1,7 @@
 ﻿@page "/bonus/allbonus"
 @inject UserBonusServices userBonusServices
 @inject IJSRuntime JSRuntime
+@inject IModalService myModal
 
 <h3>All Bonus List</h3>
 
@@ -26,8 +27,6 @@ else
             <tbody>
                 @foreach (var userBonus in userBonuses)
                 {
-                    url[0] = $"bonus/edit/{userBonus.Id}";
-                    url[1] = $"bonus/delete/{userBonus.Id}";
                     url[2] = $"bonus/discountpages/{userBonus.Id}";
                     <tr>
                         <td>@userBonus.TRCId</td>
@@ -36,8 +35,7 @@ else
                         <th>@userBonus.SpentPages</th>
                         <th>@(userBonus.Bonus.Pages - userBonus.SpentPages)</th>
                         <td>
-                            <a href="@url[0]" class="button is-info is-light is-small ">Edit</a>
-                            <a href="@url[1]" class="button is-danger is-light is-small">Delete</a>
+                            <a @onclick="@(()=>HandleDelete(userBonus))" class="button is-danger is-light is-small">Delete</a>
                             <a href="@url[2]" class="button is-success is-light is-small">Discount Pages</a>
                         </td>
                     </tr>
@@ -56,10 +54,7 @@ else
 
     protected async override Task OnInitializedAsync()
     {
-
         userBonuses = await userBonusServices.GetAllUserBonusAsync();
-
-        this.StateHasChanged();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -67,5 +62,22 @@ else
         await JSRuntime.InvokeAsync<object>("DataTable");
     }
 
+    private async Task HandleDelete(UserBonus userBonus)
+    {
+        var messageForm = myModal.Show<ConfirmDeleteComponent>($"Are you sure you want to delete the {userBonus.TRCId} bonus?");
+        var result = await messageForm.Result;
+
+        if (result.Cancelled)
+        {
+            return;
+        }
+
+        if ((bool)result.Data)
+        {
+            await userBonusServices.DeleteUserBonusAsync(userBonus);
+            userBonuses = await userBonusServices.GetAllUserBonusAsync();
+        }
+
+    }
 
 }

@@ -86,18 +86,18 @@ namespace BonusApp.Data
             await UpdateUserBonusAsync(userBonus);
         }
 
-        //public async Task DeleteUserAsync(UserBonus userBonus)
-        //{
-        //    try
-        //    {
-        //        dbContext.UserBonus.Remove(userBonus);
-        //        await dbContext.SaveChangesAsync();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
+        public async Task DeleteUserBonusAsync(UserBonus userBonus)
+        {
+            try
+            {
+                dbContext.UserBonus.Remove(userBonus);
+                await dbContext.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         #endregion
     }
 }

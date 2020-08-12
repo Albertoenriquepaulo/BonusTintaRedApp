@@ -4,6 +4,7 @@
 @inject BonusSpendingServices bonusSpendingServices
 @inject UserServices userServices
 @inject IModalService myModal
+@inject NavigationManager navManager
 
 <h3>Discount Pages</h3>
 <h1>@userBonus.TRCId</h1>
@@ -54,7 +55,7 @@
         var messageForm = myModal.Show<ConfirmCreateComponent>($"The discount has been applied.");
         var result = await messageForm.Result;
 
-        bonusSpending = new BonusSpending();
+        navManager.NavigateTo("bonus/allbonus");
     }
 
 }

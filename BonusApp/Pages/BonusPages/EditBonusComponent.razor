@@ -4,29 +4,34 @@
 
 <h3>Edit Bonus</h3>
 
-<EditForm Model="bonus" OnValidSubmit="Update">
-    <DataAnnotationsValidator />
-    <div class="field">
-        <label class="label">Name</label>
-        <div class="control">
-            <InputText class="input" type="text" placeholder="Text input" @bind-Value="@bonus.Name" />
-            <ValidationMessage For="@(()=>bonus.Name)" />
+@if (bonus != null)
+{
+    <EditForm Model="bonus" OnValidSubmit="Update">
+        <DataAnnotationsValidator />
+        <div class="field">
+            <label class="label">Name</label>
+            <div class="control">
+                <InputText class="input" type="text" placeholder="Text input" @bind-Value="@bonus.Name" />
+                <ValidationMessage For="@(()=>bonus.Name)" />
+            </div>
+            <label class="label">Pages</label>
+            <div class="control">
+                <InputNumber class="input" type="number" placeholder="Text input" @bind-Value="@bonus.Pages" />
+                <ValidationMessage For="@(()=>bonus.Pages)" />
+            </div>
         </div>
-        <label class="label">Pages</label>
-        <div class="control">
-            <InputNumber class="input" type="number" placeholder="Text input" @bind-Value="@bonus.Pages" />
-            <ValidationMessage For="@(()=>bonus.Pages)" />
-        </div>
-    </div>
 
-    <button class="button is-success is-light" type="submit">Update</button>
-</EditForm>
+        <button class="button is-success is-light" type="submit">Update</button>
+        <a href="bonus" style="text-decoration: none;" class="button is-info is-light">Back to List</a>
+    </EditForm>
+}
+
 
 
 @code {
     [Parameter] public int Id { get; set; }
 
-    private Bonus bonus;
+    public Bonus bonus { get; set; } = new Bonus();
 
     protected async override Task OnInitializedAsync()
     {
