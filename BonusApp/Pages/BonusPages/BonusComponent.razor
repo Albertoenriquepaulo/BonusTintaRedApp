@@ -1,0 +1,54 @@
+﻿@page "/bonus"
+@inject BonusServices bonusServices
+
+<h3>Bonds List</h3>
+
+@if (bonuses == null || bonuses.Count == 0)
+{
+    <h2>No user found</h2>
+    <a href="bonus/create" class="button is-primary is-outlined is-small">Add Bond</a>
+}
+else
+{
+    <a href="bonus/create" class="button is-primary is-outlined is-small">Add Bond</a>
+    <div class="table-container">
+        <table class="table is-striped">
+            <thead>
+                <tr class="th">
+                    <th>Identifier</th>
+                    <th>Name</th>
+                    <th>Pages</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var bonus in bonuses)
+                {
+                    url[0] = $"bonus/edit/{bonus.Id}";
+                    url[1] = $"bonus/delete/{bonus.Id}";
+                    <tr>
+                        <td>@bonus.Id</td>
+                        <td>@bonus.Name</td>
+                        <td>@bonus.Pages</td>
+                        <td>
+                            <a href="@url[0]" class="button is-info is-light is-small ">Edit</a>
+                            <a href="@url[1]" class="button is-danger is-light is-small">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+}
+
+
+@code {
+    List<Bonus> bonuses;
+    string[] url = new string[2];
+
+    protected async override Task OnInitializedAsync()
+    {
+        bonuses = await bonusServices.GetAllBonusAsync();
+    }
+}

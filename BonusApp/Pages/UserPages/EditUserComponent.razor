@@ -1,0 +1,36 @@
+﻿@page "/users/edit/{Id:int}"
+@inject UserServices userServices
+@inject NavigationManager navManager
+
+<h3>Edit User</h3>
+
+<EditForm Model="user" OnValidSubmit="Update">
+    <DataAnnotationsValidator />
+    <div class="field">
+        <label class="label">Name</label>
+        <div class="control">
+            <InputText class="input" type="text" placeholder="Text input" @bind-Value="@user.Email" />
+            <ValidationMessage For="@(()=>user.Email)" />
+        </div>
+    </div>
+
+    <button class="button is-success is-light" type="submit">Update</button>
+</EditForm>
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private User user;
+
+    protected async override Task OnInitializedAsync()
+    {
+        user = await userServices.GetUserAsync(Id);
+    }
+
+    private async Task Update()
+    {
+        await userServices.UpdateUserAsync(user);
+        navManager.NavigateTo("/users");
+    }
+
+}

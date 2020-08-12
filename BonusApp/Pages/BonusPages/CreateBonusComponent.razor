@@ -1,0 +1,31 @@
+﻿@page "/bonus/create"
+@inject BonusServices bonusServices
+
+<h3>Create Bond</h3>
+
+<EditForm Model="bonus" OnValidSubmit="Create">
+    <DataAnnotationsValidator />
+    <div class="field">
+        <label class="label">Name</label>
+        <div class="control">
+            <InputText class="input" type="text" placeholder="Bonus name" @bind-Value="@bonus.Name" />
+            <ValidationMessage For="@(()=>bonus.Name)" />
+            <InputNumber class="input" type="number" placeholder="Number input" @bind-Value="@bonus.Pages" />
+            <ValidationMessage For="@(()=>bonus.Pages)" />
+        </div>
+
+    </div>
+
+    <button class="button is-success is-light" type="submit">Create</button>
+    <a href="bonus" style="text-decoration: none;" class="button is-info is-light">Back to List</a>
+</EditForm>
+
+@code {
+    private Bonus bonus = new Bonus();
+
+    private async Task Create()
+    {
+        bonus.Name = bonus.Name.ToUpper();
+        await bonusServices.AddBonusAsync(bonus);
+    }
+}

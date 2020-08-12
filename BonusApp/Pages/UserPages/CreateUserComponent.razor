@@ -1,0 +1,114 @@
+﻿@page "/users/create"
+@inject UserServices userServices
+@inject BonusServices bonusServices
+
+<h3>Create User</h3>
+
+<EditForm Model="user" OnValidSubmit="Create">
+    <DataAnnotationsValidator />
+    <div class="field">
+        <label class="label">Email</label>
+        <div class="control">
+            <InputText class="input" type="text" placeholder="User email" @bind-Value="@user.Email" />
+            <ValidationMessage For="@(()=>user.Email)" />
+        </div>
+
+    </div>
+
+    <div class="field is-horizontal">
+        <label class="label" for="BonusInput">Bonus:</label>
+        <div class="control">
+            <select name="bonus" id="BonusInput" @onchange="((arg)=> selectedValue = Convert.ToInt32(arg.Value))">
+                <option value="0">Select bonus</option>
+                @foreach (var bonus in bonuses)
+                {
+                    <option value="@bonus.Id">@bonus.Name</option>
+                }
+            </select>
+        </div>
+        <a class="button is-outlined is-success is-small" @onclick="AddBonusAsync">Add</a>
+        <select name="bonus-selected" size="5" style="width:100px;" multiple>
+            @foreach (var bonus in strBonusesToAddToUser)
+            {
+                <option>@bonus</option>
+            }
+        </select>
+    </div>
+
+    <button class="button is-success is-light" type="submit">Create</button>
+    <a href="users" style="text-decoration: none;" class="button is-info is-light">Back to List</a>
+</EditForm>
+
+
+
+
+
+@if (showModal)
+{
+    <div class="modal is-active">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <p>The user has been created under the <strong>ID @user.TRCId</strong></p>
+        </div>
+        <button class="modal-close is-large" aria-label="close" @onclick="HideModal"></button>
+    </div>
+}
+
+
+@code {
+    private User user = new User();
+    List<Bonus> bonuses = new List<Bonus>();
+
+    private int selectedValue;
+    private List<int> intBonusesToAddToUser = new List<int>();
+    List<Bonus> bonusesToAddToUser = new List<Bonus>();
+    private List<string> strBonusesToAddToUser = new List<string>();
+
+    private bool showModal = false;
+
+    protected async override Task OnInitializedAsync()
+    {
+        bonuses = await bonusServices.GetAllBonusAsync();
+    }
+
+    private async Task Create()
+    {
+        List<UserBonus> userBonusList = new List<UserBonus>();
+        foreach (var bonus in bonusesToAddToUser)
+        {
+            userBonusList.Add(new UserBonus
+            {
+                //UserId = user.Id,
+                //BonusId = bonus.Id,
+                Date = DateTime.UtcNow,
+                SpentPages = 0,
+                User = user,
+                Bonus = bonus
+            });
+        }
+        user.UserBonus = userBonusList;
+        await userServices.AddUserAsync(user);
+        ShowModal();
+    }
+
+    private void ShowModal()
+    {
+        showModal = true;
+    }
+    private void HideModal()
+    {
+        showModal = false;
+        user = new User();
+    }
+
+    private async Task AddBonusAsync()
+    {
+        if (selectedValue != 0 && intBonusesToAddToUser.Contains(selectedValue) == false)
+        {
+            intBonusesToAddToUser.Add(selectedValue);
+            Bonus bonusToAddToUser = await bonusServices.GetBonusAsync(selectedValue);
+            bonusesToAddToUser.Add(bonusToAddToUser);
+            strBonusesToAddToUser.Add(bonusToAddToUser.Name);
+        }
+    }
+}

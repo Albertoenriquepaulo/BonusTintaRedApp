@@ -1,0 +1,25 @@
+﻿@page "/users/details/{Id:int}"
+@inject UserServices userServices
+@inject NavigationManager navManager
+
+<h3>User Details</h3>
+<p><strong>Usuario   : </strong>@user.Email</p>
+<p><strong>Identifier: </strong>@user.TRCId</p>
+
+@foreach (var item in user.UserBonus)
+{
+    <p>Bono: @item.Bonus.Name</p>
+    <p>Spent pages: @item.SpentPages</p>
+    <p>Date: @item.Date</p>
+    <hr />
+}
+
+@code {
+    User user = new User();
+    [Parameter] public int Id { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        user = await userServices.GetUserAsync(Id);
+    }
+}
