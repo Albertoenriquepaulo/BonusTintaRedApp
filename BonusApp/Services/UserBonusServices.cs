@@ -29,6 +29,10 @@ namespace BonusApp.Data
 
             return await dbContext.UserBonus.Include(ub => ub.Bonus).ToListAsync();
         }
+        public async Task<List<UserBonus>> GetAllUserBonusByUserIdAsync(int id)
+        {
+            return await dbContext.UserBonus.Include(ub => ub.Bonus).Where(ub => ub.UserId == id).ToListAsync();
+        }
         public async Task<UserBonus> GetUserBonusAsync(int id)
         {
 

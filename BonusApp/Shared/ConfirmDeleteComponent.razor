@@ -4,8 +4,8 @@
 
     <p>@Message</p>
 
-    <button @onclick="SubmitForm" class="button is-danger">Yes</button>
-    <button @onclick="Cancel" class="button is-primary">Cancel</button>
+    <button @onclick="SubmitForm" class="button is-danger is-link is-outlined">Yes</button>
+    <button @onclick="Cancel" class="button is-primary is-link is-outlined">Cancel</button>
 </div>
 
 @code {
@@ -16,5 +16,4 @@
 
     void SubmitForm() => BlazoredModal.Close(ModalResult.Ok<bool>(true));
     void Cancel() => BlazoredModal.Close(ModalResult.Ok<bool>(false));
-
 }

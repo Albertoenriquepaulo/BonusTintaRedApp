@@ -11,14 +11,14 @@
             }
         </select>
     </div>
-    <a class="button is-success is-small is-light" @onclick="AddBonusAsync">Add</a>
+    <a class="button is-success is-small is-link is-outlined" @onclick="AddBonusAsync">Add</a>
     <select name="bonus-selected" size="5" style="width:100px;" multiple>
         @foreach (var bonus in strBonusesToAddToUser)
         {
             <option>@bonus</option>
         }
     </select>
-    <a class="button is-danger is-small is-light" @onclick="Clear">Clear</a>
+    <a class="button is-danger is-small  is-link is-outlined" @onclick="Clear">Clear</a>
 </div>
 
 @code {

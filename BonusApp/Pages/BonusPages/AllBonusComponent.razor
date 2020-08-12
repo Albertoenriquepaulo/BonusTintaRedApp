@@ -8,7 +8,7 @@
 @if (userBonuses == null || userBonuses.Count == 0)
 {
     <h2>No user found</h2>
-    <a href="bonus/create" class="button is-primary is-outlined is-small">Add Bond</a>
+    <a href="bonus/create" class="button is-primary is-link is-outlined is-small">Add Bond</a>
 }
 else
 {
@@ -35,8 +35,8 @@ else
                         <th>@userBonus.SpentPages</th>
                         <th>@(userBonus.Bonus.Pages - userBonus.SpentPages)</th>
                         <td>
-                            <a @onclick="@(()=>HandleDelete(userBonus))" class="button is-danger is-light is-small">Delete</a>
-                            <a href="@url[2]" class="button is-success is-light is-small">Discount Pages</a>
+                            <a @onclick="@(()=>HandleDelete(userBonus))" class="button is-danger  is-small is-link is-outlined">Delete</a>
+                            <a href="@url[2]" class="button is-success  is-small is-link is-outlined">Discount Pages</a>
                         </td>
                     </tr>
                 }

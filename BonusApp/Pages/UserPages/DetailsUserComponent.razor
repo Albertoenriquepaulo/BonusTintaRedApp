@@ -4,28 +4,28 @@
 
 <h3>User Details</h3>
 <p><strong>Usuario: </strong>@user.Email</p>
-
-@if (user.UserBonus.Count == 0)
-{
-    <p class="has-background-warning-light">The user does not have any bonus.</p>
-}
-else
-{
-    @foreach (var item in user.UserBonus)
+<div class="content">
+    @if (user.UserBonus.Count == 0)
     {
-        <div class="content">
-            <p class="is-marginless"><strong>Bonus Id: </strong>@item.TRCId</p>
+        <p class="has-background-warning-light">The user does not have any bonus.</p>
+    }
+    else
+    {
+
+        @foreach (var item in user.UserBonus)
+        {
+            <p class="is-marginless has-background-info-dark" style="color: white;"><strong style="color: white;">Bonus Id: </strong>@item.TRCId</p>
             <p class="is-marginless"><strong>Bonus Name: </strong>  @item.Bonus.Name</p>
             <p class="is-marginless"><strong>Spent pages: </strong>@item.SpentPages</p>
             <p class="is-marginless"><strong>Purchase day:     </strong>@item.Date</p>
             <hr />
-        </div>
-    }
-}
+        }
 
+    }
+</div>
 <AddBonusComponent />
 <hr />
-<a href="users" style="text-decoration: none;" class="button is-info is-light">Back to List</a>
+<a href="users" style="text-decoration: none;" class="button is-info  is-link is-outlined">Back to List</a>
 
 
 

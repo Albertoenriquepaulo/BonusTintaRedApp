@@ -400,7 +400,7 @@ Fix #1979 -> Correct loading spinner color when a button is:
 <table class="table is-bordered">
   <tbody>
     <tr>
-      <th class="is-light" colspan="3">
+      <th class="" colspan="3">
         File
         <code>sass/utilities/initial-variables.sass</code>
       </th>
@@ -449,7 +449,7 @@ Fix #1979 -> Correct loading spinner color when a button is:
 <table class="table is-bordered">
   <tbody>
     <tr>
-      <th class="is-light" colspan="3">
+      <th class="" colspan="3">
         File
         <code>sass/base/generic.sass</code>
       </th>
@@ -487,7 +487,7 @@ Fix #1979 -> Correct loading spinner color when a button is:
 <table class="table is-bordered">
   <tbody>
     <tr>
-      <th class="is-light" colspan="3">
+      <th class="" colspan="3">
         File
         <code>sass/elements/content.sass</code>
       </th>
@@ -514,7 +514,7 @@ Fix #1979 -> Correct loading spinner color when a button is:
 <table class="table is-bordered">
   <tbody>
     <tr>
-      <th class="is-light" colspan="3">
+      <th class="" colspan="3">
         File
         <code>sass/components/message.sass</code>
       </th>
@@ -552,7 +552,7 @@ Fix #1979 -> Correct loading spinner color when a button is:
 <table class="table is-bordered">
   <tbody>
     <tr>
-      <th class="is-light" colspan="3">
+      <th class="" colspan="3">
         File
         <code>sass/components/navbar.sass</code>
       </th>
@@ -601,7 +601,7 @@ Fix #1979 -> Correct loading spinner color when a button is:
 <table class="table is-bordered">
   <tbody>
     <tr>
-      <th class="is-light" colspan="3">
+      <th class="" colspan="3">
         File
         <code>sass/layout/footer.sass</code>
       </th>
@@ -630,7 +630,7 @@ Fix #1979 -> Correct loading spinner color when a button is:
 <table class="table is-bordered">
   <tbody>
     <tr>
-      <th class="is-light" colspan="2">
+      <th class="" colspan="2">
         File
         <code>sass/components/breadcrumb.sass</code>
       </th>
@@ -661,7 +661,7 @@ Fix #1979 -> Correct loading spinner color when a button is:
 <table class="table is-bordered">
   <tbody>
     <tr>
-      <th class="is-light" colspan="2">
+      <th class="" colspan="2">
         File
         <code>sass/components/message.sass</code>
       </th>
@@ -708,7 +708,7 @@ Fix #1979 -> Correct loading spinner color when a button is:
 <table class="table is-bordered">
   <tbody>
     <tr>
-      <th class="is-light" colspan="2">
+      <th class="" colspan="2">
         File
         <code>sass/components/navbar.sass</code>
       </th>
@@ -763,7 +763,7 @@ Fix #1979 -> Correct loading spinner color when a button is:
 <table class="table is-bordered">
   <tbody>
     <tr>
-      <th class="is-light" colspan="2">
+      <th class="" colspan="2">
         File
         <code>sass/elements/title.sass</code>
       </th>

@@ -2,6 +2,7 @@
 @inject UserServices userServices
 @inject BonusServices bonusServices
 @inject IModalService myModal
+@inject NavigationManager navManager
 
 <h3>Create User</h3>
 
@@ -17,7 +18,7 @@
     </div>
 
     <div class="field is-horizontal">
-        <label class="label" for="BonusInput">Bonus:</label>
+        <label class="label mx-1" for="BonusInput">Bonus</label>
         <div class="control">
             <select name="bonus" id="BonusInput" @onchange="((arg)=> selectedValue = Convert.ToInt32(arg.Value))">
                 <option value="0">Select bonus</option>
@@ -27,18 +28,18 @@
                 }
             </select>
         </div>
-        <a class="button is-success is-small is-light" @onclick="AddBonusAsync">Add</a>
+        <a class="button is-success is-small  is-link is-outlined mx-2" @onclick="AddBonusAsync">Add</a>
         <select name="bonus-selected" size="5" style="width:100px;" multiple>
             @foreach (var bonus in strBonusesToAddToUser)
             {
                 <option>@bonus</option>
             }
         </select>
-        <a class="button is-danger is-small is-light" @onclick="Clear">Clear</a>
+        <a class="button is-danger is-small  is-link is-outlined mx-2" @onclick="Clear">Clear</a>
     </div>
 
-    <button class="button is-success is-light" type="submit">Create</button>
-    <a href="users" style="text-decoration: none;" class="button is-info is-light">Back to List</a>
+    <button class="button is-success  is-link is-outlined mx-1" type="submit">Create</button>
+    <a href="users" style="text-decoration: none;" class="button is-info  is-link is-outlined mx-1">Back to List</a>
 </EditForm>
 
 @code {
@@ -72,9 +73,13 @@
         }
         user.UserBonus = userBonusList;
         await userServices.AddUserAsync(user);
-        myModal.Show<ConfirmCreateComponent>($"The user has been created under the ID {user.Id}");
-        user = new User();
-        strBonusesToAddToUser = new List<string>();
+
+        var messageForm = myModal.Show<ConfirmCreateComponent>($"The user has been created under the ID {user.Id}");
+        var result = await messageForm.Result;
+
+        navManager.NavigateTo($"users/details/{user.Id}");
+        //user = new User();
+        //strBonusesToAddToUser = new List<string>();
     }
 
     private async Task AddBonusAsync()

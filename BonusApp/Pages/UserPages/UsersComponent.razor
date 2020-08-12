@@ -8,11 +8,11 @@
 @if (users == null || users.Count == 0)
 {
     <h2>No user found</h2>
-    <a href="users/create" style="text-decoration: none;" class="button is-primary is-outlined is-small">Add User</a>
+    <a href="users/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Add User</a>
 }
 else
 {
-    <a href="users/create" style="text-decoration: none;" class="button is-primary is-outlined is-small">Add User</a>
+    <a href="users/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Add User</a>
     <div class="table-container">
         <table class="table is-striped" id="myTable">
             <thead>
@@ -31,10 +31,10 @@ else
                         <td>@(index++)</td>
                         <td>@user.Email</td>
                         <td>
-                            <a href="@url[1]" class="button is-primary is-light is-small" style="text-decoration: none;">Add Bonus</a>
-                            <a href="@url[0]" class="button is-success is-light is-small" style="text-decoration: none;">Edit</a>
-                            <a href="@url[1]" class="button is-info is-light is-small" style="text-decoration: none;">Details</a>
-                            <a class="button is-danger is-light is-small" style="text-decoration: none;" @onclick="@(()=>HandleDelete(user))">Delete</a>
+                            <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration: none;">Add Bonus</a>
+                            <a href="@url[0]" class="button is-success is-small is-link is-outlined" style="text-decoration: none;">Edit</a>
+                            <a href="@url[1]" class="button is-info is-small is-link is-outlined" style="text-decoration: none;">Details</a>
+                            <a class="button is-danger is-small is-link is-outlined" style="text-decoration: none;" @onclick="@(()=>HandleDelete(user))">Delete</a>
                         </td>
                     </tr>
                 }
@@ -44,8 +44,6 @@ else
 }
 
 @code {
-
-    //private ModalComponent Modal { get; set; }
     List<User> users;
     private int index = 1;
     string[] url = new string[2];
@@ -75,6 +73,7 @@ else
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        index = 1;
         await JSRuntime.InvokeAsync<object>("DataTable");
     }
 }

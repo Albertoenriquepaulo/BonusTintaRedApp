@@ -1,8 +1,17 @@
 ﻿@page "/"
 @inject UserServices userServices
 
-<a href="bonus/allbonus" style="text-decoration:none;" class="button is-primary is-large">Discount Pages from Bonus</a>
-<a href="users" style="text-decoration:none;" class="button is-primary is-large">Add Bonus to User</a>
+<div class="rows" id="home-rows">
+    <div class="row box has-text-centered">
+        <a href="bonus/allbonus" style="text-decoration:none;" class="button is-link is-outlined is-large mx-4">Discount Pages from Bonus</a>
+    </div>
+    <div class="row box has-text-centered">
+        <a href="users" style="text-decoration:none;" class="button is-link is-outlined is-large mx-4">Add Bonus to User</a>
+    </div>
+    <div class="row box has-text-centered">
+        <a href="users/Create" style="text-decoration:none;" class="button is-link is-outlined is-large mx-4">Create New User</a>
+    </div>
+</div>
 
 @code{
 

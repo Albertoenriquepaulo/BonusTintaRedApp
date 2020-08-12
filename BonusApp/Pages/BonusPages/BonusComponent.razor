@@ -4,7 +4,7 @@
 
 <h3>Bonds List</h3>
 
-<a style="text-decoration:none;" href="bonus/create" class="button is-primary is-outlined is-small">Add Bond</a>
+<a style="text-decoration:none;" href="bonus/create" class="button is-primary is-link is-outlined is-small">Add Bond</a>
 @if (bonuses == null || bonuses.Count == 0)
 {
     <h2>No user found</h2>
@@ -30,8 +30,8 @@ else
                         <td>@bonus.Name</td>
                         <td>@bonus.Pages</td>
                         <td>
-                            <a href="@url" class="button is-info is-light is-small ">Edit</a>
-                            <a @onclick="@(()=>HandleDelete(bonus))" class="button is-danger is-light is-small">Delete</a>
+                            <a href="@url" class="button is-info is-small is-outlined" style="text-decoration:none;">Edit</a>
+                            <a @onclick="@(()=>HandleDelete(bonus))" class="button is-danger is-link  is-small is-outlined">Delete</a>
                         </td>
                     </tr>
                 }
