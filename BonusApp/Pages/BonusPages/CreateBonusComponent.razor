@@ -27,5 +27,6 @@
     {
         bonus.Name = bonus.Name.ToUpper();
         await bonusServices.AddBonusAsync(bonus);
+        bonus = new Bonus();
     }
 }

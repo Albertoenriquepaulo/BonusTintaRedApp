@@ -4,10 +4,10 @@
 
 <h3>User Details</h3>
 <p><strong>Usuario   : </strong>@user.Email</p>
-<p><strong>Identifier: </strong>@user.TRCId</p>
 
 @foreach (var item in user.UserBonus)
 {
+    <p>Bono: @item.TRCId</p>
     <p>Bono: @item.Bonus.Name</p>
     <p>Spent pages: @item.SpentPages</p>
     <p>Date: @item.Date</p>

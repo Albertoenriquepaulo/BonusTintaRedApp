@@ -6,33 +6,17 @@ using System.Threading.Tasks;
 
 namespace BonusApp.Data
 {
-    public class UserBonus
+    public class BonusSpending
     {
         [Required]
         public int Id { get; set; }
         public int UserId { get; set; }
         public int BonusId { get; set; }
+
+        [Range(1, Int32.MaxValue, ErrorMessage = "Value should be greater than or equal to 1")]
         public int SpentPages { get; set; }
         public DateTime Date { get; set; }
         public User User { get; set; }
         public Bonus Bonus { get; set; }
-        public string TRCId
-        {
-            get
-            {
-                if (Id < 10)
-                {
-                    return $"TRC00{Id}";
-                }
-                else if (Id >= 10 || Id <= 100)
-                {
-                    return $"TRC0{Id}";
-                }
-                else
-                {
-                    return $"TRC{Id}";
-                }
-            }
-        }
     }
 }

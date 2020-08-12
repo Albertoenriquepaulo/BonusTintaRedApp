@@ -17,5 +17,6 @@ namespace BonusApp.Data
         [Required]
         public int Pages { get; set; }
         public ICollection<UserBonus> UserBonus { get; set; }
+        public ICollection<BonusSpending> BonusesSpending { get; set; }
     }
 }

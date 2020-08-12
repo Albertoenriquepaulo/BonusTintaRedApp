@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BonusApp.Data;
 using Microsoft.EntityFrameworkCore;
+using Blazored.Modal;
+using BonusApp.Services;
 
 namespace BonusApp
 {
@@ -37,6 +39,10 @@ namespace BonusApp
             });
             services.AddScoped<UserServices>();
             services.AddScoped<BonusServices>();
+            services.AddScoped<UserBonusServices>();
+            services.AddScoped<BonusSpendingServices>();
+
+            services.AddBlazoredModal();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

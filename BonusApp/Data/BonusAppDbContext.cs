@@ -19,6 +19,7 @@ namespace BonusApp.Data
         public DbSet<User> User { get; set; }
         public DbSet<Bonus> Bonus { get; set; }
         public DbSet<UserBonus> UserBonus { get; set; }
+        public DbSet<BonusSpending> BonusSpending { get; set; }
         #endregion
 
         #region Overidden methods
