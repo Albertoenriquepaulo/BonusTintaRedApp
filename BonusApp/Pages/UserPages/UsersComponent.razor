@@ -7,6 +7,7 @@
 @if (users == null || users.Count == 0)
 {
     <h2>No user found</h2>
+    <a href="users/create" style="text-decoration: none;" class="button is-primary is-outlined is-small">Add User</a>
 }
 else
 {
@@ -15,7 +16,7 @@ else
         <table class="table is-striped">
             <thead>
                 <tr class="th">
-                    <th>Identifier</th>
+                    <th></th>
                     <th>Email</th>
                     <th></th>
                 </tr>
@@ -25,15 +26,13 @@ else
                 {
                     url[0] = $"users/edit/{user.Id}";
                     url[1] = $"users/details/{user.Id}";
-                    url[2] = $"users/delete/{user.Id}";
                     <tr>
-                        <td>@user.Id</td>
+                        <td>@(index++)</td>
                         <td>@user.Email</td>
                         <td>
                             <a href="@url[0]" class="button is-success is-light is-small" style="text-decoration: none;">Edit</a>
                             <a href="@url[1]" class="button is-info is-light is-small" style="text-decoration: none;">Details</a>
-                            <a class="button is-danger is-light is-small" style="text-decoration: none;" @onclick="@(() => myModal.Show<UsersComponent>("My Movies"))">Delete</a>
-                            @*<a class="button is-danger is-light is-small" style="text-decoration: none;" @onclick="@(()=>HandleDelete(user))">Delete</a>*@
+                            <a class="button is-danger is-light is-small" style="text-decoration: none;" @onclick="@(()=>HandleDelete(user))">Delete</a>
                         </td>
                     </tr>
                 }
@@ -44,10 +43,10 @@ else
 
 @code {
 
-    private ModalComponent Modal { get; set; }
+    //private ModalComponent Modal { get; set; }
     List<User> users;
-
-    string[] url = new string[3];
+    private int index = 1;
+    string[] url = new string[2];
 
     protected async override Task OnInitializedAsync()
     {
@@ -56,7 +55,19 @@ else
 
     private async Task HandleDelete(User user)
     {
-        await userServices.DeleteUserAsync(user);
-        await OnInitializedAsync();
+        var messageForm = myModal.Show<ConfirmDeleteComponent>($"Are you sure you want to delete the {user.Email} User?");
+        var result = await messageForm.Result;
+
+        if (result.Cancelled)
+        {
+            return;
+        }
+
+        if ((bool)result.Data)
+        {
+            await userServices.DeleteUserAsync(user);
+            users = await userServices.GetAllUserAsync();
+        }
+
     }
 }

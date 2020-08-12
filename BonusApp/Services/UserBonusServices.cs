@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BonusApp.Services;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,14 @@ namespace BonusApp.Data
     {
         #region Private members
         private BonusAppDbContext dbContext;
+        private readonly BonusServices _bonusServices;
         #endregion
 
         #region Constructor
-        public UserBonusServices(BonusAppDbContext dbContext)
+        public UserBonusServices(BonusAppDbContext dbContext, BonusServices bonusServices)
         {
             this.dbContext = dbContext;
+            _bonusServices = bonusServices;
         }
         #endregion
 
@@ -65,9 +68,21 @@ namespace BonusApp.Data
             return userBonus;
         }
 
-        public async Task DiscountPagesAsync(UserBonus userBonus, int pages)
+        public async Task<bool> DiscountPagesAsync(UserBonus userBonus, int pages)
         {
+            if (userBonus.SpentPages + pages > (await _bonusServices.GetBonusAsync(userBonus.BonusId)).Pages)
+            {
+                return false;
+            }
             userBonus.SpentPages += pages;
+            await UpdateUserBonusAsync(userBonus);
+            return true;
+        }
+
+        public async Task PagesAvailableAsync(int userBonusId)
+        {
+            UserBonus userBonus = await GetUserBonusAsync(userBonusId);
+
             await UpdateUserBonusAsync(userBonus);
         }
 

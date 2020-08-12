@@ -1,6 +1,7 @@
 ﻿@page "/users/create"
 @inject UserServices userServices
 @inject BonusServices bonusServices
+@inject IModalService myModal
 
 <h3>Create User</h3>
 
@@ -39,22 +40,6 @@
     <a href="users" style="text-decoration: none;" class="button is-info is-light">Back to List</a>
 </EditForm>
 
-
-
-
-
-@if (showModal)
-{
-    <div class="modal is-active">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-            <p>The user has been created under the <strong>ID @user.Id</strong></p>
-        </div>
-        <button class="modal-close is-large" aria-label="close" @onclick="HideModal"></button>
-    </div>
-}
-
-
 @code {
     private User user = new User();
     List<Bonus> bonuses = new List<Bonus>();
@@ -63,8 +48,6 @@
     private List<int> intBonusesToAddToUser = new List<int>();
     List<Bonus> bonusesToAddToUser = new List<Bonus>();
     private List<string> strBonusesToAddToUser = new List<string>();
-
-    private bool showModal = false;
 
     protected async override Task OnInitializedAsync()
     {
@@ -80,7 +63,7 @@
             {
                 //UserId = user.Id,
                 //BonusId = bonus.Id,
-                Date = DateTime.UtcNow,
+                Date = DateTime.Now,
                 SpentPages = 0,
                 User = user,
                 Bonus = bonus
@@ -88,17 +71,9 @@
         }
         user.UserBonus = userBonusList;
         await userServices.AddUserAsync(user);
-        ShowModal();
-    }
-
-    private void ShowModal()
-    {
-        showModal = true;
-    }
-    private void HideModal()
-    {
-        showModal = false;
+        myModal.Show<ConfirmCreateComponent>($"The user has been created under the ID {user.Id}");
         user = new User();
+        strBonusesToAddToUser = new List<string>();
     }
 
     private async Task AddBonusAsync()

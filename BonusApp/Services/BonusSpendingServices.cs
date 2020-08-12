@@ -44,6 +44,14 @@ namespace BonusApp.Services
             }
             return bonusSpending;
         }
+        //public async Task<int> GetSpentPages(int bonusId)
+        //{
+        //    var list = await dbContext.BonusSpending.Where(bs => bs.Id == bonusId).ToListAsync();
+        //    int sum = list.Sum(item => item.SpentPages);
+        //    return (await dbContext.BonusSpending.Where(bs => bs.Id == bonusId).ToListAsync()).Sum(item => item.SpentPages);
+        //}
+
+
 
         //public async Task<BonusSpending> Get(BonusSpending bonusSpending)
         //{

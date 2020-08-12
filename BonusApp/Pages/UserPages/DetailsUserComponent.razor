@@ -5,14 +5,23 @@
 <h3>User Details</h3>
 <p><strong>Usuario   : </strong>@user.Email</p>
 
-@foreach (var item in user.UserBonus)
+@if (user.UserBonus.Count == 0)
 {
-    <p>Bono: @item.TRCId</p>
-    <p>Bono: @item.Bonus.Name</p>
-    <p>Spent pages: @item.SpentPages</p>
-    <p>Date: @item.Date</p>
-    <hr />
+    <p class="has-background-warning-light">The user does not have any bonus.</p>
 }
+else
+{
+    @foreach (var item in user.UserBonus)
+    {
+        <p>Bono: @item.TRCId</p>
+        <p>Bono: @item.Bonus.Name</p>
+        <p>Spent pages: @item.SpentPages</p>
+        <p>Date: @item.Date</p>
+        <hr />
+    }
+}
+
+
 
 @code {
     User user = new User();

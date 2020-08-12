@@ -1,5 +1,6 @@
 ﻿@page "/bonus/create"
 @inject BonusServices bonusServices
+@inject IModalService myModal
 
 <h3>Create Bond</h3>
 
@@ -27,6 +28,7 @@
     {
         bonus.Name = bonus.Name.ToUpper();
         await bonusServices.AddBonusAsync(bonus);
+        myModal.Show<ConfirmCreateComponent>($"The bonus has been created under the ID {bonus.Id}");
         bonus = new Bonus();
     }
 }

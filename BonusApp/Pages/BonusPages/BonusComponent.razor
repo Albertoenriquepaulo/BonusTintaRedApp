@@ -1,16 +1,16 @@
 ﻿@page "/bonus"
 @inject BonusServices bonusServices
+@inject IModalService myModal
 
 <h3>Bonds List</h3>
 
+<a style="text-decoration:none;" href="bonus/create" class="button is-primary is-outlined is-small">Add Bond</a>
 @if (bonuses == null || bonuses.Count == 0)
 {
     <h2>No user found</h2>
-    <a href="bonus/create" class="button is-primary is-outlined is-small">Add Bond</a>
 }
 else
 {
-    <a href="bonus/create" class="button is-primary is-outlined is-small">Add Bond</a>
     <div class="table-container">
         <table class="table is-striped">
             <thead>
@@ -24,15 +24,14 @@ else
             <tbody>
                 @foreach (var bonus in bonuses)
                 {
-                    url[0] = $"bonus/edit/{bonus.Id}";
-                    url[1] = $"bonus/delete/{bonus.Id}";
+                    url = $"bonus/edit/{bonus.Id}";
                     <tr>
-                        <td>@bonus.Id</td>
+                        <td>@(index++)</td>
                         <td>@bonus.Name</td>
                         <td>@bonus.Pages</td>
                         <td>
-                            <a href="@url[0]" class="button is-info is-light is-small ">Edit</a>
-                            <a href="@url[1]" class="button is-danger is-light is-small">Delete</a>
+                            <a href="@url" class="button is-info is-light is-small ">Edit</a>
+                            <a @onclick="@(()=>HandleDelete(bonus))" class="button is-danger is-light is-small">Delete</a>
                         </td>
                     </tr>
                 }
@@ -45,10 +44,29 @@ else
 
 @code {
     List<Bonus> bonuses;
-    string[] url = new string[2];
+    private int index = 1;
+    string url;
 
     protected async override Task OnInitializedAsync()
     {
         bonuses = await bonusServices.GetAllBonusAsync();
+    }
+
+    private async Task HandleDelete(Bonus bonus)
+    {
+        var messageForm = myModal.Show<ConfirmDeleteComponent>($"Are you sure you want to delete the {bonus.Name} bonus?");
+        var result = await messageForm.Result;
+
+        if (result.Cancelled)
+        {
+            return;
+        }
+
+        if ((bool)result.Data)
+        {
+            await bonusServices.DeleteBonusAsync(bonus);
+            bonuses = await bonusServices.GetAllBonusAsync();
+        }
+
     }
 }

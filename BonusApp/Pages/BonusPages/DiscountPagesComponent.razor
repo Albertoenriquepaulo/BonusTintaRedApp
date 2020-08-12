@@ -3,6 +3,7 @@
 @inject BonusServices bonusServices
 @inject BonusSpendingServices bonusSpendingServices
 @inject UserServices userServices
+@inject IModalService myModal
 
 <h3>Discount Pages</h3>
 <h1>@userBonus.TRCId</h1>
@@ -10,7 +11,7 @@
 <EditForm Model="bonusSpending" OnValidSubmit="AddPageToDiscount">
     <DataAnnotationsValidator />
     <div class="field">
-        <label class="label">Name</label>
+        <label class="label">Discount to apply</label>
         <div class="control">
             <InputNumber class="input" type="number" placeholder="Number input" @bind-Value="@bonusSpending.SpentPages" />
             <ValidationMessage For="@(()=>bonusSpending.SpentPages)" />
@@ -42,9 +43,18 @@
     {
         bonusSpending.User = user;
         bonusSpending.Bonus = bonus;
-        bonusSpending.Date = DateTime.UtcNow;
-        await userBonusServices.DiscountPagesAsync(userBonus, bonusSpending.SpentPages);
+        bonusSpending.Date = DateTime.Now;
+        if (await userBonusServices.DiscountPagesAsync(userBonus, bonusSpending.SpentPages) == false)
+        {
+            myModal.Show<ConfirmCreateComponent>("ERROR: The discount could not be applied...");
+            return;
+        }
         await bonusSpendingServices.AddBonusSpendingAsync(bonusSpending);
+
+        var messageForm = myModal.Show<ConfirmCreateComponent>($"The discount has been applied.");
+        var result = await messageForm.Result;
+
+        bonusSpending = new BonusSpending();
     }
 
 }
