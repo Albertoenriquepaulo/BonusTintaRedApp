@@ -25,6 +25,10 @@ namespace BonusApp.Services
         {
             return await dbContext.BonusSpending.ToListAsync();
         }
+        public async Task<List<BonusSpending>> GetAllBonusSpendingByBonusIdAsync(int bonusId)
+        {
+            return await dbContext.BonusSpending.Where(bs => bs.BonusId == bonusId).ToListAsync();
+        }
 
         public async Task<BonusSpending> GetBonusSpendingAsync(int id)
         {
@@ -44,12 +48,13 @@ namespace BonusApp.Services
             }
             return bonusSpending;
         }
-        //public async Task<int> GetSpentPages(int bonusId)
-        //{
-        //    var list = await dbContext.BonusSpending.Where(bs => bs.Id == bonusId).ToListAsync();
-        //    int sum = list.Sum(item => item.SpentPages);
-        //    return (await dbContext.BonusSpending.Where(bs => bs.Id == bonusId).ToListAsync()).Sum(item => item.SpentPages);
-        //}
+
+        public async Task<int> GetSpentPagesByBonusSpendingId(int bonusSpendingId)
+        {
+            var list = await dbContext.BonusSpending.Where(bs => bs.Id == bonusSpendingId).ToListAsync();
+            int sum = list.Sum(item => item.SpentPages);
+            return (await dbContext.BonusSpending.Where(bs => bs.Id == bonusSpendingId).ToListAsync()).Sum(item => item.SpentPages);
+        }
 
 
 

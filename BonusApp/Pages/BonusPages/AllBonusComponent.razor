@@ -27,7 +27,8 @@ else
             <tbody>
                 @foreach (var userBonus in userBonuses)
                 {
-                    url[2] = $"bonus/discountpages/{userBonus.Id}";
+                    url[0] = $"bonus/discountpages/{userBonus.Id}";
+                    url[1] = $"bonus/details/{userBonus.Id}";
                     <tr>
                         <td>@userBonus.TRCId</td>
                         <td>@userBonus.Bonus.Name</td>
@@ -35,8 +36,9 @@ else
                         <th>@userBonus.SpentPages</th>
                         <th>@(userBonus.Bonus.Pages - userBonus.SpentPages)</th>
                         <td>
+                            <a href="@url[0]" class="button is-success is-small is-link is-outlined" style="text-decoration:none;">Discount Pages</a>
+                            <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration:none;">Details</a>
                             <a @onclick="@(()=>HandleDelete(userBonus))" class="button is-danger  is-small is-link is-outlined">Delete</a>
-                            <a href="@url[2]" class="button is-success  is-small is-link is-outlined">Discount Pages</a>
                         </td>
                     </tr>
                 }
@@ -50,7 +52,7 @@ else
 @code {
 
     List<UserBonus> userBonuses;
-    string[] url = new string[3];
+    string[] url = new string[2];
 
     protected async override Task OnInitializedAsync()
     {
@@ -64,7 +66,7 @@ else
 
     private async Task HandleDelete(UserBonus userBonus)
     {
-        var messageForm = myModal.Show<ConfirmDeleteComponent>($"Are you sure you want to delete the {userBonus.TRCId} bonus?");
+        var messageForm = myModal.Show<ConfirmDeleteComponent>($"Are you sure you want to delete {userBonus.TRCId} bonus?");
         var result = await messageForm.Result;
 
         if (result.Cancelled)

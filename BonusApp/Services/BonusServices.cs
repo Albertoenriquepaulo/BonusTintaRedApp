@@ -25,9 +25,9 @@ namespace BonusApp.Data
             return await dbContext.Bonus.ToListAsync();
         }
 
-        public async Task<Bonus> GetBonusAsync(int id)
+        public async Task<Bonus> GetBonusAsync(int bonusId)
         {
-            return await dbContext.Bonus.FindAsync(id);
+            return await dbContext.Bonus.FindAsync(bonusId);
         }
 
         public async Task<Bonus> AddBonusAsync(Bonus bond)
