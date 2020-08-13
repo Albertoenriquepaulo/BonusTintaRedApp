@@ -63,8 +63,6 @@
         {
             userBonusList.Add(new UserBonus
             {
-                //UserId = user.Id,
-                //BonusId = bonus.Id,
                 Date = DateTime.Now,
                 SpentPages = 0,
                 User = user,
@@ -78,8 +76,6 @@
         var result = await messageForm.Result;
 
         navManager.NavigateTo($"users/details/{user.Id}");
-        //user = new User();
-        //strBonusesToAddToUser = new List<string>();
     }
 
     private async Task AddBonusAsync()

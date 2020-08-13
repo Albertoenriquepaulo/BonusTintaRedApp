@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 
 namespace BonusApp.Data
@@ -56,6 +57,23 @@ namespace BonusApp.Data
                 throw;
             }
             return userBonus;
+        }
+
+        public async Task<bool> AddListUserBonusAsync(List<UserBonus> userBonuses)
+        {
+            foreach (var userBonus in userBonuses)
+            {
+                try
+                {
+                    dbContext.UserBonus.Add(userBonus);
+                    await dbContext.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public async Task<UserBonus> UpdateUserBonusAsync(UserBonus userBonus)

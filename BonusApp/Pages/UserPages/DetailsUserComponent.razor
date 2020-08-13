@@ -1,6 +1,7 @@
 ﻿@page "/users/details/{Id:int}"
 @inject UserServices userServices
 @inject NavigationManager navManager
+@inject RefreshServices refreshServices
 
 <h3>User Details</h3>
 <p><strong>Usuario: </strong>@user.Email</p>
@@ -23,18 +24,23 @@
 
     }
 </div>
-<AddBonusComponent />
+<AddBonusComponent user="user" />
 <hr />
 <a href="users" style="text-decoration: none;" class="button is-info  is-link is-outlined">Back to List</a>
 
-
-
 @code {
     User user = new User();
+
     [Parameter] public int Id { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
         user = await userServices.GetUserAsync(Id);
+        refreshServices.RefreshRequested += RefreshMe;
+    }
+
+    private void RefreshMe()
+    {
+        StateHasChanged();
     }
 }

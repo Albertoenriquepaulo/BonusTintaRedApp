@@ -1,31 +1,44 @@
 ﻿@inject BonusServices bonusServices
+@inject UserBonusServices userBonusServices
+@inject UserServices userServices
+@inject IModalService myModal
+@inject NavigationManager navManager
+@inject RefreshServices refreshServices
 
-<div class="field is-horizontal">
-    <label class="label" for="BonusInput">Bonus:</label>
-    <div class="control">
-        <select name="bonus" id="BonusInput" @onchange="((arg)=> selectedValue = Convert.ToInt32(arg.Value))">
-            <option value="0">Select bonus</option>
-            @foreach (var bonus in bonuses)
+
+<div>
+    <div class="field is-horizontal">
+        <label class="label" for="BonusInput">Bonus:</label>
+        <div class="control">
+            <select name="bonus" id="BonusInput" @onchange="((arg)=> selectedValue = Convert.ToInt32(arg.Value))">
+                <option value="0">Select bonus</option>
+                @foreach (var bonus in bonuses)
+                {
+                    <option value="@bonus.Id">@bonus.Name</option>
+                }
+            </select>
+        </div>
+        <a class="button is-success is-small is-link is-outlined mx-2" @onclick="AddBonusToSelectBoxAsync">Add</a>
+        <select name="bonus-selected" size="5" style="width:100px;" multiple>
+            @foreach (var bonus in strBonusesToAddToUser)
             {
-                <option value="@bonus.Id">@bonus.Name</option>
+                <option>@bonus</option>
             }
         </select>
+        <a class="button is-danger is-small  is-link is-outlined mx-2" @onclick="Clear">Clear</a>
     </div>
-    <a class="button is-success is-small is-link is-outlined" @onclick="AddBonusAsync">Add</a>
-    <select name="bonus-selected" size="5" style="width:100px;" multiple>
-        @foreach (var bonus in strBonusesToAddToUser)
-        {
-            <option>@bonus</option>
-        }
-    </select>
-    <a class="button is-danger is-small  is-link is-outlined" @onclick="Clear">Clear</a>
+    <button class="button is-success  is-link is-outlined mx-1" @onclick="AddBonus">Add Bonus</button>
+    @*<a href="users" style="text-decoration: none;" class="button is-info  is-link is-outlined mx-1">Back to List</a>*@
 </div>
 
 @code {
+    [Parameter] public User user { get; set; }
     List<Bonus> bonuses = new List<Bonus>();
     private int selectedValue;
     private List<string> strBonusesToAddToUser = new List<string>();
     private List<int> intBonusesToAddToUser = new List<int>();
+
+    List<Bonus> bonusesToAddToUser = new List<Bonus>();
 
     protected async override Task OnInitializedAsync()
     {
@@ -36,16 +49,60 @@
     {
         intBonusesToAddToUser = new List<int>();
         strBonusesToAddToUser = new List<string>();
+        bonusesToAddToUser = new List<Bonus>();
     }
 
-    private async Task AddBonusAsync()
+    private async Task AddBonus()
     {
-        //if (selectedValue != 0 && intBonusesToAddToUser.Contains(selectedValue) == false)
+        List<UserBonus> userBonusList = new List<UserBonus>();
+        foreach (var bonus in bonusesToAddToUser)
+        {
+            userBonusList.Add(new UserBonus
+            {
+                UserId = user.Id,
+                BonusId = bonus.Id,
+                Date = DateTime.Now,
+                SpentPages = 0,
+                User = user,
+                Bonus = bonus
+            });
+        }
+        user.UserBonus = userBonusList;
+        //await userServices.AddUserAsync(user);
+        await userServices.UpdateUserAsync(user);
+
+        //foreach (var userBonus in userBonusList)
         //{
-        //    intBonusesToAddToUser.Add(selectedValue);
-        //    Bonus bonusToAddToUser = await bonusServices.GetBonusAsync(selectedValue);
-        //    bonusesToAddToUser.Add(bonusToAddToUser);
-        //    strBonusesToAddToUser.Add(bonusToAddToUser.Name);
+        //    await userBonusServices.AddUserBonusAsync(userBonus);
         //}
+
+        //await userBonusServices.AddUserBonusAsync(userBonusList[0]);
+
+        if (await userBonusServices.AddListUserBonusAsync(userBonusList))
+        {
+            var messageForm = myModal.Show<ConfirmCreateComponent>($"The bonus has been added to {user.Email}.");
+            var result = await messageForm.Result;
+        }
+        else
+        {
+            var messageForm = myModal.Show<ConfirmCreateComponent>($"ERROR: The bonuses could not have been added.");
+            var result = await messageForm.Result;
+        }
+
+        Clear();
+        bonuses = await bonusServices.GetAllBonusAsync();
+        refreshServices.CallRequestRefresh();
+        //navManager.NavigateTo($"users/details/{user.Id}");
+    }
+
+    private async Task AddBonusToSelectBoxAsync()
+    {
+        if (selectedValue != 0 && intBonusesToAddToUser.Contains(selectedValue) == false)
+        {
+            intBonusesToAddToUser.Add(selectedValue);
+            Bonus bonusToAddToUser = await bonusServices.GetBonusAsync(selectedValue);
+            bonusesToAddToUser.Add(bonusToAddToUser);
+            strBonusesToAddToUser.Add(bonusToAddToUser.Name);
+        }
     }
 }

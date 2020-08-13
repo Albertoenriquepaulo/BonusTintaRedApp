@@ -41,6 +41,8 @@ namespace BonusApp
             services.AddScoped<BonusServices>();
             services.AddScoped<UserBonusServices>();
             services.AddScoped<BonusSpendingServices>();
+            services.AddScoped<RefreshServices>();
+
 
             services.AddBlazoredModal();
         }
