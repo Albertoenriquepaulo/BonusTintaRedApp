@@ -62,23 +62,12 @@
                 UserId = user.Id,
                 BonusId = bonus.Id,
                 Date = DateTime.Now,
-                SpentPages = 0,
-                User = user,
-                Bonus = bonus
+                SpentPages = 0
             });
         }
         user.UserBonus = userBonusList;
-        //await userServices.AddUserAsync(user);
-        await userServices.UpdateUserAsync(user);
 
-        //foreach (var userBonus in userBonusList)
-        //{
-        //    await userBonusServices.AddUserBonusAsync(userBonus);
-        //}
-
-        //await userBonusServices.AddUserBonusAsync(userBonusList[0]);
-
-        if (await userBonusServices.AddListUserBonusAsync(userBonusList))
+        if (userBonusServices.AddListUserBonusAsyncWSQL(userBonusList))
         {
             var messageForm = myModal.Show<ConfirmCreateComponent>($"The bonus has been added to {user.Email}.");
             var result = await messageForm.Result;
@@ -91,8 +80,8 @@
 
         Clear();
         bonuses = await bonusServices.GetAllBonusAsync();
+
         refreshServices.CallRequestRefresh();
-        //navManager.NavigateTo($"users/details/{user.Id}");
     }
 
     private async Task AddBonusToSelectBoxAsync()

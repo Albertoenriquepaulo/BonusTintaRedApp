@@ -33,7 +33,7 @@ namespace BonusApp.Data
             //return await dbContext.User.FindAsync(id);
         }
 
-        public async Task<List<UserBonus>> GetUserBonds(int id)
+        public async Task<List<UserBonus>> GetUserBonus(int id)
         {
             return (await dbContext.User.Include(u => u.UserBonus).Where(u => u.Id == 1).FirstOrDefaultAsync()).UserBonus.ToList();
         }

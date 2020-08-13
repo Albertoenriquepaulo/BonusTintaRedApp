@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
+using Microsoft.Data.Sqlite;
 
 namespace BonusApp.Data
 {
@@ -68,11 +69,42 @@ namespace BonusApp.Data
                     dbContext.UserBonus.Add(userBonus);
                     await dbContext.SaveChangesAsync();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    string message = ex.InnerException.Message;
                     return false;
                 }
             }
+            return true;
+        }
+
+        public bool AddListUserBonusAsyncWSQL(List<UserBonus> userBonuses)
+        {
+            const string connection = "Data Source=UserBondsDB.db;";
+            string stringQuery;
+
+            SqliteConnection sqlite_conn = new SqliteConnection(connection);
+            sqlite_conn.Open();
+            var SqliteCmd = new SqliteCommand();
+            SqliteCmd = sqlite_conn.CreateCommand();
+
+            try
+            {
+                foreach (var userBonus in userBonuses)
+                {
+
+                    stringQuery = "INSERT INTO UserBonus (UserId, BonusId, SpentPages, Date) VALUES(" +
+                        $"{userBonus.UserId}, {userBonus.BonusId}, {userBonus.SpentPages}, '{userBonus.Date}')";
+                    SqliteCmd.CommandText = stringQuery;
+                    SqliteCmd.ExecuteNonQuery();
+                }
+                sqlite_conn.Close();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             return true;
         }
 

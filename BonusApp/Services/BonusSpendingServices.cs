@@ -25,9 +25,9 @@ namespace BonusApp.Services
         {
             return await dbContext.BonusSpending.ToListAsync();
         }
-        public async Task<List<BonusSpending>> GetAllBonusSpendingByBonusIdAsync(int bonusId)
+        public async Task<List<BonusSpending>> GetAllBonusSpendingByBonusIdAsync(int bonusId, int userId)
         {
-            return await dbContext.BonusSpending.Where(bs => bs.BonusId == bonusId).ToListAsync();
+            return await dbContext.BonusSpending.Where(bs => bs.BonusId == bonusId && bs.UserId == userId).ToListAsync();
         }
 
         public async Task<BonusSpending> GetBonusSpendingAsync(int id)

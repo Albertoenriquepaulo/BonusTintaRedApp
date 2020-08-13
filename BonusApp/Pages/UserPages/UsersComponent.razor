@@ -3,16 +3,16 @@
 @inject IModalService myModal
 @inject IJSRuntime JSRuntime
 
-<h3>Users List</h3>
+<h3>Clients List</h3>
 
 @if (users == null || users.Count == 0)
 {
     <h2>No user found</h2>
-    <a href="users/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Add User</a>
+    <a href="users/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Add Client</a>
 }
 else
 {
-    <a href="users/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Add User</a>
+    <a href="users/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Add Client</a>
     <div class="table-container">
         <table class="table is-striped" id="myTable">
             <thead>

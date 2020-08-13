@@ -1,21 +1,23 @@
 ﻿@page "/users/details/{Id:int}"
 @inject UserServices userServices
+@inject UserBonusServices userBonusServices
 @inject NavigationManager navManager
 @inject RefreshServices refreshServices
 
-<h3>User Details</h3>
-<p><strong>Usuario: </strong>@user.Email</p>
+<h3>Client Details</h3>
+<p><strong>Client: </strong>@user.Email</p>
+<AddBonusComponent user="user" />
 <div class="content">
     @if (user.UserBonus.Count == 0)
     {
-        <p class="has-background-warning-light">The user does not have any bonus.</p>
+        <p class="has-background-warning-light">@user.Email does not have any bonus.</p>
     }
     else
     {
 
         @foreach (var item in user.UserBonus)
         {
-            <p class="is-marginless has-background-info-dark" style="color: white;"><strong style="color: white;">Bonus Id: </strong>@item.TRCId</p>
+            <p class="is-marginless has-background-info-dark" style="color: white;"><strong style="color: white;">Bonus Id: </strong><a style="color: white;" href=@($"bonuspurchased/discountpages/{item.Id}")>@item.TRCId</a></p>
             <p class="is-marginless"><strong>Bonus Name: </strong>  @item.Bonus.Name</p>
             <p class="is-marginless"><strong>Spent pages: </strong>@item.SpentPages</p>
             <p class="is-marginless"><strong>Purchase day:     </strong>@item.Date</p>
@@ -24,8 +26,6 @@
 
     }
 </div>
-<AddBonusComponent user="user" />
-<hr />
 <a href="users" style="text-decoration: none;" class="button is-info  is-link is-outlined">Back to List</a>
 
 @code {
@@ -39,8 +39,15 @@
         refreshServices.RefreshRequested += RefreshMe;
     }
 
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        user = await userServices.GetUserAsync(Id);
+    }
+
+
     private void RefreshMe()
     {
+        user.UserBonus = userBonusServices.GetAllUserBonusByUserIdAsync(user.Id).Result;
         StateHasChanged();
     }
 }

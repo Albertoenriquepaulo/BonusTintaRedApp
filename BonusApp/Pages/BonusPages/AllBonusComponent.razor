@@ -1,9 +1,9 @@
-﻿@page "/bonus/allbonus"
+﻿@page "/bonuspurchased/allbonus"
 @inject UserBonusServices userBonusServices
 @inject IJSRuntime JSRuntime
 @inject IModalService myModal
 
-<h3>All Bonus List</h3>
+<h3>Bonuses List</h3>
 
 @if (userBonuses == null || userBonuses.Count == 0)
 {
@@ -27,8 +27,8 @@ else
             <tbody>
                 @foreach (var userBonus in userBonuses)
                 {
-                    url[0] = $"bonus/discountpages/{userBonus.Id}";
-                    url[1] = $"bonus/details/{userBonus.Id}";
+                    url[0] = $"bonuspurchased/discountpages/{userBonus.Id}";
+                    url[1] = $"bonuspurchased/details/{userBonus.Id}";
                     <tr>
                         <td>@userBonus.TRCId</td>
                         <td>@userBonus.Bonus.Name</td>

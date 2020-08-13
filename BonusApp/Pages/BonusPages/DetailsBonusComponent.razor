@@ -1,11 +1,11 @@
-﻿@page "/bonus/details/{Id:int}"
+﻿@page "/bonuspurchased/details/{Id:int}"
 @inject BonusServices bonusServices
 @inject UserBonusServices userBonusServices
 @inject BonusSpendingServices bonusSpendingServices
 <h3>Bonus Details</h3>
 
 <div class="content">
-    <p><strong>Usuario: </strong>@userBonus.User.Email</p>
+    <p><strong>Client: </strong>@userBonus.User.Email</p>
     @if (bonusSpending.Count == 0)
     {
         <p class="has-background-warning-light">There is no transaction for this bonus.</p>
@@ -17,14 +17,14 @@
         <p class="is-marginless has-background-danger-dark" style="color: white;"><strong style="color: white;">Page remaining: </strong>@totalRemainingPages</p>
         @foreach (var item in bonusSpending)
         {
-            <p class="is-marginless"><strong>Purchase day:     </strong>@item.Date</p>
+            <p class="is-marginless"><strong>Transaction Date:     </strong>@item.Date</p>
             <p class="is-marginless"><strong>Spent pages: </strong>@item.SpentPages</p>
             <hr class="my-0" />
         }
 
     }
 </div>
-<a href="bonus/allbonus" style="text-decoration: none;" class="button is-info  is-link is-outlined">Back to List</a>
+<a href="bonuspurchased/allbonus" style="text-decoration: none;" class="button is-info  is-link is-outlined">Back to List</a>
 
 
 @code {
@@ -38,7 +38,7 @@
     {
         userBonus = await userBonusServices.GetBonusIdByUserBonusIdAsync(Id);
         totalBonusPages = (await bonusServices.GetBonusAsync(userBonus.BonusId)).Pages;
-        bonusSpending = await bonusSpendingServices.GetAllBonusSpendingByBonusIdAsync(userBonus.BonusId);
+        bonusSpending = await bonusSpendingServices.GetAllBonusSpendingByBonusIdAsync(userBonus.BonusId, userBonus.UserId);
 
         if (bonusSpending.Count > 0)
         {
