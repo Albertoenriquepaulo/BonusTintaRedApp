@@ -2,7 +2,7 @@
 @inject BonusServices bonusServices
 @inject NavigationManager navManager
 
-<h3>Edit Bonus</h3>
+<h3>Edit Coupon</h3>
 
 @if (bonus != null)
 {
@@ -14,7 +14,7 @@
                 <InputText class="input" type="text" placeholder="Text input" @bind-Value="@bonus.Name" />
                 <ValidationMessage For="@(()=>bonus.Name)" />
             </div>
-            <label class="label">Pages</label>
+            <label class="label mt-2">Pages</label>
             <div class="control">
                 <InputNumber class="input" type="number" placeholder="Text input" @bind-Value="@bonus.Pages" />
                 <ValidationMessage For="@(()=>bonus.Pages)" />

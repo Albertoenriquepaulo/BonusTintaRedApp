@@ -8,24 +8,10 @@
 
 <h3>Discount Pages</h3>
 <div>
-    @*<div style="display: flex;">
-            <h4 class="is-marginless pt-2 pr-2 has-text-link">Bonus Id: </h4>
-            <h1 class="is-marginless has-text-link-dark">@userBonus.TRCId</h1>
-        </div>
-
-        <div style="display: flex;">
-            <h4 class="is-marginless pt-2 pr-2 has-text-link">Bonus Type: </h4>
-            <h3 class="is-marginless has-text-success-dark">@bonus.Name</h3>
-        </div>
-
-        <div style="display: flex;">
-            <h4 class="is-marginless pt-2 pr-2 has-text-link">Remaining pages: </h4>
-            <h3 class="is-marginless has-text-grey-dark">500</h3>
-        </div>*@
     <div class="card" style="width: 18rem;">
         <div class="card-body">
-            <h5 class="card-title">Bonus Id: @userBonus.TRCId</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Bonus Type: @bonus.Name</h6>
+            <h5 class="card-title">Coupon Id: @userBonus.TRCId</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Coupon Type: @bonus.Name</h6>
             <p class="card-text">Remaining pages: @(bonus.Pages - userBonus.SpentPages) </p>
         </div>
     </div>
@@ -36,7 +22,7 @@
     <div class="field">
         <label class="label mt-3">Discount to apply</label>
         <div class="control">
-            <InputNumber class="input" type="number" placeholder="Number input" @bind-Value="@bonusSpending.SpentPages" />
+            <InputNumber class="input" type="number" placeholder="Type number of pages" @bind-Value="@bonusSpending.SpentPages" />
             <ValidationMessage For="@(()=>bonusSpending.SpentPages)" />
         </div>
 
@@ -70,14 +56,17 @@
         if (await userBonusServices.DiscountPagesAsync(userBonus, bonusSpending.SpentPages) == false)
         {
             myModal.Show<ConfirmCreateComponent>("ERROR: The discount could not be applied...");
-            return;
         }
-        await bonusSpendingServices.AddBonusSpendingAsync(bonusSpending);
+        else
+        {
+            await bonusSpendingServices.AddBonusSpendingAsync(bonusSpending);
 
-        var messageForm = myModal.Show<ConfirmCreateComponent>($"The discount has been applied.");
-        var result = await messageForm.Result;
+            var messageForm = myModal.Show<ConfirmCreateComponent>($"The discount has been applied.");
+            var result = await messageForm.Result;
 
-        navManager.NavigateTo("bonuspurchased/allbonus");
+            navManager.NavigateTo("bonuspurchased/allbonus");
+        }
+
     }
 
 }

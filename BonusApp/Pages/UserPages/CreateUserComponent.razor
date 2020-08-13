@@ -18,10 +18,10 @@
     </div>
 
     <div class="field is-horizontal">
-        <label class="label mx-1" for="BonusInput">Bonus</label>
+        <label class="label mx-1" for="BonusInput">Coupon</label>
         <div class="control">
             <select name="bonus" id="BonusInput" @onchange="((arg)=> selectedValue = Convert.ToInt32(arg.Value))">
-                <option value="0">Select bonus</option>
+                <option value="0">Select coupon</option>
                 @foreach (var bonus in bonuses)
                 {
                     <option value="@bonus.Id">@bonus.Name</option>

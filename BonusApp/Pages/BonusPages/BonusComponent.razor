@@ -2,19 +2,19 @@
 @inject BonusServices bonusServices
 @inject IModalService myModal
 
-<h3>Bonus Types</h3>
+<h3>Coupon Types</h3>
 
 <a style="text-decoration:none;" href="bonus/create" class="button is-primary is-link is-outlined is-small">Create Bonus</a>
 @if (bonuses == null || bonuses.Count == 0)
 {
-    <h2>No user found</h2>
+    <h2>No Coupon found</h2>
 }
 else
 {
     <div class="table-container">
         <table class="table is-striped">
             <thead>
-                <tr class="th">
+                <tr class="th has-text-centered">
                     <th>Identifier</th>
                     <th>Name</th>
                     <th>Pages</th>
@@ -25,11 +25,11 @@ else
                 @foreach (var bonus in bonuses)
                 {
                     url = $"bonus/edit/{bonus.Id.ToString()}";
-                    <tr>
-                        <td>@(index++)</td>
-                        <td>@bonus.Name</td>
-                        <td>@bonus.Pages</td>
-                        <td>
+                    <tr class="has-text-centered">
+                        <td style="vertical-align: middle">@(index++)</td>
+                        <td style="vertical-align: middle">@bonus.Name</td>
+                        <td style="vertical-align: middle">@bonus.Pages</td>
+                        <td style="vertical-align: middle">
                             <a href="@url" class="button is-info is-small is-outlined" style="text-decoration:none;">Edit</a>
                             <a @onclick="@(()=>HandleDelete(bonus))" class="button is-danger is-link  is-small is-outlined">Delete</a>
                         </td>
@@ -44,17 +44,18 @@ else
 
 @code {
     List<Bonus> bonuses;
-    private int index = 1;
+    private int index;
     string url;
 
     protected async override Task OnInitializedAsync()
     {
+        index = 1;
         bonuses = await bonusServices.GetAllBonusAsync();
     }
 
     private async Task HandleDelete(Bonus bonus)
     {
-        var messageForm = myModal.Show<ConfirmDeleteComponent>($"Are you sure you want to delete the {bonus.Name} bonus?");
+        var messageForm = myModal.Show<ConfirmDeleteComponent>($"Are you sure you want to delete the {bonus.Name} coupon?");
         var result = await messageForm.Result;
 
         if (result.Cancelled)
@@ -67,6 +68,10 @@ else
             await bonusServices.DeleteBonusAsync(bonus);
             bonuses = await bonusServices.GetAllBonusAsync();
         }
+    }
 
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        index = 1;
     }
 }

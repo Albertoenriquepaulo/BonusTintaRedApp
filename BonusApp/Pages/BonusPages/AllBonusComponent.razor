@@ -3,24 +3,25 @@
 @inject IJSRuntime JSRuntime
 @inject IModalService myModal
 
-<h3>Bonuses List</h3>
+<h3>Coupon List</h3>
 
 @if (userBonuses == null || userBonuses.Count == 0)
 {
-    <h2>No user found</h2>
-    <a href="bonus/create" class="button is-primary is-link is-outlined is-small">Add Bond</a>
+    <h2>No Coupon Issued</h2>
+    <a href="/" style="text-decoration: none;" class="button is-info  is-link is-outlined">Home</a>
+    @*<a href="bonus/create" class="button is-primary is-link is-outlined is-small" style="text-decoration:none;">Add Coupon</a>*@
 }
 else
 {
     <div class="table-container">
         <table class="table is-striped" id="myTable">
             <thead>
-                <tr class="th">
-                    <th>Identifier</th>
-                    <th>Bonus Type</th>
+                <tr class="th has-text-centered">
+                    <th>Coupon Id</th>
+                    <th>Coupon Type</th>
                     <th>Pages</th>
-                    <th>Pages Spent</th>
-                    <th>Pages Available</th>
+                    <th>Printed Pages</th>
+                    <th>Remaining Pages</th>
                     <th></th>
                 </tr>
             </thead>
@@ -29,13 +30,13 @@ else
                 {
                     url[0] = $"bonuspurchased/discountpages/{userBonus.Id}";
                     url[1] = $"bonuspurchased/details/{userBonus.Id}";
-                    <tr>
-                        <td>@userBonus.TRCId</td>
-                        <td>@userBonus.Bonus.Name</td>
-                        <td>@userBonus.Bonus.Pages</td>
-                        <th>@userBonus.SpentPages</th>
-                        <th>@(userBonus.Bonus.Pages - userBonus.SpentPages)</th>
-                        <td>
+                    <tr class="has-text-centered">
+                        <td style="vertical-align: middle">@userBonus.TRCId</td>
+                        <td style="vertical-align: middle">@userBonus.Bonus.Name</td>
+                        <td style="vertical-align: middle">@userBonus.Bonus.Pages</td>
+                        <td style="vertical-align: middle">@userBonus.SpentPages</td>
+                        <td style="vertical-align: middle">@(userBonus.Bonus.Pages - userBonus.SpentPages)</td>
+                        <td style="vertical-align: middle">
                             <a href="@url[0]" class="button is-success is-small is-link is-outlined" style="text-decoration:none;">Discount Pages</a>
                             <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration:none;">Details</a>
                             <a @onclick="@(()=>HandleDelete(userBonus))" class="button is-danger  is-small is-link is-outlined">Delete</a>

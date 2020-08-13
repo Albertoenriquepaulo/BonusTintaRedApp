@@ -2,19 +2,22 @@
 @inject BonusServices bonusServices
 @inject IModalService myModal
 
-<h3>Create Bond</h3>
+<h3>Create Coupon</h3>
 
 <EditForm Model="bonus" OnValidSubmit="Create">
     <DataAnnotationsValidator />
     <div class="field">
         <label class="label">Name</label>
         <div class="control">
-            <InputText class="input" type="text" placeholder="Bonus name" @bind-Value="@bonus.Name" />
+            <InputText class="input" type="text" placeholder="Coupon name" @bind-Value="@bonus.Name" />
             <ValidationMessage For="@(()=>bonus.Name)" />
+
+        </div>
+        <label class="label mt-2">Page</label>
+        <div class="control">
             <InputNumber class="input" type="number" placeholder="Number input" @bind-Value="@bonus.Pages" />
             <ValidationMessage For="@(()=>bonus.Pages)" />
         </div>
-
     </div>
 
     <button class="button is-success is-link is-outlined" type="submit">Create</button>

@@ -16,7 +16,7 @@ else
     <div class="table-container">
         <table class="table is-striped" id="myTable">
             <thead>
-                <tr class="th">
+                <tr class="th has-text-centered">
                     <th></th>
                     <th>Email</th>
                     <th></th>
@@ -27,11 +27,11 @@ else
                 {
                     url[0] = $"users/edit/{user.Id}";
                     url[1] = $"users/details/{user.Id}";
-                    <tr>
-                        <td>@(index++)</td>
-                        <td>@user.Email</td>
-                        <td>
-                            <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration: none;">Add Bonus</a>
+                    <tr class="has-text-centered">
+                        <td style="vertical-align: middle">@(index++)</td>
+                        <td style="vertical-align: middle">@user.Email</td>
+                        <td style="vertical-align: middle">
+                            <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration: none;">Add Coupon</a>
                             <a href="@url[0]" class="button is-success is-small is-link is-outlined" style="text-decoration: none;">Edit</a>
                             <a href="@url[1]" class="button is-info is-small is-link is-outlined" style="text-decoration: none;">Details</a>
                             <a class="button is-danger is-small is-link is-outlined" style="text-decoration: none;" @onclick="@(()=>HandleDelete(user))">Delete</a>

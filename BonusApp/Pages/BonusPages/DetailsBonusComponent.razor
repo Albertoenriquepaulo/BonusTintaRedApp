@@ -2,7 +2,7 @@
 @inject BonusServices bonusServices
 @inject UserBonusServices userBonusServices
 @inject BonusSpendingServices bonusSpendingServices
-<h3>Bonus Details</h3>
+<h3>Coupon Details</h3>
 
 <div class="content">
     <p><strong>Client: </strong>@userBonus.User.Email</p>
@@ -12,16 +12,34 @@
     }
     else
     {
-        <p class="is-marginless has-background-info-dark" style="color: white;"><strong style="color: white;">Bonus Id: </strong>@userBonus.TRCId</p>
-        <p class="is-marginless has-background-info-dark" style="color: white;"><strong style="color: white;">Total Bonus Pages: </strong>@totalBonusPages</p>
-        <p class="is-marginless has-background-danger-dark" style="color: white;"><strong style="color: white;">Page remaining: </strong>@totalRemainingPages</p>
-        @foreach (var item in bonusSpending)
-        {
-            <p class="is-marginless"><strong>Transaction Date:     </strong>@item.Date</p>
-            <p class="is-marginless"><strong>Spent pages: </strong>@item.SpentPages</p>
-            <hr class="my-0" />
-        }
+        <div class="card mb-3" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Coupon Id: @userBonus.TRCId</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Total Coupon Pages:  @totalBonusPages</h6>
+                <p class="card-text ">Remaining pages: @totalRemainingPages </p>
+            </div>
+        </div>
 
+        <div class="table-container">
+            <table class="table is-striped align-middle" id="myTable">
+                <thead>
+                </thead>
+                <tbody>
+                    @foreach (var item in bonusSpending)
+                    {
+                        <tr>
+                            <td>
+                                <div>
+                                    <p class="is-marginless"><strong>Transaction Date:     </strong>@item.Date</p>
+                                    <p class="is-marginless"><strong>Printed pages: </strong>@item.SpentPages</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
     }
 </div>
 <a href="bonuspurchased/allbonus" style="text-decoration: none;" class="button is-info  is-link is-outlined">Back to List</a>
