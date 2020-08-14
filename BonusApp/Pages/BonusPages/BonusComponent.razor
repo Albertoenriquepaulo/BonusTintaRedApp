@@ -30,8 +30,12 @@ else
                         <td style="vertical-align: middle">@bonus.Name</td>
                         <td style="vertical-align: middle">@bonus.Pages</td>
                         <td style="vertical-align: middle">
-                            <a href="@url" class="button is-info is-small is-outlined" style="text-decoration:none;">Edit</a>
-                            <a @onclick="@(()=>HandleDelete(bonus))" class="button is-danger is-link  is-small is-outlined">Delete</a>
+                            <a href="@url" class="button is-info is-small is-outlined" style="text-decoration:none;">
+                                <span class="oi oi-pencil"></span> @*EDIT*@
+                            </a>
+                            <a @onclick="@(()=>HandleDelete(bonus))" class="button is-danger is-link  is-small is-outlined">
+                                <span class="oi oi-trash"></span> @*DELETE*@
+                            </a>
                         </td>
                     </tr>
                 }

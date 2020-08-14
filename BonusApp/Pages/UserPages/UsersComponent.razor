@@ -32,9 +32,15 @@ else
                         <td style="vertical-align: middle">@user.Email</td>
                         <td style="vertical-align: middle">
                             <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration: none;">Add Coupon</a>
-                            <a href="@url[0]" class="button is-success is-small is-link is-outlined" style="text-decoration: none;">Edit</a>
-                            <a href="@url[1]" class="button is-info is-small is-link is-outlined" style="text-decoration: none;">Details</a>
-                            <a class="button is-danger is-small is-link is-outlined" style="text-decoration: none;" @onclick="@(()=>HandleDelete(user))">Delete</a>
+                            <a href="@url[0]" class="button is-success is-small is-link is-outlined" style="text-decoration: none;">
+                                <span class="oi oi-pencil"></span> @*EDIT*@
+                            </a>
+                            <a href="@url[1]" class="button is-info is-small is-link is-outlined" style="text-decoration: none;">
+                                <span class="oi oi-magnifying-glass"></span> @*DETAILS*@
+                            </a>
+                            <a class="button is-danger is-small is-link is-outlined" style="text-decoration: none;" @onclick="@(()=>HandleDelete(user))">
+                                <span class="oi oi-trash"></span> @*DELETE*@
+                            </a>
                         </td>
                     </tr>
                 }
