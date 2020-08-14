@@ -14,7 +14,7 @@
                 <option value="0">Select coupon</option>
                 @foreach (var bonus in bonuses)
                 {
-                    <option value="@bonus.Id">@bonus.Name</option>
+                <option value="@bonus.Id">@bonus.Name</option>
                 }
             </select>
         </div>
@@ -22,7 +22,7 @@
         <select name="bonus-selected" size="5" style="width:100px;" multiple>
             @foreach (var bonus in strBonusesToAddToUser)
             {
-                <option>@bonus</option>
+            <option>@bonus</option>
             }
         </select>
         <a class="button is-danger is-small  is-link is-outlined mx-2" @onclick="Clear">Clear</a>
@@ -50,6 +50,7 @@
         intBonusesToAddToUser = new List<int>();
         strBonusesToAddToUser = new List<string>();
         bonusesToAddToUser = new List<Bonus>();
+        userBonusList = new List<UserBonus>();
     }
 
     private async Task AddBonus()
@@ -77,10 +78,10 @@
             var result = await messageForm.Result;
         }
 
-        Clear();
         bonuses = await bonusServices.GetAllBonusAsync();
 
         refreshServices.CallRequestRefresh();
+        Clear();
     }
 
     private async Task AddBonusToSelectBoxAsync()

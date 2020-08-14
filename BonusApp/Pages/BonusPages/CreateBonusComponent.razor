@@ -9,7 +9,7 @@
     <div class="field">
         <label class="label">Name</label>
         <div class="control">
-            <InputText class="input" type="text" placeholder="Coupon name" @bind-Value="@bonus.Name" />
+            <InputText class="input" type="text" placeholder="Coupon name" @bind-Value="@bonus.Name" oninput="this.value=this.value.toUpperCase()" />
             <ValidationMessage For="@(()=>bonus.Name)" />
 
         </div>
