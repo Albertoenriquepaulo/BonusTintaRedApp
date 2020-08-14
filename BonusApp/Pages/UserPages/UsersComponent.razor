@@ -68,7 +68,6 @@ else
             await userServices.DeleteUserAsync(user);
             users = await userServices.GetAllUserAsync();
         }
-
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

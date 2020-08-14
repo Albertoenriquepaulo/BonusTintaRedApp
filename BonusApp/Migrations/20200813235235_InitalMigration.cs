@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BonusApp.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class InitalMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -35,34 +35,6 @@ namespace BonusApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BonusSpending",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    UserId = table.Column<int>(nullable: false),
-                    BonusId = table.Column<int>(nullable: false),
-                    SpentPages = table.Column<int>(nullable: false),
-                    Date = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BonusSpending", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BonusSpending_Bonus_BonusId",
-                        column: x => x.BonusId,
-                        principalTable: "Bonus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BonusSpending_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserBonus",
                 columns: table => new
                 {
@@ -90,6 +62,41 @@ namespace BonusApp.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "BonusSpending",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<int>(nullable: false),
+                    BonusId = table.Column<int>(nullable: false),
+                    UserBonusId = table.Column<int>(nullable: false),
+                    SpentPages = table.Column<int>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BonusSpending", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BonusSpending_Bonus_BonusId",
+                        column: x => x.BonusId,
+                        principalTable: "Bonus",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BonusSpending_UserBonus_UserBonusId",
+                        column: x => x.UserBonusId,
+                        principalTable: "UserBonus",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BonusSpending_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "Id", "Email" },
@@ -109,6 +116,11 @@ namespace BonusApp.Migrations
                 name: "IX_BonusSpending_BonusId",
                 table: "BonusSpending",
                 column: "BonusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BonusSpending_UserBonusId",
+                table: "BonusSpending",
+                column: "UserBonusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BonusSpending_UserId",

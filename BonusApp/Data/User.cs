@@ -18,7 +18,7 @@ namespace BonusApp.Data
         [EmailAddress]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Email { get; set; }
-        public ICollection<UserBonus> UserBonus { get; set; }
+        public ICollection<UserBonus> UserBonuses { get; set; }
         public ICollection<BonusSpending> BonusesSpending { get; set; }
 
     }

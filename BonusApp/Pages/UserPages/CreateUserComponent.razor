@@ -69,7 +69,7 @@
                 Bonus = bonus
             });
         }
-        user.UserBonus = userBonusList;
+        user.UserBonuses = userBonusList;
         await userServices.AddUserAsync(user);
 
         var messageForm = myModal.Show<ConfirmCreateComponent>($"The user has been created under the ID {user.Id}");

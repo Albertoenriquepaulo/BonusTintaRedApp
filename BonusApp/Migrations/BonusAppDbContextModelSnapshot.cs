@@ -49,12 +49,17 @@ namespace BonusApp.Migrations
                     b.Property<int>("SpentPages")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("UserBonusId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BonusId");
+
+                    b.HasIndex("UserBonusId");
 
                     b.HasIndex("UserId");
 
@@ -129,6 +134,12 @@ namespace BonusApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BonusApp.Data.UserBonus", "UserBonus")
+                        .WithMany("BonusesSpending")
+                        .HasForeignKey("UserBonusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BonusApp.Data.User", "User")
                         .WithMany("BonusesSpending")
                         .HasForeignKey("UserId")
@@ -139,13 +150,13 @@ namespace BonusApp.Migrations
             modelBuilder.Entity("BonusApp.Data.UserBonus", b =>
                 {
                     b.HasOne("BonusApp.Data.Bonus", "Bonus")
-                        .WithMany("UserBonus")
+                        .WithMany("UserBonuses")
                         .HasForeignKey("BonusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BonusApp.Data.User", "User")
-                        .WithMany("UserBonus")
+                        .WithMany("UserBonuses")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

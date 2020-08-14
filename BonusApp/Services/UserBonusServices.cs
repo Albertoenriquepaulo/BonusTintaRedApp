@@ -25,11 +25,9 @@ namespace BonusApp.Data
         #endregion
 
         #region Public methods
-
         public async Task<List<UserBonus>> GetAllUserBonusAsync()
         {
-
-            return await dbContext.UserBonus.Include(ub => ub.Bonus).ToListAsync();
+            return await dbContext.UserBonus.Include(ub => ub.Bonus).Include(ub => ub.User).ToListAsync();
         }
         public async Task<List<UserBonus>> GetAllUserBonusByUserIdAsync(int id)
         {
@@ -45,39 +43,6 @@ namespace BonusApp.Data
             return await dbContext.UserBonus.FindAsync(id);
             //return await dbContext.User.FindAsync(id);
         }
-
-        public async Task<UserBonus> AddUserBonusAsync(UserBonus userBonus)
-        {
-            try
-            {
-                dbContext.UserBonus.Add(userBonus);
-                await dbContext.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return userBonus;
-        }
-
-        public async Task<bool> AddListUserBonusAsync(List<UserBonus> userBonuses)
-        {
-            foreach (var userBonus in userBonuses)
-            {
-                try
-                {
-                    dbContext.UserBonus.Add(userBonus);
-                    await dbContext.SaveChangesAsync();
-                }
-                catch (Exception ex)
-                {
-                    string message = ex.InnerException.Message;
-                    return false;
-                }
-            }
-            return true;
-        }
-
         public bool AddListUserBonusAsyncWSQL(List<UserBonus> userBonuses)
         {
             const string connection = "Data Source=UserBondsDB.db;";
@@ -107,7 +72,6 @@ namespace BonusApp.Data
 
             return true;
         }
-
         public async Task<UserBonus> UpdateUserBonusAsync(UserBonus userBonus)
         {
             try
@@ -125,7 +89,6 @@ namespace BonusApp.Data
             }
             return userBonus;
         }
-
         public async Task<bool> DiscountPagesAsync(UserBonus userBonus, int pages)
         {
             if (userBonus.SpentPages + pages > (await _bonusServices.GetBonusAsync(userBonus.BonusId)).Pages)
@@ -136,14 +99,6 @@ namespace BonusApp.Data
             await UpdateUserBonusAsync(userBonus);
             return true;
         }
-
-        public async Task PagesAvailableAsync(int userBonusId)
-        {
-            UserBonus userBonus = await GetUserBonusAsync(userBonusId);
-
-            await UpdateUserBonusAsync(userBonus);
-        }
-
         public async Task DeleteUserBonusAsync(UserBonus userBonus)
         {
             try

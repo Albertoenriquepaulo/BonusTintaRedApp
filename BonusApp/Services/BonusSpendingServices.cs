@@ -25,14 +25,10 @@ namespace BonusApp.Services
         {
             return await dbContext.BonusSpending.ToListAsync();
         }
-        public async Task<List<BonusSpending>> GetAllBonusSpendingByBonusIdAsync(int bonusId, int userId)
-        {
-            return await dbContext.BonusSpending.Where(bs => bs.BonusId == bonusId && bs.UserId == userId).ToListAsync();
-        }
 
-        public async Task<BonusSpending> GetBonusSpendingAsync(int id)
+        public async Task<List<BonusSpending>> GetAllBonusSpendingByBonusIdAndUserBonusIdAsync(int bonusId, int userBonusId)
         {
-            return await dbContext.BonusSpending.FindAsync(id);
+            return await dbContext.BonusSpending.Where(bs => bs.BonusId == bonusId && bs.UserBonusId == userBonusId).ToListAsync();
         }
 
         public async Task<BonusSpending> AddBonusSpendingAsync(BonusSpending bonusSpending)
@@ -54,54 +50,6 @@ namespace BonusApp.Services
             var list = await dbContext.BonusSpending.Where(bs => bs.Id == bonusSpendingId).ToListAsync();
             int sum = list.Sum(item => item.SpentPages);
             return (await dbContext.BonusSpending.Where(bs => bs.Id == bonusSpendingId).ToListAsync()).Sum(item => item.SpentPages);
-        }
-
-
-
-        //public async Task<BonusSpending> Get(BonusSpending bonusSpending)
-        //{
-        //    try
-        //    {
-        //        dbContext.BonusSpending.Add(bonusSpending);
-        //        await dbContext.SaveChangesAsync();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //    return bonusSpending;
-        //}
-
-
-        public async Task<BonusSpending> UpdateBonusSpendingAsync(BonusSpending bonusSpending)
-        {
-            try
-            {
-                var bondExist = dbContext.BonusSpending.FirstOrDefault(bs => bs.Id == bonusSpending.Id);
-                if (bondExist != null)
-                {
-                    dbContext.Update(bonusSpending);
-                    await dbContext.SaveChangesAsync();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return bonusSpending;
-        }
-
-        public async Task DeleteBonusSpendingAsync(BonusSpending bonusSpending)
-        {
-            try
-            {
-                dbContext.BonusSpending.Remove(bonusSpending);
-                await dbContext.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
         }
         #endregion
     }

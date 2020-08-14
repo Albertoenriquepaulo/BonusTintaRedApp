@@ -13,7 +13,6 @@
             <ValidationMessage For="@(()=>user.Email)" />
         </div>
     </div>
-
     <button class="button is-success  is-link is-outlined" type="submit">Update</button>
     <a href="users" style="text-decoration: none;" class="button is-info  is-link is-outlined">Back to List</a>
 </EditForm>
@@ -33,5 +32,4 @@
         await userServices.UpdateUserAsync(user);
         navManager.NavigateTo("/users");
     }
-
 }

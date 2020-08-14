@@ -23,6 +23,9 @@
         <div class="table-container">
             <table class="table is-striped align-middle" id="myTable">
                 <thead>
+                    <tr class="th has-text-centered">
+                        <th></th>
+                    </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in bonusSpending)
@@ -44,7 +47,6 @@
 </div>
 <a href="bonuspurchased/allbonus" style="text-decoration: none;" class="button is-info  is-link is-outlined">Back to List</a>
 
-
 @code {
     [Parameter] public int Id { get; set; }
     private List<BonusSpending> bonusSpending { get; set; }
@@ -56,7 +58,8 @@
     {
         userBonus = await userBonusServices.GetBonusIdByUserBonusIdAsync(Id);
         totalBonusPages = (await bonusServices.GetBonusAsync(userBonus.BonusId)).Pages;
-        bonusSpending = await bonusSpendingServices.GetAllBonusSpendingByBonusIdAsync(userBonus.BonusId, userBonus.UserId);
+        //bonusSpending = await bonusSpendingServices.GetAllBonusSpendingByBonusIdAsync(userBonus.BonusId, userBonus.UserId);
+        bonusSpending = await bonusSpendingServices.GetAllBonusSpendingByBonusIdAndUserBonusIdAsync(userBonus.BonusId, userBonus.Id);
 
         if (bonusSpending.Count > 0)
         {

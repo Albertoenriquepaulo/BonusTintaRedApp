@@ -16,6 +16,7 @@ namespace BonusApp.Data
         public DateTime Date { get; set; }
         public User User { get; set; }
         public Bonus Bonus { get; set; }
+        public ICollection<BonusSpending> BonusesSpending { get; set; }
         public string TRCId
         {
             get

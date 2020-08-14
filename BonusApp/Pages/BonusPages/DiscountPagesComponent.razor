@@ -12,7 +12,7 @@
         <div class="card-body">
             <h5 class="card-title">Coupon Id: @userBonus.TRCId</h5>
             <h6 class="card-subtitle mb-2 text-muted">Coupon Type: @bonus.Name</h6>
-            <p class="card-text">Remaining pages: @(bonus.Pages - userBonus.SpentPages) </p>
+            <p class="card-text has-text-link">Remaining pages: @remainingPages </p>
         </div>
     </div>
 </div>
@@ -37,6 +37,7 @@
     public User user { get; set; }
 
     private BonusSpending bonusSpending = new BonusSpending();
+    private int remainingPages;
 
     private UserBonus userBonus;
     private Bonus bonus;
@@ -46,6 +47,8 @@
         userBonus = await userBonusServices.GetUserBonusAsync(Id);
         user = await userServices.GetUserAsync(userBonus.UserId);
         bonus = await bonusServices.GetBonusAsync(userBonus.BonusId);
+        //remainingPages = bonus.Pages - userBonus.SpentPages;
+        OnAfterRender(true);
     }
 
     private async Task AddPageToDiscount()
@@ -53,20 +56,24 @@
         bonusSpending.User = user;
         bonusSpending.Bonus = bonus;
         bonusSpending.Date = DateTime.Now;
+        bonusSpending.UserBonusId = userBonus.Id;
         if (await userBonusServices.DiscountPagesAsync(userBonus, bonusSpending.SpentPages) == false)
         {
             myModal.Show<ConfirmCreateComponent>("ERROR: The discount could not be applied...");
+            return;
         }
-        else
-        {
-            await bonusSpendingServices.AddBonusSpendingAsync(bonusSpending);
+        await bonusSpendingServices.AddBonusSpendingAsync(bonusSpending);
 
-            var messageForm = myModal.Show<ConfirmCreateComponent>($"The discount has been applied.");
-            var result = await messageForm.Result;
+        var messageForm = myModal.Show<ConfirmCreateComponent>($"The discount has been applied.");
+        var result = await messageForm.Result;
 
-            navManager.NavigateTo("bonuspurchased/allbonus");
-        }
+        navManager.NavigateTo("bonuspurchased/allbonus");
 
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        remainingPages = bonus.Pages - userBonus.SpentPages;
     }
 
 }

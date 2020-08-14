@@ -9,7 +9,6 @@
 {
     <h2>No Coupon Issued</h2>
     <a href="/" style="text-decoration: none;" class="button is-info  is-link is-outlined">Home</a>
-    @*<a href="bonus/create" class="button is-primary is-link is-outlined is-small" style="text-decoration:none;">Add Coupon</a>*@
 }
 else
 {
@@ -19,6 +18,7 @@ else
                 <tr class="th has-text-centered">
                     <th>Coupon Id</th>
                     <th>Coupon Type</th>
+                    <th>Client</th>
                     <th>Pages</th>
                     <th>Printed Pages</th>
                     <th>Remaining Pages</th>
@@ -28,18 +28,26 @@ else
             <tbody>
                 @foreach (var userBonus in userBonuses)
                 {
+                    { RemainingPages(userBonus.Bonus.Pages, userBonus.SpentPages); }
                     url[0] = $"bonuspurchased/discountpages/{userBonus.Id}";
                     url[1] = $"bonuspurchased/details/{userBonus.Id}";
                     <tr class="has-text-centered">
                         <td style="vertical-align: middle">@userBonus.TRCId</td>
                         <td style="vertical-align: middle">@userBonus.Bonus.Name</td>
+                        <td style="vertical-align: middle">@userBonus.User.Email</td>
                         <td style="vertical-align: middle">@userBonus.Bonus.Pages</td>
                         <td style="vertical-align: middle">@userBonus.SpentPages</td>
-                        <td style="vertical-align: middle">@(userBonus.Bonus.Pages - userBonus.SpentPages)</td>
+                        <td style="vertical-align: middle">@remainingPages</td>
                         <td style="vertical-align: middle">
-                            <a href="@url[0]" class="button is-success is-small is-link is-outlined" style="text-decoration:none;">Discount Pages</a>
-                            <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration:none;">Details</a>
-                            <a @onclick="@(()=>HandleDelete(userBonus))" class="button is-danger  is-small is-link is-outlined">Delete</a>
+                            <a href="@url[0]" class="button is-success is-small is-link is-outlined" style="text-decoration:none;" disabled=@(remainingPages == 0 ? true: false)>
+                                Discount Pages
+                            </a>
+                            <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration:none;">
+                                <span class="oi oi-magnifying-glass"></span>
+                            </a>
+                            <a @onclick="@(()=>HandleDelete(userBonus))" class="button is-danger is-small is-link is-outlined">
+                                <span class="oi oi-trash"></span>
+                            </a>
                         </td>
                     </tr>
                 }
@@ -54,6 +62,7 @@ else
 
     List<UserBonus> userBonuses;
     string[] url = new string[2];
+    private int remainingPages;
 
     protected async override Task OnInitializedAsync()
     {
@@ -80,7 +89,10 @@ else
             await userBonusServices.DeleteUserBonusAsync(userBonus);
             userBonuses = await userBonusServices.GetAllUserBonusAsync();
         }
-
+    }
+    private void RemainingPages(int pages, int spentPages)
+    {
+        remainingPages = pages - spentPages;
     }
 
 }
