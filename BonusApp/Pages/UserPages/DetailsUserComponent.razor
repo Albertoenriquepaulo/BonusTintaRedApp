@@ -7,7 +7,12 @@
 
 <h3>Client Details</h3>
 <p><strong>Client: </strong>@user.Email</p>
-<AddBonusComponent user="user" />
+<div class="card mb-3" style="width: 33rem;">
+    <div class="card-body is-vcentered is-centered">
+        <AddBonusComponent user="user" />
+    </div>
+</div>
+
 <div class="content">
     @if (user.UserBonuses.Count == 0)
     {

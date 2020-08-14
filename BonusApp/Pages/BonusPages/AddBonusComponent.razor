@@ -7,27 +7,31 @@
 
 
 <div>
-    <div class="field is-horizontal">
+    <div class="field is-horizontal mb-0">
         <label class="label" for="BonusInput">Coupon:</label>
         <div class="control">
             <select name="bonus" id="BonusInput" @onchange="((arg)=> selectedValue = Convert.ToInt32(arg.Value))">
                 <option value="0">Select coupon</option>
                 @foreach (var bonus in bonuses)
                 {
-                <option value="@bonus.Id">@bonus.Name</option>
+                    <option value="@bonus.Id">@bonus.Name</option>
                 }
             </select>
         </div>
         <a class="button is-success is-small is-link is-outlined mx-2" @onclick="AddBonusToSelectBoxAsync">Add</a>
-        <select name="bonus-selected" size="5" style="width:100px;" multiple>
+        <select name="bonus-selected mb-0" size="5" style="width:100px;" multiple>
             @foreach (var bonus in strBonusesToAddToUser)
             {
-            <option>@bonus</option>
+                <option>@bonus</option>
             }
         </select>
-        <a class="button is-danger is-small  is-link is-outlined mx-2" @onclick="Clear">Clear</a>
+        <div>
+            <a class="button is-danger is-small  is-link is-outlined mx-2" @onclick="Clear">Clear</a>
+            <p class="is-size-7 is-small mt-1 ml-3">@strBonusesToAddToUser.Count Coupons selected</p>
+        </div>
     </div>
-    <button class="button is-success is-link is-outlined mx-1" @onclick="AddBonus" disabled=@DisabledAddCouponButton()>Add Coupon</button>
+
+    <button class="button is-success is-link is-outlined mx-1 mt-0" @onclick="AddBonus" disabled=@DisabledAddCouponButton()>Add Coupon</button>
 </div>
 
 @code {
