@@ -31,7 +31,6 @@ namespace BonusApp
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
 
             services.AddDbContext<BonusAppDbContext>(options =>
             {

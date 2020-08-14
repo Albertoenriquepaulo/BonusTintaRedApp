@@ -31,7 +31,7 @@ else
                     { RemainingPages(userBonus.Bonus.Pages, userBonus.SpentPages); }
                     url[0] = $"bonuspurchased/discountpages/{userBonus.Id}";
                     url[1] = $"bonuspurchased/details/{userBonus.Id}";
-                    <tr class="has-text-centered">
+                    <tr class="has-text-centered @(remainingPages == 0 ? "has-text-danger": null)">
                         <td style="vertical-align: middle">@userBonus.TRCId</td>
                         <td style="vertical-align: middle">@userBonus.Bonus.Name</td>
                         <td style="vertical-align: middle">@userBonus.User.Email</td>

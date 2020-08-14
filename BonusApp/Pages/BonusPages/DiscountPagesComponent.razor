@@ -55,7 +55,7 @@
     {
         bonusSpending.User = user;
         bonusSpending.Bonus = bonus;
-        bonusSpending.Date = DateTime.Now;
+        bonusSpending.Date = DateTime.Now.ToString();
         bonusSpending.UserBonusId = userBonus.Id;
         if (await userBonusServices.DiscountPagesAsync(userBonus, bonusSpending.SpentPages) == false)
         {

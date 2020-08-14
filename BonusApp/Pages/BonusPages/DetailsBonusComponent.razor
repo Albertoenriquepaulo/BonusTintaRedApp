@@ -10,7 +10,8 @@
         <div class="card-body">
             <h5 class="card-title">Coupon Id: @userBonus.TRCId</h5>
             <h6 class="card-subtitle mb-2 text-muted">Total coupon pages:  @totalBonusPages</h6>
-            <h6 class="card-subtitle mb-2 text-muted">Issued:  @userBonus.Date.ToString("MM/dd/yyyy hh:mm tt")</h6>
+            @*<h6 class="card-subtitle mb-2 text-muted">Issued:  @userBonus.Date.ToString("MM/dd/yyyy hh:mm tt")</h6>*@
+            <h6 class="card-subtitle mb-2 text-muted">Issued:  @userBonus.Date</h6>
             <p class="card-text">Remaining pages: @totalRemainingPages </p>
         </div>
     </div>
