@@ -6,20 +6,17 @@
 
 <div class="content">
     <p><strong>Client: </strong>@userBonus.User.Email</p>
-    @if (bonusSpending.Count == 0)
-    {
-        <p class="has-background-warning-light">There is no transaction for this bonus.</p>
-    }
-    else
-    {
-        <div class="card mb-3" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Coupon Id: @userBonus.TRCId</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Total Coupon Pages:  @totalBonusPages</h6>
-                <p class="card-text ">Remaining pages: @totalRemainingPages </p>
-            </div>
+    <div class="card mb-3" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Coupon Id: @userBonus.TRCId</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Total coupon pages:  @totalBonusPages</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Issued:  @userBonus.Date.ToString("MM/dd/yyyy hh:mm tt")</h6>
+            <p class="card-text">Remaining pages: @totalRemainingPages </p>
         </div>
+    </div>
 
+    @if (bonusSpending.Count != 0)
+    {
         <div class="table-container">
             <table class="table is-striped align-middle" id="myTable">
                 <thead>
@@ -45,7 +42,23 @@
         </div>
     }
 </div>
-<a href="bonuspurchased/allbonus" style="text-decoration: none;" class="button is-info  is-link is-outlined">Back to List</a>
+
+<div class="field is-grouped">
+    <p class="control">
+        <a href="@(totalRemainingPages == 0 ? "javascript:function() { return false; }": url)"
+           class="button is-success is-link is-outlined" style="text-decoration:none;"
+           disabled=@(totalRemainingPages == 0 ? true: false)>
+            Discount Pages
+        </a>
+    </p>
+    <p class="control">
+        <a href="bonuspurchased/allbonus" style="text-decoration: none;" class="button is-info  is-link is-outlined">
+            Back to List
+        </a>
+    </p>
+</div>
+
+
 
 @code {
     [Parameter] public int Id { get; set; }
@@ -53,6 +66,7 @@
     private UserBonus userBonus { get; set; }
     private int totalBonusPages { get; set; }
     private int totalRemainingPages { get; set; }
+    string url;
 
     protected async override Task OnInitializedAsync()
     {
@@ -60,6 +74,7 @@
         totalBonusPages = (await bonusServices.GetBonusAsync(userBonus.BonusId)).Pages;
         //bonusSpending = await bonusSpendingServices.GetAllBonusSpendingByBonusIdAsync(userBonus.BonusId, userBonus.UserId);
         bonusSpending = await bonusSpendingServices.GetAllBonusSpendingByBonusIdAndUserBonusIdAsync(userBonus.BonusId, userBonus.Id);
+        url = $"bonuspurchased/discountpages/{userBonus.Id}";
 
         if (bonusSpending.Count > 0)
         {
@@ -67,12 +82,7 @@
             {
                 totalRemainingPages += (await bonusSpendingServices.GetSpentPagesByBonusSpendingId(item.Id));
             }
-            totalRemainingPages = totalBonusPages - totalRemainingPages;
         }
-    }
-
-    private async Task<int> GetPageRemaining(BonusSpending oBS)
-    {
-        return await bonusSpendingServices.GetSpentPagesByBonusSpendingId(oBS.Id) - totalBonusPages;
+        totalRemainingPages = totalBonusPages - totalRemainingPages;
     }
 }

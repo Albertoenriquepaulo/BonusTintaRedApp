@@ -80,7 +80,7 @@
 
     private async Task AddBonusAsync()
     {
-        if (selectedValue != 0 && intBonusesToAddToUser.Contains(selectedValue) == false)
+        if (selectedValue != 0)
         {
             intBonusesToAddToUser.Add(selectedValue);
             Bonus bonusToAddToUser = await bonusServices.GetBonusAsync(selectedValue);

@@ -27,7 +27,7 @@
         </select>
         <a class="button is-danger is-small  is-link is-outlined mx-2" @onclick="Clear">Clear</a>
     </div>
-    <button class="button is-success  is-link is-outlined mx-1" @onclick="AddBonus">Add Coupon</button>
+    <button class="button is-success is-link is-outlined mx-1" @onclick="AddBonus" disabled=@DisabledAddCouponButton()>Add Coupon</button>
 </div>
 
 @code {
@@ -36,6 +36,7 @@
     private int selectedValue;
     private List<string> strBonusesToAddToUser = new List<string>();
     private List<int> intBonusesToAddToUser = new List<int>();
+    List<UserBonus> userBonusList = new List<UserBonus>();
 
     List<Bonus> bonusesToAddToUser = new List<Bonus>();
 
@@ -53,7 +54,6 @@
 
     private async Task AddBonus()
     {
-        List<UserBonus> userBonusList = new List<UserBonus>();
         foreach (var bonus in bonusesToAddToUser)
         {
             userBonusList.Add(new UserBonus
@@ -85,12 +85,19 @@
 
     private async Task AddBonusToSelectBoxAsync()
     {
-        if (selectedValue != 0 && intBonusesToAddToUser.Contains(selectedValue) == false)
+        //To add only one type of coupon
+        //if (selectedValue != 0 && intBonusesToAddToUser.Contains(selectedValue) == false)
+        if (selectedValue != 0)
         {
             intBonusesToAddToUser.Add(selectedValue);
             Bonus bonusToAddToUser = await bonusServices.GetBonusAsync(selectedValue);
             bonusesToAddToUser.Add(bonusToAddToUser);
             strBonusesToAddToUser.Add(bonusToAddToUser.Name);
         }
+    }
+
+    private bool DisabledAddCouponButton()
+    {
+        return strBonusesToAddToUser.Count == 0 ? true : false;
     }
 }

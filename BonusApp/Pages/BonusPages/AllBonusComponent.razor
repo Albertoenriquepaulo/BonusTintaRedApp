@@ -39,7 +39,9 @@ else
                         <td style="vertical-align: middle">@userBonus.SpentPages</td>
                         <td style="vertical-align: middle">@remainingPages</td>
                         <td style="vertical-align: middle">
-                            <a href="@url[0]" class="button is-success is-small is-link is-outlined" style="text-decoration:none;" disabled=@(remainingPages == 0 ? true: false)>
+                            <a href="@(remainingPages == 0 ? "javascript:function() { return false; }": url[0])"
+                               class="button is-success is-small is-link is-outlined" style="text-decoration:none;"
+                               disabled=@(remainingPages == 0 ? true: false)>
                                 Discount Pages
                             </a>
                             <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration:none;">
