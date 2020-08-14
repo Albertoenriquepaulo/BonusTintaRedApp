@@ -65,7 +65,7 @@ namespace BonusApp.Data
                 }
                 sqlite_conn.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

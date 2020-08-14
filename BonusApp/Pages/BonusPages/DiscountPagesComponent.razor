@@ -20,7 +20,7 @@
 <EditForm Model="bonusSpending" OnValidSubmit="AddPageToDiscount">
     <DataAnnotationsValidator />
     <div class="field">
-        <label class="label mt-3">Discount to apply</label>
+        <label class="label mt-3">Set pages to discount</label>
         <div class="control">
             <InputNumber class="input" type="number" placeholder="Type number of pages" @bind-Value="@bonusSpending.SpentPages" />
             <ValidationMessage For="@(()=>bonusSpending.SpentPages)" />
