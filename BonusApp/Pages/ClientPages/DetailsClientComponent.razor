@@ -32,7 +32,13 @@
             }
             else
             {
-                <p class="is-marginless @CssAccordingToRemainingPage()" style="color: white;"><strong style="color: white;">Coupon Id: </strong><a style="color: white;" href=@($"couponpurchased/discountpages/{item.Id}")>@item.TRCId</a></p>
+                <p class="is-marginless @CssAccordingToRemainingPage()" style="color: white;">
+                    <strong style="color: white;">Coupon Id: </strong>
+                    <a style="color: white; text-decoration:underline" data-toggle="tooltip" data-placement="top" title="Set pages to discount"
+                       href=@($"couponpurchased/discountpages/{item.Id}")>
+                        @item.TRCId
+                    </a>
+                </p>
             }
             <p class="is-marginless"><strong>Coupon name: </strong>  @item.Coupon.Name</p>
             <p class="is-marginless"><strong>Issued date:     </strong>@item.Date</p>

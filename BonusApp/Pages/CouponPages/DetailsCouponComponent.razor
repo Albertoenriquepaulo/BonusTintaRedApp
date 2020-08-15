@@ -4,11 +4,19 @@
 @inject TransactionServices transactionsServices
 <h3>Coupon Details</h3>
 
+
+
+
 <div class="content">
     <p><strong>Client: </strong>@clientCoupon.Client.Email</p>
     <div class="card mb-3" style="width: 18rem;">
         <div class="card-body">
-            <h5 class="card-title">Coupon Id: @clientCoupon.TRCId</h5>
+            <h5 class="card-title">
+                Coupon Id: <a style="text-decoration:underline" data-toggle="tooltip" data-placement="top" title="Set pages to discount"
+                              href=@($"couponpurchased/discountpages/{clientCoupon.Id}")>
+                    @clientCoupon.TRCId
+                </a>
+            </h5>
             <h6 class="card-subtitle mb-2 text-muted">Total coupon pages:  @totalCouponPages</h6>
             @*<h6 class="card-subtitle mb-2 text-muted">Issued:  @clientCoupon.Date.ToString("MM/dd/yyyy hh:mm tt")</h6>*@
             <h6 class="card-subtitle mb-2 text-muted">Issued:  @clientCoupon.Date</h6>
