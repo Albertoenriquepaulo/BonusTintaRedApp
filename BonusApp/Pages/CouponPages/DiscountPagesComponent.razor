@@ -10,26 +10,35 @@
 <div>
     <div class="card" style="width: 18rem;">
         <div class="card-body">
-            <h5 class="card-title">Coupon Id: @clientCoupon.TRCId</h5>
+            <h5 class="card-title">
+                Coupon Id: <a style="text-decoration:underline" data-toggle="tooltip" data-placement="top" title="Click to see coupon details"
+                              href=@($"couponpurchased/details/{clientCoupon.Id}")>
+                    @clientCoupon.TRCId
+                </a>
+            </h5>
             <h6 class="card-subtitle mb-2 text-muted">Coupon Type: @coupon.Name</h6>
-            <p class="card-text has-text-link">Remaining pages: @remainingPages </p>
+            <p class="card-text has-text-link mb-0 pb-0">Remaining pages: @remainingPages </p>
+            <p class="card-text has-text-danger mt-0 pt-0">Used pages: @clientCoupon.SpentPages </p>
         </div>
     </div>
 </div>
 
 <EditForm Model="transactions" OnValidSubmit="AddPageToDiscount">
     <DataAnnotationsValidator />
-    <div class="field">
-        <label class="label mt-3">Set pages to discount</label>
-        <div class="control">
-            <InputNumber class="input" type="number" placeholder="Type number of pages" @bind-Value="@transactions.SpentPages" />
-            <ValidationMessage For="@(()=>transactions.SpentPages)" />
+    @if (remainingPages != 0)
+    {
+        <div class="field">
+            <label class="label mt-3">Set pages to discount</label>
+            <div class="control">
+                <InputNumber class="input" type="number" placeholder="Type number of pages" @bind-Value="@transactions.SpentPages" />
+                <ValidationMessage For="@(()=>transactions.SpentPages)" />
+            </div>
+
         </div>
-
-    </div>
-
-    <button class="button is-success  is-link is-outlined" type="submit">Apply Discount</button>
-    <a href="couponpurchased/allcoupon" style="text-decoration: none;" class="button is-info  is-link is-outlined">Back to List</a>
+        <button class="button is-success  is-link is-outlined" type="submit">Apply Discount</button>
+    }
+    @*<a href="couponpurchased/allcoupon" style="text-decoration: none;" class="button is-info  is-link is-outlined">Back to List</a>*@
+    <BackButtonComponent />
 </EditForm>
 
 @code {
@@ -62,12 +71,24 @@
             myModal.Show<ConfirmCreateComponent>("ERROR: The discount could not be applied...");
             return;
         }
-        await transactionsServices.AddTransactionAsync(transactions);
 
-        var messageForm = myModal.Show<ConfirmCreateComponent>($"The discount has been applied.");
+        var messageForm = myModal.Show<ConfirmDeleteComponent>($"Are you sure you want to set {transactions.SpentPages} pages to discount?");
         var result = await messageForm.Result;
 
-        navManager.NavigateTo("couponpurchased/allcoupon");
+        if ((bool)result.Data == false)
+        {
+            return;
+        }
+        else
+        {
+            await transactionsServices.AddTransactionAsync(transactions);
+
+            messageForm = myModal.Show<ConfirmCreateComponent>($"The discount has been applied.");
+            result = await messageForm.Result;
+        }
+
+        string url = $"couponpurchased/details/{Id}";
+        navManager.NavigateTo(url);
 
     }
 

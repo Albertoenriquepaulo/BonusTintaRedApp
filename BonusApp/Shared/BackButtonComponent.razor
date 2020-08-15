@@ -1,0 +1,14 @@
+﻿@inject IJSRuntime JSRuntime
+
+<button style="text-decoration: none;" class="button is-info  is-link is-outlined"
+        data-toggle="tooltip" data-placement="right" title="Go Back"
+        @onclick="OnClick">
+    <span class="oi oi-arrow-circle-left"></span>
+</button>
+
+@code {
+    private void OnClick()
+    {
+        JSRuntime.InvokeAsync<object>("test.historyGo", -1);
+    }
+}

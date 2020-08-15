@@ -12,7 +12,7 @@
     <div class="card mb-3" style="width: 18rem;">
         <div class="card-body">
             <h5 class="card-title">
-                Coupon Id: <a style="text-decoration:underline" data-toggle="tooltip" data-placement="top" title="Set pages to discount"
+                Coupon Id: <a style="text-decoration:underline" data-toggle="tooltip" data-placement="top" title="Click to set pages"
                               href=@($"couponpurchased/discountpages/{clientCoupon.Id}")>
                     @clientCoupon.TRCId
                 </a>
@@ -20,17 +20,18 @@
             <h6 class="card-subtitle mb-2 text-muted">Total coupon pages:  @totalCouponPages</h6>
             @*<h6 class="card-subtitle mb-2 text-muted">Issued:  @clientCoupon.Date.ToString("MM/dd/yyyy hh:mm tt")</h6>*@
             <h6 class="card-subtitle mb-2 text-muted">Issued:  @clientCoupon.Date</h6>
-            <p class="card-text">Remaining pages: @totalRemainingPages </p>
+            <p class="card-texthas-text-link mb-0 pb-0">Remaining pages: @totalRemainingPages </p>
+            <p class="card-text has-text-danger mt-0 pt-0">Used pages: @(totalCouponPages - totalRemainingPages) </p>
         </div>
     </div>
-
+    <p class="mb-2 pt-3 has-text-grey-light is-italic">Total Transactions: @transactions.Count</p>
     @if (transactions.Count != 0)
     {
-        <div class="table-container">
+        <div class="table-container mt-0">
             <table class="table is-striped align-middle" id="myTable">
                 <thead>
                     <tr class="th has-text-centered">
-                        <th></th>
+                        <th class="mt-0 p-0"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -61,9 +62,10 @@
         </a>
     </p>
     <p class="control">
-        <a href="couponpurchased/allcoupon" style="text-decoration: none;" class="button is-info  is-link is-outlined">
-            Back to List
-        </a>
+        @*<a href="couponpurchased/allcoupon" style="text-decoration: none;" class="button is-info  is-link is-outlined">
+                Back to List
+            </a>*@
+        <BackButtonComponent />
     </p>
 </div>
 
@@ -75,6 +77,7 @@
     private ClientCoupon clientCoupon { get; set; }
     private int totalCouponPages { get; set; }
     private int totalRemainingPages { get; set; }
+    //private int totalTransactions;
     string url;
 
     protected async override Task OnInitializedAsync()

@@ -4,3 +4,9 @@ function DataTable() {
         $('#myTable').DataTable();
     });
 }
+
+window.test = {
+    historyGo(value) {
+        window.history.go(value);
+    }
+};

@@ -34,7 +34,7 @@
             {
                 <p class="is-marginless @CssAccordingToRemainingPage()" style="color: white;">
                     <strong style="color: white;">Coupon Id: </strong>
-                    <a style="color: white; text-decoration:underline" data-toggle="tooltip" data-placement="top" title="Set pages to discount"
+                    <a style="color: white; text-decoration:underline" data-toggle="tooltip" data-placement="top" title="Click to set pages"
                        href=@($"couponpurchased/discountpages/{item.Id}")>
                         @item.TRCId
                     </a>
@@ -48,7 +48,8 @@
         }
     }
 </div>
-<a href="clients" style="text-decoration: none;" class="button is-info  is-link is-outlined">Back to List</a>
+@*<a href="clients" style="text-decoration: none;" class="button is-info  is-link is-outlined">Back to List</a>*@
+<BackButtonComponent />
 
 @code {
     Client client = new Client();
