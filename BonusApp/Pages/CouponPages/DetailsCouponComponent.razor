@@ -14,6 +14,7 @@
                     @clientCoupon.TRCId
                 </a>
             </h5>
+            <h6 class="card-subtitle mb-2 text-muted">Coupon Type: @coupon.Name</h6>
             <h6 class="card-subtitle mb-2 text-muted">Total coupon pages:  @totalCouponPages</h6>
             <h6 class="card-subtitle mb-2 text-muted">Issued:  @clientCoupon.Date</h6>
             <p class="card-text has-text-link mb-0 pb-0">Remaining pages: @totalRemainingPages </p>
@@ -66,6 +67,7 @@
     [Parameter] public int Id { get; set; }
     private List<Transaction> transactions { get; set; }
     private ClientCoupon clientCoupon { get; set; }
+    private Coupon coupon;
     private int totalCouponPages { get; set; }
     private int totalRemainingPages { get; set; }
     string url;
@@ -73,6 +75,7 @@
     protected async override Task OnInitializedAsync()
     {
         clientCoupon = await clientCouponServices.GetCouponIdByClientCouponIdAsync(Id);
+        coupon = await couponServices.GetCouponAsync(clientCoupon.CouponId);
         totalCouponPages = (await couponServices.GetCouponAsync(clientCoupon.CouponId)).Pages;
         transactions = await transactionsServices.GetAllTransactionByCouponIdAndClientCouponIdAsync(clientCoupon.CouponId, clientCoupon.Id);
         url = $"couponpurchased/discountpages/{clientCoupon.Id}";
