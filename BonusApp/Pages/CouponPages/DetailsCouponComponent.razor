@@ -21,7 +21,7 @@
             @*<h6 class="card-subtitle mb-2 text-muted">Issued:  @clientCoupon.Date.ToString("MM/dd/yyyy hh:mm tt")</h6>*@
             <h6 class="card-subtitle mb-2 text-muted">Issued:  @clientCoupon.Date</h6>
             <p class="card-texthas-text-link mb-0 pb-0">Remaining pages: @totalRemainingPages </p>
-            <p class="card-text has-text-danger mt-0 pt-0">Used pages: @(totalCouponPages - totalRemainingPages) </p>
+            <p class="card-text has-text-danger mt-0 pt-0">Printed pages: @(totalCouponPages - totalRemainingPages) </p>
         </div>
     </div>
     <p class="mb-2 pt-3 has-text-grey-light is-italic">Total Transactions: @transactions.Count</p>
