@@ -1,0 +1,35 @@
+﻿@page "/clients/edit/{Id:int}"
+@inject ClientServices clientServices
+@inject NavigationManager navManager
+
+<h3>Edit Client</h3>
+
+<EditForm Model="client" OnValidSubmit="Update">
+    <DataAnnotationsValidator />
+    <div class="field">
+        <label class="label">Name</label>
+        <div class="control">
+            <InputText class="input" type="text" placeholder="Text input" @bind-Value="@client.Email" />
+            <ValidationMessage For="@(()=>client.Email)" />
+        </div>
+    </div>
+    <button class="button is-success  is-link is-outlined" type="submit">Update</button>
+    <a href="clients" style="text-decoration: none;" class="button is-info  is-link is-outlined">Back to List</a>
+</EditForm>
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private Client client;
+
+    protected async override Task OnInitializedAsync()
+    {
+        client = await clientServices.GetClientAsync(Id);
+    }
+
+    private async Task Update()
+    {
+        await clientServices.UpdateClientAsync(client);
+        navManager.NavigateTo("/clients");
+    }
+}

@@ -1,0 +1,37 @@
+﻿@page "/coupon/create"
+@inject CouponServices couponServices
+@inject IModalService myModal
+
+<h3>Create Coupon</h3>
+
+<EditForm Model="coupon" OnValidSubmit="Create">
+    <DataAnnotationsValidator />
+    <div class="field">
+        <label class="label">Name</label>
+        <div class="control">
+            <InputText class="input" type="text" placeholder="Coupon name" @bind-Value="@coupon.Name" oninput="this.value=this.value.toUpperCase()" />
+            <ValidationMessage For="@(()=>coupon.Name)" />
+
+        </div>
+        <label class="label mt-2">Page</label>
+        <div class="control">
+            <InputNumber class="input" type="number" placeholder="Number input" @bind-Value="@coupon.Pages" />
+            <ValidationMessage For="@(()=>coupon.Pages)" />
+        </div>
+    </div>
+
+    <button class="button is-success is-link is-outlined" type="submit">Create</button>
+    <a href="coupon" style="text-decoration: none;" class="button is-info is-link  is-outlined">Back to List</a>
+</EditForm>
+
+@code {
+    private Coupon coupon = new Coupon();
+
+    private async Task Create()
+    {
+        coupon.Name = coupon.Name.ToUpper();
+        await couponServices.AddCouponAsync(coupon);
+        myModal.Show<ConfirmCreateComponent>($"The coupon has been created under the ID {coupon.Id}");
+        coupon = new Coupon();
+    }
+}

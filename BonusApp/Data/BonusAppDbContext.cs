@@ -16,41 +16,41 @@ namespace BonusApp.Data
         #endregion
 
         #region Public properties
-        public DbSet<User> User { get; set; }
-        public DbSet<Bonus> Bonus { get; set; }
-        public DbSet<UserBonus> UserBonus { get; set; }
-        public DbSet<BonusSpending> BonusSpending { get; set; }
+        public DbSet<Client> Client { get; set; }
+        public DbSet<Coupon> Coupon { get; set; }
+        public DbSet<ClientCoupon> ClientCoupon { get; set; }
+        public DbSet<Transaction> Transaction { get; set; }
         #endregion
 
         #region Overidden methods
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().HasData(GetUsers());
-            modelBuilder.Entity<Bonus>().HasData(GetCoupons());
+            modelBuilder.Entity<Client>().HasData(GetClients());
+            modelBuilder.Entity<Coupon>().HasData(GetCoupons());
             base.OnModelCreating(modelBuilder);
         }
         #endregion
 
 
         #region Private methods
-        private List<User> GetUsers()
+        private List<Client> GetClients()
         {
-            return new List<User>
+            return new List<Client>
             {
-                new User { Id=1, Email = "TRCtester@tcr.com"},
+                new Client { Id=1, Email = "TRCtester@tcr.com"},
             };
         }
 
-        private List<Bonus> GetCoupons()
+        private List<Coupon> GetCoupons()
         {
-            return new List<Bonus>
+            return new List<Coupon>
             {
-                new Bonus { Id=1, Name = "BYN100", Pages= 100},
-                new Bonus { Id=2, Name = "BYN200", Pages= 200},
-                new Bonus { Id=3, Name = "BYN500", Pages= 500},
-                new Bonus { Id=4, Name = "COLOR50", Pages= 50},
-                new Bonus { Id=5, Name = "COLOR100", Pages= 100},
-                new Bonus { Id=6, Name = "COLOR200", Pages= 200},
+                new Coupon { Id=1, Name = "BYN100", Pages= 100},
+                new Coupon { Id=2, Name = "BYN200", Pages= 200},
+                new Coupon { Id=3, Name = "BYN500", Pages= 500},
+                new Coupon { Id=4, Name = "COLOR50", Pages= 50},
+                new Coupon { Id=5, Name = "COLOR100", Pages= 100},
+                new Coupon { Id=6, Name = "COLOR200", Pages= 200},
             };
         }
         #endregion

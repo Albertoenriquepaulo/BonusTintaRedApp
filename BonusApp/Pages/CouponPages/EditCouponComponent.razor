@@ -1,0 +1,44 @@
+﻿@page "/coupon/edit/{Id:int}"
+@inject CouponServices couponServices
+@inject NavigationManager navManager
+
+<h3>Edit Coupon</h3>
+
+@if (coupon != null)
+{
+    <EditForm Model="coupon" OnValidSubmit="Update">
+        <DataAnnotationsValidator />
+        <div class="field">
+            <label class="label">Name</label>
+            <div class="control">
+                <InputText class="input" type="text" placeholder="Text input" @bind-Value="@coupon.Name" />
+                <ValidationMessage For="@(()=>coupon.Name)" />
+            </div>
+            <label class="label mt-2">Pages</label>
+            <div class="control">
+                <InputNumber class="input" type="number" placeholder="Text input" @bind-Value="@coupon.Pages" />
+                <ValidationMessage For="@(()=>coupon.Pages)" />
+            </div>
+        </div>
+
+        <button class="button is-success  is-link is-outlined" type="submit">Update</button>
+        <a href="coupon" style="text-decoration: none;" class="button is-info  is-link is-outlined">Back to List</a>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    public Coupon coupon { get; set; } = new Coupon();
+
+    protected async override Task OnInitializedAsync()
+    {
+        coupon = await couponServices.GetCouponAsync(Id);
+    }
+
+    private async Task Update()
+    {
+        await couponServices.UpdateCouponAsync(coupon);
+        navManager.NavigateTo("/coupon");
+    }
+}

@@ -34,12 +34,12 @@ namespace BonusApp
 
             services.AddDbContext<BonusAppDbContext>(options =>
             {
-                options.UseSqlite("Data Source = UserBondsDB.db");
+                options.UseSqlite("Data Source = ClientBondsDB.db");
             });
-            services.AddScoped<UserServices>();
-            services.AddScoped<BonusServices>();
-            services.AddScoped<UserBonusServices>();
-            services.AddScoped<BonusSpendingServices>();
+            services.AddScoped<ClientServices>();
+            services.AddScoped<CouponServices>();
+            services.AddScoped<ClientCouponServices>();
+            services.AddScoped<TransactionServices>();
             services.AddScoped<RefreshServices>();
 
 

@@ -1,11 +1,11 @@
-﻿@page "/bonus"
-@inject BonusServices bonusServices
+﻿@page "/coupon"
+@inject CouponServices couponServices
 @inject IModalService myModal
 
 <h3>Coupon Types</h3>
 
-<a style="text-decoration:none;" href="bonus/create" class="button is-primary is-link is-outlined is-small">Create Coupon</a>
-@if (bonuses == null || bonuses.Count == 0)
+<a style="text-decoration:none;" href="coupon/create" class="button is-primary is-link is-outlined is-small">Create Coupon</a>
+@if (coupons == null || coupons.Count == 0)
 {
     <h2>No Coupon found</h2>
 }
@@ -22,18 +22,18 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var bonus in bonuses)
+                @foreach (var coupon in coupons)
                 {
-                    url = $"bonus/edit/{bonus.Id.ToString()}";
+                    url = $"coupon/edit/{coupon.Id.ToString()}";
                     <tr class="has-text-centered">
                         <td style="vertical-align: middle">@(index++)</td>
-                        <td style="vertical-align: middle">@bonus.Name</td>
-                        <td style="vertical-align: middle">@bonus.Pages</td>
+                        <td style="vertical-align: middle">@coupon.Name</td>
+                        <td style="vertical-align: middle">@coupon.Pages</td>
                         <td style="vertical-align: middle">
                             <a href="@url" class="button is-info is-small is-outlined" style="text-decoration:none;">
                                 <span class="oi oi-pencil"></span> @*EDIT*@
                             </a>
-                            <a @onclick="@(()=>HandleDelete(bonus))" class="button is-danger is-link  is-small is-outlined">
+                            <a @onclick="@(()=>HandleDelete(coupon))" class="button is-danger is-link  is-small is-outlined">
                                 <span class="oi oi-trash"></span> @*DELETE*@
                             </a>
                         </td>
@@ -46,19 +46,19 @@ else
 }
 
 @code {
-    List<Bonus> bonuses;
+    List<Coupon> coupons;
     private int index;
     string url;
 
     protected async override Task OnInitializedAsync()
     {
         index = 1;
-        bonuses = await bonusServices.GetAllBonusAsync();
+        coupons = await couponServices.GetAllCouponAsync();
     }
 
-    private async Task HandleDelete(Bonus bonus)
+    private async Task HandleDelete(Coupon coupon)
     {
-        var messageForm = myModal.Show<ConfirmDeleteComponent>($"Are you sure you want to delete the {bonus.Name} coupon?");
+        var messageForm = myModal.Show<ConfirmDeleteComponent>($"Are you sure you want to delete the {coupon.Name} coupon?");
         var result = await messageForm.Result;
 
         if (result.Cancelled)
@@ -68,8 +68,8 @@ else
 
         if ((bool)result.Data)
         {
-            await bonusServices.DeleteBonusAsync(bonus);
-            bonuses = await bonusServices.GetAllBonusAsync();
+            await couponServices.DeleteCouponAsync(coupon);
+            coupons = await couponServices.GetAllCouponAsync();
         }
     }
 

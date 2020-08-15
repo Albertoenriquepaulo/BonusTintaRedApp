@@ -1,18 +1,18 @@
-﻿@page "/users"
-@inject UserServices userServices
+﻿@page "/clients"
+@inject ClientServices clientServices
 @inject IModalService myModal
 @inject IJSRuntime JSRuntime
 
 <h3>Clients List</h3>
 
-@if (users == null || users.Count == 0)
+@if (clients == null || clients.Count == 0)
 {
-    <h2>No user found</h2>
-    <a href="users/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Add Client</a>
+    <h2>No client found</h2>
+    <a href="clients/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Create Client</a>
 }
 else
 {
-    <a href="users/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Add Client</a>
+    <a href="clients/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Create Client</a>
     <div class="table-container">
         <table class="table is-striped" id="myTable">
             <thead>
@@ -23,13 +23,13 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var user in users)
+                @foreach (var client in clients)
                 {
-                    url[0] = $"users/edit/{user.Id}";
-                    url[1] = $"users/details/{user.Id}";
+                    url[0] = $"clients/edit/{client.Id}";
+                    url[1] = $"clients/details/{client.Id}";
                     <tr class="has-text-centered">
                         <td style="vertical-align: middle">@(index++)</td>
-                        <td style="vertical-align: middle">@user.Email</td>
+                        <td style="vertical-align: middle">@client.Email</td>
                         <td style="vertical-align: middle">
                             <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration: none;">Add Coupon</a>
                             <a href="@url[0]" class="button is-success is-small is-link is-outlined" style="text-decoration: none;">
@@ -38,7 +38,7 @@ else
                             <a href="@url[1]" class="button is-info is-small is-link is-outlined" style="text-decoration: none;">
                                 <span class="oi oi-magnifying-glass"></span> @*DETAILS*@
                             </a>
-                            <a class="button is-danger is-small is-link is-outlined" style="text-decoration: none;" @onclick="@(()=>HandleDelete(user))">
+                            <a class="button is-danger is-small is-link is-outlined" style="text-decoration: none;" @onclick="@(()=>HandleDelete(client))">
                                 <span class="oi oi-trash"></span> @*DELETE*@
                             </a>
                         </td>
@@ -50,18 +50,18 @@ else
 }
 
 @code {
-    List<User> users;
+    List<Client> clients;
     private int index = 1;
     string[] url = new string[2];
 
     protected async override Task OnInitializedAsync()
     {
-        users = await userServices.GetAllUserAsync();
+        clients = await clientServices.GetAllClientAsync();
     }
 
-    private async Task HandleDelete(User user)
+    private async Task HandleDelete(Client client)
     {
-        var messageForm = myModal.Show<ConfirmDeleteComponent>($"Are you sure you want to delete the {user.Email} User?");
+        var messageForm = myModal.Show<ConfirmDeleteComponent>($"Are you sure you want to delete the {client.Email} Client?");
         var result = await messageForm.Result;
 
         if (result.Cancelled)
@@ -71,8 +71,8 @@ else
 
         if ((bool)result.Data)
         {
-            await userServices.DeleteUserAsync(user);
-            users = await userServices.GetAllUserAsync();
+            await clientServices.DeleteClientAsync(client);
+            clients = await clientServices.GetAllClientAsync();
         }
     }
 

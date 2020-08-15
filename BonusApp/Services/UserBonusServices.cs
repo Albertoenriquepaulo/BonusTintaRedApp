@@ -9,43 +9,43 @@ using Microsoft.Data.Sqlite;
 
 namespace BonusApp.Data
 {
-    public class UserBonusServices
+    public class ClientCouponServices
     {
         #region Private members
         private BonusAppDbContext dbContext;
-        private readonly BonusServices _bonusServices;
+        private readonly CouponServices _couponServices;
         #endregion
 
         #region Constructor
-        public UserBonusServices(BonusAppDbContext dbContext, BonusServices bonusServices)
+        public ClientCouponServices(BonusAppDbContext dbContext, CouponServices couponServices)
         {
             this.dbContext = dbContext;
-            _bonusServices = bonusServices;
+            _couponServices = couponServices;
         }
         #endregion
 
         #region Public methods
-        public async Task<List<UserBonus>> GetAllUserBonusAsync()
+        public async Task<List<ClientCoupon>> GetAllClientCouponAsync()
         {
-            return await dbContext.UserBonus.Include(ub => ub.Bonus).Include(ub => ub.User).ToListAsync();
+            return await dbContext.ClientCoupon.Include(ub => ub.Coupon).Include(ub => ub.Client).ToListAsync();
         }
-        public async Task<List<UserBonus>> GetAllUserBonusByUserIdAsync(int id)
+        public async Task<List<ClientCoupon>> GetAllClientCouponByClientIdAsync(int id)
         {
-            return await dbContext.UserBonus.Include(ub => ub.Bonus).Where(ub => ub.UserId == id).ToListAsync();
+            return await dbContext.ClientCoupon.Include(ub => ub.Coupon).Where(ub => ub.ClientId == id).ToListAsync();
         }
-        public async Task<UserBonus> GetBonusIdByUserBonusIdAsync(int id)
+        public async Task<ClientCoupon> GetCouponIdByClientCouponIdAsync(int id)
         {
-            return await dbContext.UserBonus.Include(ub => ub.User).Where(ub => ub.Id == id).FirstOrDefaultAsync();
+            return await dbContext.ClientCoupon.Include(ub => ub.Client).Where(ub => ub.Id == id).FirstOrDefaultAsync();
         }
-        public async Task<UserBonus> GetUserBonusAsync(int id)
+        public async Task<ClientCoupon> GetClientCouponAsync(int id)
         {
 
-            return await dbContext.UserBonus.FindAsync(id);
-            //return await dbContext.User.FindAsync(id);
+            return await dbContext.ClientCoupon.FindAsync(id);
+            //return await dbContext.Client.FindAsync(id);
         }
-        public bool AddListUserBonusAsyncWSQL(List<UserBonus> userBonuses)
+        public bool AddListClientCouponAsyncWSQL(List<ClientCoupon> clientCoupons)
         {
-            const string connection = "Data Source=UserBondsDB.db;";
+            const string connection = "Data Source=ClientBondsDB.db;";
             string stringQuery;
 
             SqliteConnection sqlite_conn = new SqliteConnection(connection);
@@ -55,11 +55,11 @@ namespace BonusApp.Data
 
             try
             {
-                foreach (var userBonus in userBonuses)
+                foreach (var clientCoupon in clientCoupons)
                 {
 
-                    stringQuery = "INSERT INTO UserBonus (UserId, BonusId, SpentPages, Date) VALUES(" +
-                        $"{userBonus.UserId}, {userBonus.BonusId}, {userBonus.SpentPages}, '{userBonus.Date}')";
+                    stringQuery = "INSERT INTO ClientCoupon (ClientId, CouponId, SpentPages, Date) VALUES(" +
+                        $"{clientCoupon.ClientId}, {clientCoupon.CouponId}, {clientCoupon.SpentPages}, '{clientCoupon.Date}')";
                     SqliteCmd.CommandText = stringQuery;
                     SqliteCmd.ExecuteNonQuery();
                 }
@@ -72,14 +72,14 @@ namespace BonusApp.Data
 
             return true;
         }
-        public async Task<UserBonus> UpdateUserBonusAsync(UserBonus userBonus)
+        public async Task<ClientCoupon> UpdateClientCouponAsync(ClientCoupon clientCoupon)
         {
             try
             {
-                var userExist = dbContext.UserBonus.FirstOrDefault(u => u.Id == userBonus.Id);
-                if (userExist != null)
+                var clientExist = dbContext.ClientCoupon.FirstOrDefault(u => u.Id == clientCoupon.Id);
+                if (clientExist != null)
                 {
-                    dbContext.Update(userBonus);
+                    dbContext.Update(clientCoupon);
                     await dbContext.SaveChangesAsync();
                 }
             }
@@ -87,23 +87,23 @@ namespace BonusApp.Data
             {
                 throw;
             }
-            return userBonus;
+            return clientCoupon;
         }
-        public async Task<bool> DiscountPagesAsync(UserBonus userBonus, int pages)
+        public async Task<bool> DiscountPagesAsync(ClientCoupon clientCoupon, int pages)
         {
-            if (userBonus.SpentPages + pages > (await _bonusServices.GetBonusAsync(userBonus.BonusId)).Pages)
+            if (clientCoupon.SpentPages + pages > (await _couponServices.GetCouponAsync(clientCoupon.CouponId)).Pages)
             {
                 return false;
             }
-            userBonus.SpentPages += pages;
-            await UpdateUserBonusAsync(userBonus);
+            clientCoupon.SpentPages += pages;
+            await UpdateClientCouponAsync(clientCoupon);
             return true;
         }
-        public async Task DeleteUserBonusAsync(UserBonus userBonus)
+        public async Task DeleteClientCouponAsync(ClientCoupon clientCoupon)
         {
             try
             {
-                dbContext.UserBonus.Remove(userBonus);
+                dbContext.ClientCoupon.Remove(clientCoupon);
                 await dbContext.SaveChangesAsync();
             }
             catch (Exception)

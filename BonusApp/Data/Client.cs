@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BonusApp.Data
 {
-    public class User
+    public class Client
     {
         [Required]
         public int Id { get; set; }
@@ -18,8 +18,8 @@ namespace BonusApp.Data
         [EmailAddress]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Email { get; set; }
-        public ICollection<UserBonus> UserBonuses { get; set; }
-        public ICollection<BonusSpending> BonusesSpending { get; set; }
+        public ICollection<ClientCoupon> ClientCoupons { get; set; }
+        public ICollection<Transaction> Transactions { get; set; }
 
     }
 }

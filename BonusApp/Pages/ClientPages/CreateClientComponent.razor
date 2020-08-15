@@ -1,0 +1,104 @@
+﻿@page "/clients/create"
+@inject ClientServices clientServices
+@inject CouponServices couponServices
+@inject IModalService myModal
+@inject NavigationManager navManager
+
+<h3>New Client</h3>
+
+<EditForm Model="client" OnValidSubmit="Create">
+    <DataAnnotationsValidator />
+    <div class="field">
+        <label class="label">Email</label>
+        <div class="control">
+            <InputText class="input" type="text" placeholder="Client email" @bind-Value="@client.Email" />
+            <ValidationMessage For="@(()=>client.Email)" />
+        </div>
+
+    </div>
+
+    <div class="card mb-3" style="width: 33rem;">
+        <div class="card-body is-vcentered is-centered">
+            <div class="field is-horizontal">
+                <label class="label mx-1" for="CouponInput">Coupon</label>
+                <div class="control">
+                    <select name="coupon" id="CouponInput" @onchange="((arg)=> selectedValue = Convert.ToInt32(arg.Value))">
+                        <option value="0">Select coupon</option>
+                        @foreach (var coupon in coupons)
+                        {
+                            <option value="@coupon.Id">@coupon.Name</option>
+                        }
+                    </select>
+                </div>
+                <a class="button is-success is-small  is-link is-outlined mx-2" @onclick="AddCouponAsync">Add</a>
+                <select name="coupon-selected" size="5" style="width:100px;" multiple>
+                    @foreach (var coupon in strCouponsToAddToClient)
+                    {
+                        <option>@coupon</option>
+                    }
+                </select>
+                <div>
+                    <a class="button is-danger is-small  is-link is-outlined mx-2" @onclick="Clear">Clear</a>
+                    <p class="is-size-7 is-small mt-1 ml-3">@strCouponsToAddToClient.Count Coupons selected</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="button is-success  is-link is-outlined mx-1" type="submit">Create</button>
+    <a href="clients" style="text-decoration: none;" class="button is-info  is-link is-outlined mx-1">Back to List</a>
+</EditForm>
+
+@code {
+    private Client client = new Client();
+    List<Coupon> coupons = new List<Coupon>();
+
+    private int selectedValue;
+    private List<int> intCouponsToAddToClient = new List<int>();
+    List<Coupon> couponsToAddToClient = new List<Coupon>();
+    private List<string> strCouponsToAddToClient = new List<string>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        coupons = await couponServices.GetAllCouponAsync();
+    }
+
+    private async Task Create()
+    {
+        List<ClientCoupon> clientCouponList = new List<ClientCoupon>();
+        foreach (var coupon in couponsToAddToClient)
+        {
+            clientCouponList.Add(new ClientCoupon
+            {
+                Date = DateTime.Now.ToString(),
+                SpentPages = 0,
+                Client = client,
+                Coupon = coupon
+            });
+        }
+        client.ClientCoupons = clientCouponList;
+        await clientServices.AddClientAsync(client);
+
+        var messageForm = myModal.Show<ConfirmCreateComponent>($"The client has been created under the ID {client.Id}");
+        var result = await messageForm.Result;
+
+        navManager.NavigateTo($"clients/details/{client.Id}");
+    }
+
+    private async Task AddCouponAsync()
+    {
+        if (selectedValue != 0)
+        {
+            intCouponsToAddToClient.Add(selectedValue);
+            Coupon couponToAddToClient = await couponServices.GetCouponAsync(selectedValue);
+            couponsToAddToClient.Add(couponToAddToClient);
+            strCouponsToAddToClient.Add(couponToAddToClient.Name);
+        }
+    }
+
+    private void Clear()
+    {
+        intCouponsToAddToClient = new List<int>();
+        strCouponsToAddToClient = new List<string>();
+    }
+}

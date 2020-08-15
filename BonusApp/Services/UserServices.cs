@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace BonusApp.Data
 {
-    public class UserServices
+    public class ClientServices
     {
         #region Private members
         private BonusAppDbContext dbContext;
         #endregion
 
         #region Constructor
-        public UserServices(BonusAppDbContext dbContext)
+        public ClientServices(BonusAppDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
@@ -21,40 +21,40 @@ namespace BonusApp.Data
 
         #region Public methods
 
-        public async Task<List<User>> GetAllUserAsync()
+        public async Task<List<Client>> GetAllClientAsync()
         {
 
-            return await dbContext.User.ToListAsync();
+            return await dbContext.Client.ToListAsync();
         }
-        public async Task<User> GetUserAsync(int id)
+        public async Task<Client> GetClientAsync(int id)
         {
 
-            return await dbContext.User.Include(ub => ub.UserBonuses).ThenInclude(b => b.Bonus).FirstOrDefaultAsync(x => x.Id == id);
-            //return await dbContext.User.FindAsync(id);
+            return await dbContext.Client.Include(ub => ub.ClientCoupons).ThenInclude(b => b.Coupon).FirstOrDefaultAsync(x => x.Id == id);
+            //return await dbContext.Client.FindAsync(id);
         }
 
-        public async Task<User> AddUserAsync(User user)
+        public async Task<Client> AddClientAsync(Client client)
         {
             try
             {
-                dbContext.User.Add(user);
+                dbContext.Client.Add(client);
                 await dbContext.SaveChangesAsync();
             }
             catch (Exception)
             {
                 throw;
             }
-            return user;
+            return client;
         }
 
-        public async Task<User> UpdateUserAsync(User user)
+        public async Task<Client> UpdateClientAsync(Client client)
         {
             try
             {
-                var userExist = dbContext.User.FirstOrDefault(u => u.Id == user.Id);
-                if (userExist != null)
+                var clientExist = dbContext.Client.FirstOrDefault(u => u.Id == client.Id);
+                if (clientExist != null)
                 {
-                    dbContext.Update(user);
+                    dbContext.Update(client);
                     await dbContext.SaveChangesAsync();
                 }
             }
@@ -62,14 +62,14 @@ namespace BonusApp.Data
             {
                 throw;
             }
-            return user;
+            return client;
         }
 
-        public async Task DeleteUserAsync(User user)
+        public async Task DeleteClientAsync(Client client)
         {
             try
             {
-                dbContext.User.Remove(user);
+                dbContext.Client.Remove(client);
                 await dbContext.SaveChangesAsync();
             }
             catch (Exception)

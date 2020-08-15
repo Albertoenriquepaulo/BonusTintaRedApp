@@ -7,49 +7,49 @@ using System.Threading.Tasks;
 
 namespace BonusApp.Services
 {
-    public class BonusSpendingServices
+    public class TransactionServices
     {
         #region Private members
         private BonusAppDbContext dbContext;
         #endregion
 
         #region Constructor
-        public BonusSpendingServices(BonusAppDbContext dbContext)
+        public TransactionServices(BonusAppDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
         #endregion
 
         #region Public methods
-        public async Task<List<BonusSpending>> GetAllBonusSpendingAsync()
+        public async Task<List<Transaction>> GetAllTransactionAsync()
         {
-            return await dbContext.BonusSpending.ToListAsync();
+            return await dbContext.Transaction.ToListAsync();
         }
 
-        public async Task<List<BonusSpending>> GetAllBonusSpendingByBonusIdAndUserBonusIdAsync(int bonusId, int userBonusId)
+        public async Task<List<Transaction>> GetAllTransactionByCouponIdAndClientCouponIdAsync(int couponId, int clientCouponId)
         {
-            return await dbContext.BonusSpending.Where(bs => bs.BonusId == bonusId && bs.UserBonusId == userBonusId).ToListAsync();
+            return await dbContext.Transaction.Where(bs => bs.CouponId == couponId && bs.ClientCouponId == clientCouponId).ToListAsync();
         }
 
-        public async Task<BonusSpending> AddBonusSpendingAsync(BonusSpending bonusSpending)
+        public async Task<Transaction> AddTransactionAsync(Transaction transactions)
         {
             try
             {
-                dbContext.BonusSpending.Add(bonusSpending);
+                dbContext.Transaction.Add(transactions);
                 await dbContext.SaveChangesAsync();
             }
             catch (Exception)
             {
                 throw;
             }
-            return bonusSpending;
+            return transactions;
         }
 
-        public async Task<int> GetSpentPagesByBonusSpendingId(int bonusSpendingId)
+        public async Task<int> GetSpentPagesByTransactionId(int transactionsId)
         {
-            var list = await dbContext.BonusSpending.Where(bs => bs.Id == bonusSpendingId).ToListAsync();
+            var list = await dbContext.Transaction.Where(bs => bs.Id == transactionsId).ToListAsync();
             int sum = list.Sum(item => item.SpentPages);
-            return (await dbContext.BonusSpending.Where(bs => bs.Id == bonusSpendingId).ToListAsync()).Sum(item => item.SpentPages);
+            return (await dbContext.Transaction.Where(bs => bs.Id == transactionsId).ToListAsync()).Sum(item => item.SpentPages);
         }
         #endregion
     }

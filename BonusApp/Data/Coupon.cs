@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BonusApp.Data
 {
-    public class Bonus
+    public class Coupon
     {
         [Required]
         public int Id { get; set; }
@@ -16,7 +16,7 @@ namespace BonusApp.Data
 
         [Required]
         public int Pages { get; set; }
-        public ICollection<UserBonus> UserBonuses { get; set; }
-        public ICollection<BonusSpending> BonusesSpending { get; set; }
+        public ICollection<ClientCoupon> ClientCoupons { get; set; }
+        public ICollection<Transaction> Transactions { get; set; }
     }
 }

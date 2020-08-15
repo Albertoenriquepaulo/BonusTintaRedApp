@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace BonusApp.Data
 {
-    public class BonusSpending
+    public class Transaction
     {
         [Required]
         public int Id { get; set; }
-        public int UserId { get; set; }
-        public int BonusId { get; set; }
-        public int UserBonusId { get; set; }
+        public int ClientId { get; set; }
+        public int CouponId { get; set; }
+        public int ClientCouponId { get; set; }
 
         [Range(1, Int32.MaxValue, ErrorMessage = "Value should be greater than or equal to 1")]
         public int SpentPages { get; set; }
         public string Date { get; set; }
-        public User User { get; set; }
-        public Bonus Bonus { get; set; }
-        public UserBonus UserBonus { get; set; }
+        public Client Client { get; set; }
+        public Coupon Coupon { get; set; }
+        public ClientCoupon ClientCoupon { get; set; }
     }
 }

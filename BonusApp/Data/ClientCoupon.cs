@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace BonusApp.Data
 {
-    public class UserBonus
+    public class ClientCoupon
     {
         [Required]
         public int Id { get; set; }
-        public int UserId { get; set; }
-        public int BonusId { get; set; }
+        public int ClientId { get; set; }
+        public int CouponId { get; set; }
         public int SpentPages { get; set; }
         public string Date { get; set; }
-        public User User { get; set; }
-        public Bonus Bonus { get; set; }
-        public ICollection<BonusSpending> BonusesSpending { get; set; }
+        public Client Client { get; set; }
+        public Coupon Coupon { get; set; }
+        public ICollection<Transaction> Transactions { get; set; }
         public string TRCId
         {
             get

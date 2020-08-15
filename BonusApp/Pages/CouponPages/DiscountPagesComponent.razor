@@ -1,0 +1,79 @@
+﻿@page "/couponpurchased/discountpages/{Id:int}"
+@inject ClientCouponServices clientCouponServices
+@inject CouponServices couponServices
+@inject TransactionServices transactionsServices
+@inject ClientServices clientServices
+@inject IModalService myModal
+@inject NavigationManager navManager
+
+<h3>Discount Pages</h3>
+<div>
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Coupon Id: @clientCoupon.TRCId</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Coupon Type: @coupon.Name</h6>
+            <p class="card-text has-text-link">Remaining pages: @remainingPages </p>
+        </div>
+    </div>
+</div>
+
+<EditForm Model="transactions" OnValidSubmit="AddPageToDiscount">
+    <DataAnnotationsValidator />
+    <div class="field">
+        <label class="label mt-3">Set pages to discount</label>
+        <div class="control">
+            <InputNumber class="input" type="number" placeholder="Type number of pages" @bind-Value="@transactions.SpentPages" />
+            <ValidationMessage For="@(()=>transactions.SpentPages)" />
+        </div>
+
+    </div>
+
+    <button class="button is-success  is-link is-outlined" type="submit">Apply Discount</button>
+    <a href="couponpurchased/allcoupon" style="text-decoration: none;" class="button is-info  is-link is-outlined">Back to List</a>
+</EditForm>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    public Client client { get; set; }
+
+    private Transaction transactions = new Transaction();
+    private int remainingPages;
+
+    private ClientCoupon clientCoupon;
+    private Coupon coupon;
+
+    protected async override Task OnInitializedAsync()
+    {
+        clientCoupon = await clientCouponServices.GetClientCouponAsync(Id);
+        client = await clientServices.GetClientAsync(clientCoupon.ClientId);
+        coupon = await couponServices.GetCouponAsync(clientCoupon.CouponId);
+        //remainingPages = coupon.Pages - clientCoupon.SpentPages;
+        OnAfterRender(true);
+    }
+
+    private async Task AddPageToDiscount()
+    {
+        transactions.Client = client;
+        transactions.Coupon = coupon;
+        transactions.Date = DateTime.Now.ToString();
+        transactions.ClientCouponId = clientCoupon.Id;
+        if (await clientCouponServices.DiscountPagesAsync(clientCoupon, transactions.SpentPages) == false)
+        {
+            myModal.Show<ConfirmCreateComponent>("ERROR: The discount could not be applied...");
+            return;
+        }
+        await transactionsServices.AddTransactionAsync(transactions);
+
+        var messageForm = myModal.Show<ConfirmCreateComponent>($"The discount has been applied.");
+        var result = await messageForm.Result;
+
+        navManager.NavigateTo("couponpurchased/allcoupon");
+
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        remainingPages = coupon.Pages - clientCoupon.SpentPages;
+    }
+
+}

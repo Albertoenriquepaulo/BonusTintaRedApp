@@ -6,35 +6,35 @@ using System.Threading.Tasks;
 
 namespace BonusApp.Data
 {
-    public class BonusServices
+    public class CouponServices
     {
         #region Private members
         private BonusAppDbContext dbContext;
         #endregion
 
         #region Constructor
-        public BonusServices(BonusAppDbContext dbContext)
+        public CouponServices(BonusAppDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
         #endregion
 
         #region Public methods
-        public async Task<List<Bonus>> GetAllBonusAsync()
+        public async Task<List<Coupon>> GetAllCouponAsync()
         {
-            return await dbContext.Bonus.ToListAsync();
+            return await dbContext.Coupon.ToListAsync();
         }
 
-        public async Task<Bonus> GetBonusAsync(int bonusId)
+        public async Task<Coupon> GetCouponAsync(int couponId)
         {
-            return await dbContext.Bonus.FindAsync(bonusId);
+            return await dbContext.Coupon.FindAsync(couponId);
         }
 
-        public async Task<Bonus> AddBonusAsync(Bonus bond)
+        public async Task<Coupon> AddCouponAsync(Coupon bond)
         {
             try
             {
-                dbContext.Bonus.Add(bond);
+                dbContext.Coupon.Add(bond);
                 await dbContext.SaveChangesAsync();
             }
             catch (Exception)
@@ -44,11 +44,11 @@ namespace BonusApp.Data
             return bond;
         }
 
-        public async Task<Bonus> UpdateBonusAsync(Bonus bond)
+        public async Task<Coupon> UpdateCouponAsync(Coupon bond)
         {
             try
             {
-                var bondExist = dbContext.Bonus.FirstOrDefault(b => b.Id == bond.Id);
+                var bondExist = dbContext.Coupon.FirstOrDefault(b => b.Id == bond.Id);
                 if (bondExist != null)
                 {
                     dbContext.Update(bond);
@@ -62,11 +62,11 @@ namespace BonusApp.Data
             return bond;
         }
 
-        public async Task DeleteBonusAsync(Bonus bond)
+        public async Task DeleteCouponAsync(Coupon bond)
         {
             try
             {
-                dbContext.Bonus.Remove(bond);
+                dbContext.Coupon.Remove(bond);
                 await dbContext.SaveChangesAsync();
             }
             catch (Exception)
