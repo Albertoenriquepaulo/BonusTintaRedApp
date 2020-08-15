@@ -14,7 +14,6 @@
             <InputText class="input" type="text" placeholder="Client email" @bind-Value="@client.Email" />
             <ValidationMessage For="@(()=>client.Email)" />
         </div>
-
     </div>
 
     <div class="card mb-3" style="width: 33rem;">
@@ -46,7 +45,6 @@
     </div>
 
     <button class="button is-success  is-link is-outlined mx-1" type="submit">Create</button>
-    @*<a href="clients" style="text-decoration: none;" class="button is-info  is-link is-outlined mx-1">Back to List</a>*@
     <BackButtonComponent />
 </EditForm>
 

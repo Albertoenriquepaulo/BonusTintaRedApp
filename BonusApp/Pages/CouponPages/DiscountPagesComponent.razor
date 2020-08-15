@@ -37,7 +37,6 @@
         </div>
         <button class="button is-success  is-link is-outlined" type="submit">Apply Discount</button>
     }
-    @*<a href="couponpurchased/allcoupon" style="text-decoration: none;" class="button is-info  is-link is-outlined">Back to List</a>*@
     <BackButtonComponent />
 </EditForm>
 
@@ -56,7 +55,6 @@
         clientCoupon = await clientCouponServices.GetClientCouponAsync(Id);
         client = await clientServices.GetClientAsync(clientCoupon.ClientId);
         coupon = await couponServices.GetCouponAsync(clientCoupon.CouponId);
-        //remainingPages = coupon.Pages - clientCoupon.SpentPages;
         OnAfterRender(true);
     }
 
@@ -66,7 +64,6 @@
         transactions.Coupon = coupon;
         transactions.Date = DateTime.Now.ToString();
         transactions.ClientCouponId = clientCoupon.Id;
-        //if (await clientCouponServices.DiscountPagesAsync(clientCoupon, transactions.SpentPages) == false)
         if (transactions.SpentPages > remainingPages)
         {
             myModal.Show<ConfirmCreateComponent>("ERROR: The discount could not be applied...");
@@ -99,5 +96,4 @@
     {
         remainingPages = coupon.Pages - clientCoupon.SpentPages;
     }
-
 }

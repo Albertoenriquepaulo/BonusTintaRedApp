@@ -4,9 +4,6 @@
 @inject TransactionServices transactionsServices
 <h3>Coupon Details</h3>
 
-
-
-
 <div class="content">
     <p><strong>Client: </strong>@clientCoupon.Client.Email</p>
     <div class="card mb-3" style="width: 18rem;">
@@ -18,9 +15,8 @@
                 </a>
             </h5>
             <h6 class="card-subtitle mb-2 text-muted">Total coupon pages:  @totalCouponPages</h6>
-            @*<h6 class="card-subtitle mb-2 text-muted">Issued:  @clientCoupon.Date.ToString("MM/dd/yyyy hh:mm tt")</h6>*@
             <h6 class="card-subtitle mb-2 text-muted">Issued:  @clientCoupon.Date</h6>
-            <p class="card-texthas-text-link mb-0 pb-0">Remaining pages: @totalRemainingPages </p>
+            <p class="card-text has-text-link mb-0 pb-0">Remaining pages: @totalRemainingPages </p>
             <p class="card-text has-text-danger mt-0 pt-0">Printed pages: @(totalCouponPages - totalRemainingPages) </p>
         </div>
     </div>
@@ -62,14 +58,9 @@
         </a>
     </p>
     <p class="control">
-        @*<a href="couponpurchased/allcoupon" style="text-decoration: none;" class="button is-info  is-link is-outlined">
-                Back to List
-            </a>*@
         <BackButtonComponent />
     </p>
 </div>
-
-
 
 @code {
     [Parameter] public int Id { get; set; }
@@ -77,14 +68,12 @@
     private ClientCoupon clientCoupon { get; set; }
     private int totalCouponPages { get; set; }
     private int totalRemainingPages { get; set; }
-    //private int totalTransactions;
     string url;
 
     protected async override Task OnInitializedAsync()
     {
         clientCoupon = await clientCouponServices.GetCouponIdByClientCouponIdAsync(Id);
         totalCouponPages = (await couponServices.GetCouponAsync(clientCoupon.CouponId)).Pages;
-        //transactions = await transactionsServices.GetAllTransactionByCouponIdAsync(clientCoupon.CouponId, clientCoupon.ClientId);
         transactions = await transactionsServices.GetAllTransactionByCouponIdAndClientCouponIdAsync(clientCoupon.CouponId, clientCoupon.Id);
         url = $"couponpurchased/discountpages/{clientCoupon.Id}";
 
