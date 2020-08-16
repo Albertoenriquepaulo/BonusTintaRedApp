@@ -1,5 +1,26 @@
-﻿<h3>HandleDeleteButtonComponent</h3>
+﻿@inject IModalService myModal
+@inject IJSRuntime JSRuntime
+
+<div style="float: right; ">
+    <button class="button is-success is-small is-link is-outlined" style="text-decoration:none;"
+            disabled=@(!disabled) @onclick="SetDisabled">
+        Allow delete
+    </button>
+    <button class="button is-danger is-small is-link is-outlined" style="text-decoration:none;"
+            disabled=@disabled @onclick="SetDisabled">
+        Deny delete
+    </button>
+</div>
+
 
 @code {
+
+    private bool disabled = true;
+
+    private void SetDisabled()
+    {
+        var messageForm = myModal.Show<LoginComponent>();
+        disabled = !disabled;
+    }
 
 }

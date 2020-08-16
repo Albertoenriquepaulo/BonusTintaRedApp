@@ -191,3 +191,7 @@ app {
     -ms-flex-align: center;
     align-items: center;
 }
+
+.blazored-modal-header {
+    height: 5px;
+}

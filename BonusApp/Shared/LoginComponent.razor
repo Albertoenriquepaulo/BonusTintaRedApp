@@ -1,0 +1,24 @@
+﻿@inject IModalService myModal
+
+<div class="m-0 p-0">
+    <div id="login" class="m-0 p-0">
+        <div class="login-card m-0 p-0">
+            <div class="card-title m-0 p-0">
+                <h1>Please Sign In</h1>
+            </div>
+            <div class="content m-0 p-0">
+                <form method="POST" action="#">
+                    <input id="password" type="password" name="password" title="password" placeholder="Password" required>
+                    <button type="submit" class="button is-primary is-outlined is-small">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public bool disabled { get; set; }
+    BlazoredModalInstance BlazoredModalAllowUser { get; set; }
+
+    void CloseModal() => BlazoredModalAllowUser.Close();
+}
