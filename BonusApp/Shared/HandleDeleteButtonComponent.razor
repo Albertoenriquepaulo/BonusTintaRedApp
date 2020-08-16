@@ -2,25 +2,34 @@
 @inject IJSRuntime JSRuntime
 
 <div style="float: right; ">
-    <button class="button is-success is-small is-link is-outlined" style="text-decoration:none;"
-            disabled=@(!disabled) @onclick="SetDisabled">
-        Allow delete
-    </button>
-    <button class="button is-danger is-small is-link is-outlined" style="text-decoration:none;"
-            disabled=@disabled @onclick="SetDisabled">
-        Deny delete
+    <button class="button @(disabled ? "is-success" : "is-danger") is-success is-small is-link is-outlined" style="text-decoration:none;"
+            @onclick="@(() => disabled ? EnableDeleteButton() : DisableDeleteButton())">
+        @(disabled ? "Enable delete" : "Disable delete")
     </button>
 </div>
-
 
 @code {
 
     private bool disabled = true;
 
-    private void SetDisabled()
+    [Parameter] public EventCallback<bool> OnAllowButtonStateChange { get; set; }
+
+    private async Task EnableDeleteButton()
     {
-        var messageForm = myModal.Show<LoginComponent>();
-        disabled = !disabled;
+        var messageForm = myModal.Show<LoginComponent>("Please Sign In");
+        var result = await messageForm.Result;
+
+        if (result.Cancelled)
+        {
+            return;
+        }
+        disabled = false;
+        await OnAllowButtonStateChange.InvokeAsync(disabled);
     }
 
+    private async Task DisableDeleteButton()
+    {
+        disabled = true;
+        await OnAllowButtonStateChange.InvokeAsync(disabled);
+    }
 }
