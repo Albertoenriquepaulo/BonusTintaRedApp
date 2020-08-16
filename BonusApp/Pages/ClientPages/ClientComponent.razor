@@ -38,7 +38,8 @@ else
                             <a href="@url[1]" class="button is-info is-small is-link is-outlined" style="text-decoration: none;">
                                 <span class="oi oi-magnifying-glass"></span> @*DETAILS*@
                             </a>
-                            <a class="button is-danger is-small is-link is-outlined" style="text-decoration: none;" @onclick="@(()=>HandleDelete(client))">
+                            <a class="button is-danger is-small is-link is-outlined" style="text-decoration: none;"
+                               @onclick="@(()=>HandleDelete(client))" disabled=@disabled>
                                 <span class="oi oi-trash"></span> @*DELETE*@
                             </a>
                         </td>
@@ -54,6 +55,8 @@ else
     private int index = 1;
     string[] url = new string[2];
 
+    private bool disabled = true;
+
     protected async override Task OnInitializedAsync()
     {
         clients = await clientServices.GetAllClientAsync();
@@ -61,6 +64,10 @@ else
 
     private async Task HandleDelete(Client client)
     {
+        if (disabled)
+        {
+            return;
+        }
         var messageForm = myModal.Show<ConfirmDeleteComponent>($"Are you sure you want to delete the {client.Email} Client?");
         var result = await messageForm.Result;
 

@@ -23,15 +23,19 @@ namespace BonusApp.Data
             {
                 if (Id < 10)
                 {
-                    return $"TRC00{Id}";
+                    return $"TRCB000{Id}";
                 }
-                else if (Id >= 10 || Id <= 100)
+                else if (Id >= 10 || Id < 100)
                 {
-                    return $"TRC0{Id}";
+                    return $"TRCB00{Id}";
+                }
+                else if (Id >= 100 || Id < 1000)
+                {
+                    return $"TRCB0{Id}";
                 }
                 else
                 {
-                    return $"TRC{Id}";
+                    return $"TRCB{Id}";
                 }
             }
         }
