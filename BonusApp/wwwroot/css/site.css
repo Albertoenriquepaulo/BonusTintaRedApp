@@ -195,3 +195,7 @@ app {
 .blazored-modal-header {
     height: 5px;
 }
+
+.blazored-modal-content {
+    margin-top: 15px;
+}
