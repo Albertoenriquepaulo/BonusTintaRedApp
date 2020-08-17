@@ -14,7 +14,10 @@
                    href=@($"couponpurchased/discountpages/{clientCoupon.Id}")>
                     @clientCoupon.TRCId
                 </a>
-                <PdfDownloadComponent CouponName="@coupon.Name" TRCId="@clientCoupon.TRCId" />
+                @if (totalRemainingPages != 0)
+                {
+                    <PdfDownloadComponent CouponName="@coupon.Name" TRCId="@clientCoupon.TRCId" />
+                }
             </h5>
             <h6 class="card-subtitle mb-2 text-muted">Coupon Type: @coupon.Name</h6>
             <h6 class="card-subtitle mb-2 text-muted">Total coupon pages:  @totalCouponPages</h6>
