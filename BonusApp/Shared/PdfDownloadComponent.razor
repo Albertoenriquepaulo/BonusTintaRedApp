@@ -1,0 +1,26 @@
+﻿@inject IJSRuntime JSRuntime
+
+<a href="javascript:function() { return false; }" style="color: white; text-decoration: underline" data-toggle="tooltip"
+   data-placement="top" class="ml-2" @onclick="@DownloadFile">
+    <img src="icon/pdf.png" title="Download PDF Document" alt="Adobe-PDF-Document icon" width="16" height="16">
+</a>
+
+@code {
+
+    [Parameter] public string CouponName { get; set; }
+    [Parameter] public string TRCId { get; set; }
+
+    public async Task DownloadFile()
+    {
+        Pdf pdfFile = new Pdf("pdfs", CouponName, TRCId);
+        MemoryStream mem = pdfFile.Create();
+        if (mem == null)
+        {
+            return;
+        }
+        await JSRuntime.InvokeAsync<object>(
+            "saveAsFile",
+            $"{TRCId}.pdf",
+            Convert.ToBase64String(mem.ToArray()));
+    }
+}
