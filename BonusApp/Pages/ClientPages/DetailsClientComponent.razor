@@ -38,6 +38,10 @@
                        href=@($"couponpurchased/discountpages/{item.Id}")>
                         @item.TRCId
                     </a>
+                    <a href="javascript:function() { return false; }" style="color: white; text-decoration: underline" data-toggle="tooltip"
+                       data-placement="top" title="Click generate pdf file" class="ml-2" @onclick="Test">
+                        (pdf)
+                    </a>
                 </p>
             }
             <p class="is-marginless"><strong>Coupon name: </strong>  @item.Coupon.Name</p>
@@ -86,5 +90,10 @@
             return "has-background-danger-light";
         }
         return "has-background-info-dark";
+    }
+
+    void Test()
+    {
+        int a = 2 + 2;
     }
 }

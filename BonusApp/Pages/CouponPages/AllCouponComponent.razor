@@ -7,56 +7,60 @@
 
 @if (clientCoupons == null || clientCoupons.Count == 0)
 {
-    <h2>No Coupon Issued</h2>
-    <a href="/" style="text-decoration: none;" class="button is-info  is-link is-outlined">Home</a>
+<h2>No Coupon Issued</h2>
+<a href="/" style="text-decoration: none;" class="button is-info  is-link is-outlined">Home</a>
 }
 else
 {
-    <div class="table-container">
-        <table class="table is-striped" id="myTable">
-            <thead>
-                <tr class="th has-text-centered">
-                    <th>Coupon Id</th>
-                    <th>Coupon Type</th>
-                    <th>Client</th>
-                    <th>Pages</th>
-                    <th>Printed Pages</th>
-                    <th>Remaining Pages</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var clientCoupon in clientCoupons)
+<div style="display: flex; flex-direction: row-reverse;" class="mb-2">
+    <HandleDeleteButtonComponent OnAllowButtonStateChange="OnAllowButtonStateChange" />
+</div>
+
+<div class="table-container">
+    <table class="table is-striped" id="myTable">
+        <thead>
+            <tr class="th has-text-centered">
+                <th>Coupon Id</th>
+                <th>Coupon Type</th>
+                <th>Client</th>
+                <th>Pages</th>
+                <th>Printed Pages</th>
+                <th>Remaining Pages</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var clientCoupon in clientCoupons)
                 {
                     { RemainingPages(clientCoupon.Coupon.Pages, clientCoupon.SpentPages); }
                     url[0] = $"couponpurchased/discountpages/{clientCoupon.Id}";
                     url[1] = $"couponpurchased/details/{clientCoupon.Id}";
-                    <tr class="has-text-centered @(remainingPages == 0 ? "has-text-danger": null)">
-                        <td style="vertical-align: middle">@clientCoupon.TRCId</td>
-                        <td style="vertical-align: middle">@clientCoupon.Coupon.Name</td>
-                        <td style="vertical-align: middle">@clientCoupon.Client.Email</td>
-                        <td style="vertical-align: middle">@clientCoupon.Coupon.Pages</td>
-                        <td style="vertical-align: middle">@clientCoupon.SpentPages</td>
-                        <td style="vertical-align: middle">@remainingPages</td>
-                        <td style="vertical-align: middle">
-                            <a href="@(remainingPages == 0 ? "javascript:function() { return false; }": url[0])"
-                               class="button is-success is-small is-link is-outlined" style="text-decoration:none;"
-                               disabled=@(remainingPages == 0 ? true: false)>
-                                Discount Pages
-                            </a>
-                            <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration:none;">
-                                <span class="oi oi-magnifying-glass"></span>
-                            </a>
-                            <a @onclick="@(()=>HandleDelete(clientCoupon))" class="button is-danger is-small is-link is-outlined">
-                                <span class="oi oi-trash"></span>
-                            </a>
-                        </td>
-                    </tr>
+            <tr class="has-text-centered @(remainingPages == 0 ? "has-text-danger": null)">
+                <td style="vertical-align: middle">@clientCoupon.TRCId</td>
+                <td style="vertical-align: middle">@clientCoupon.Coupon.Name</td>
+                <td style="vertical-align: middle">@clientCoupon.Client.Email</td>
+                <td style="vertical-align: middle">@clientCoupon.Coupon.Pages</td>
+                <td style="vertical-align: middle">@clientCoupon.SpentPages</td>
+                <td style="vertical-align: middle">@remainingPages</td>
+                <td style="vertical-align: middle">
+                    <a href="@(remainingPages == 0 ? "javascript:function() { return false; }": url[0])"
+                       class="button is-success is-small is-link is-outlined" style="text-decoration:none;"
+                       disabled=@(remainingPages == 0 ? true: false)>
+                        Set Pages to Discount
+                    </a>
+                    <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration:none;">
+                        <span class="oi oi-magnifying-glass"></span>
+                    </a>
+                    <a @onclick="@(()=>HandleDelete(clientCoupon))" class="button is-danger is-small is-link is-outlined" disabled=@disabled>
+                        <span class="oi oi-trash"></span>
+                    </a>
+                </td>
+            </tr>
                 }
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 
-    </div>
+</div>
 }
 
 @code {
@@ -64,6 +68,8 @@ else
     List<ClientCoupon> clientCoupons;
     string[] url = new string[2];
     private int remainingPages;
+
+    private bool disabled = true;
 
     protected async override Task OnInitializedAsync()
     {
@@ -77,6 +83,10 @@ else
 
     private async Task HandleDelete(ClientCoupon clientCoupon)
     {
+        if (disabled)
+        {
+            return;
+        }
         var messageForm = myModal.Show<ConfirmDeleteComponent>($"Are you sure you want to delete {clientCoupon.TRCId} coupon?");
         var result = await messageForm.Result;
 
@@ -91,8 +101,14 @@ else
             clientCoupons = await clientCouponServices.GetAllClientCouponAsync();
         }
     }
+
     private void RemainingPages(int pages, int spentPages)
     {
         remainingPages = pages - spentPages;
+    }
+
+    void OnAllowButtonStateChange(bool value)
+    {
+        disabled = value;
     }
 }

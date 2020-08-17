@@ -9,9 +9,14 @@
     <div class="card mb-3" style="width: 18rem;">
         <div class="card-body">
             <h5 class="card-title">
-                Coupon Id: <a style="text-decoration:underline" data-toggle="tooltip" data-placement="top" title="Click to set pages"
-                              href=@($"couponpurchased/discountpages/{clientCoupon.Id}")>
+                Coupon Id:
+                <a style="text-decoration:underline" data-toggle="tooltip" data-placement="top" title="Click to set pages"
+                   href=@($"couponpurchased/discountpages/{clientCoupon.Id}")>
                     @clientCoupon.TRCId
+                </a>
+                <a style="text-decoration:underline" data-toggle="tooltip" data-placement="top" title="Click generate pdf file"
+                   href="#" )>
+                    (pdf)
                 </a>
             </h5>
             <h6 class="card-subtitle mb-2 text-muted">Coupon Type: @coupon.Name</h6>
