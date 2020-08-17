@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BonusApp.Pages.ClientPages;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,12 +46,12 @@ namespace BonusApp.Data
         {
             return new List<Coupon>
             {
-                new Coupon { Id=1, Name = "BYN100", Pages= 100},
-                new Coupon { Id=2, Name = "BYN200", Pages= 200},
-                new Coupon { Id=3, Name = "BYN500", Pages= 500},
-                new Coupon { Id=4, Name = "COLOR50", Pages= 50},
-                new Coupon { Id=5, Name = "COLOR100", Pages= 100},
-                new Coupon { Id=6, Name = "COLOR200", Pages= 200},
+                new Coupon { Id=1, Name = CouponTypes.BYN100, Pages= 1000},
+                new Coupon { Id=2, Name = CouponTypes.BYN200, Pages= 20000},
+                new Coupon { Id=3, Name = CouponTypes.BYN500, Pages= 50000},
+                new Coupon { Id=4, Name = CouponTypes.COLOR50, Pages= 50},
+                new Coupon { Id=5, Name = CouponTypes.COLOR150, Pages= 100},
+                new Coupon { Id=6, Name = CouponTypes.COLOR350, Pages= 200},
             };
         }
         #endregion
