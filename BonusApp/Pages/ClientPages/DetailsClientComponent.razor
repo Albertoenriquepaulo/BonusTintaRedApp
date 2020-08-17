@@ -39,12 +39,12 @@
            href=@($"couponpurchased/discountpages/{item.Id}")>
             @item.TRCId
         </a>
-
         <a href="javascript:function() { return false; }" style="color: white; text-decoration: underline" data-toggle="tooltip"
-           data-placement="top" title="Click generate pdf file" class="ml-2" @onclick="@(()=>DownloadFile(item.Coupon.Name, item.TRCId))">
-            (pdf)
+           data-placement="top" class="ml-2" @onclick="@(()=>DownloadFile(item.Coupon.Name, item.TRCId))">
+            <img src="icon/pdf.png" title="Download PDF Document" alt="Adobe-PDF-Document icon" width="16" height="16">
         </a>
     </p>
+
             }
     <p class="is-marginless"><strong>Coupon name: </strong>  @item.Coupon.Name</p>
     <p class="is-marginless"><strong>Issued date:     </strong>@item.Date</p>
