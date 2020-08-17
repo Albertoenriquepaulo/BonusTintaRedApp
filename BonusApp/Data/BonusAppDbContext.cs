@@ -46,12 +46,12 @@ namespace BonusApp.Data
         {
             return new List<Coupon>
             {
-                new Coupon { Id=1, Name = CouponTypes.BYN100, Pages= 1000},
-                new Coupon { Id=2, Name = CouponTypes.BYN200, Pages= 20000},
-                new Coupon { Id=3, Name = CouponTypes.BYN500, Pages= 50000},
+                new Coupon { Id=1, Name = CouponTypes.BYN100, Pages= 100},
+                new Coupon { Id=2, Name = CouponTypes.BYN200, Pages= 200},
+                new Coupon { Id=3, Name = CouponTypes.BYN500, Pages= 500},
                 new Coupon { Id=4, Name = CouponTypes.COLOR50, Pages= 50},
-                new Coupon { Id=5, Name = CouponTypes.COLOR150, Pages= 100},
-                new Coupon { Id=6, Name = CouponTypes.COLOR350, Pages= 200},
+                new Coupon { Id=5, Name = CouponTypes.COLOR150, Pages= 150},
+                new Coupon { Id=6, Name = CouponTypes.COLOR350, Pages= 350},
             };
         }
         #endregion
