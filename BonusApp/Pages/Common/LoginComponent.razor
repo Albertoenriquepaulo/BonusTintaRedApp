@@ -3,7 +3,8 @@
 <div class="m-0 p-0">
     <div id="login" class="m-0 p-0">
         <div class="login-card m-0 p-0">
-            <input id="password" type="password" name="password" title="password" placeholder="Password" required @bind="pass" @onclick="CleanMessage">
+            <input id="password" type="password" name="password" title="password" placeholder="Password" required @bind="pass"
+                   @onclick="CleanMessage" @onkeyup="@(e => KeyWasPressed(e))">
             <p class="has-text-danger is-size-7 is-italic">@message</p>
             <button class="button is-primary is-outlined is-small mt-1 pt-1" @onclick="Login">Login</button>
         </div>
@@ -33,5 +34,14 @@
     private void CleanMessage()
     {
         message = null;
+    }
+
+    private void KeyWasPressed(KeyboardEventArgs args)
+    {
+        if (args.Key != "Enter")
+        {
+            return;
+        }
+        Login();
     }
 }

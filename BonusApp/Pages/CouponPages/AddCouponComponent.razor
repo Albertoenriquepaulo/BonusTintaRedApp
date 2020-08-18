@@ -36,7 +36,7 @@
 @code {
     [Parameter] public Client client { get; set; }
     List<Coupon> coupons = new List<Coupon>();
-    private bool selected = false;
+    private bool selected;
     private int selectedValue;
     private List<string> strCouponsToAddToClient = new List<string>();
     private List<int> intCouponsToAddToClient = new List<int>();
