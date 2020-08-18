@@ -10,7 +10,7 @@
         <label class="label" for="CouponInput">Coupon:</label>
         <div class="control">
             <select name="coupon" id="CouponInput" @onchange="((arg)=> selectedValue = Convert.ToInt32(arg.Value))">
-                <option value="0">Select coupon</option>
+                <option value="0" selected=@selected>Select coupon</option>
                 @foreach (var coupon in coupons)
                 {
                     <option value="@coupon.Id">@coupon.Name</option>
@@ -36,6 +36,7 @@
 @code {
     [Parameter] public Client client { get; set; }
     List<Coupon> coupons = new List<Coupon>();
+    private bool selected = false;
     private int selectedValue;
     private List<string> strCouponsToAddToClient = new List<string>();
     private List<int> intCouponsToAddToClient = new List<int>();
@@ -82,13 +83,18 @@
         }
 
         coupons = await couponServices.GetAllCouponAsync();
-
+        selected = true;
         refreshServices.CallRequestRefresh();
         Clear();
+
     }
 
     private async Task AddCouponToSelectBoxAsync()
     {
+        if (selected)
+        {
+            selected = false;
+        }
         //To add only one type of coupon
         //if (selectedValue != 0 && intCouponsToAddToClient.Contains(selectedValue) == false)
         if (selectedValue != 0)
