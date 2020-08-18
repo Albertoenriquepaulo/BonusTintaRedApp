@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BonusApp.Data
 {
@@ -10,6 +7,7 @@ namespace BonusApp.Data
     {
         [Required]
         public int Id { get; set; }
+
         public int ClientId { get; set; }
         public int CouponId { get; set; }
         public int SpentPages { get; set; }
@@ -17,6 +15,7 @@ namespace BonusApp.Data
         public Client Client { get; set; }
         public Coupon Coupon { get; set; }
         public ICollection<Transaction> Transactions { get; set; }
+
         public string TRCId
         {
             get

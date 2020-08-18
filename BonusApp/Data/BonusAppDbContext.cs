@@ -1,39 +1,42 @@
 ﻿using BonusApp.Pages.ClientPages;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BonusApp.Data
 {
     public class BonusAppDbContext : DbContext
     {
         #region Contructor
+
         public BonusAppDbContext(DbContextOptions<BonusAppDbContext> options) : base(options)
         {
             Database.EnsureCreated();
         }
-        #endregion
+
+        #endregion Contructor
 
         #region Public properties
+
         public DbSet<Client> Client { get; set; }
         public DbSet<Coupon> Coupon { get; set; }
         public DbSet<ClientCoupon> ClientCoupon { get; set; }
         public DbSet<Transaction> Transaction { get; set; }
-        #endregion
+
+        #endregion Public properties
 
         #region Overidden methods
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Client>().HasData(GetClients());
             modelBuilder.Entity<Coupon>().HasData(GetCoupons());
             base.OnModelCreating(modelBuilder);
         }
-        #endregion
 
+        #endregion Overidden methods
 
         #region Private methods
+
         private List<Client> GetClients()
         {
             return new List<Client>
@@ -54,7 +57,7 @@ namespace BonusApp.Data
                 new Coupon { Id=6, Name = CouponTypes.COLOR350, Pages= 350},
             };
         }
-        #endregion
 
+        #endregion Private methods
     }
 }

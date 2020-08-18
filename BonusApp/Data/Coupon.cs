@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BonusApp.Data
 {
@@ -16,6 +13,7 @@ namespace BonusApp.Data
 
         [Required]
         public int Pages { get; set; }
+
         public ICollection<ClientCoupon> ClientCoupons { get; set; }
         public ICollection<Transaction> Transactions { get; set; }
     }
