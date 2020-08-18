@@ -39,7 +39,7 @@
                        href=@($"couponpurchased/discountpages/{item.Id}")>
                         @item.TRCId
                     </a>
-                    <PdfDownloadComponent CouponName="@item.Coupon.Name" TRCId="item.TRCId" />
+                    <PdfDownloadComponent CouponName="@item.Coupon.Name" TRCId="@item.TRCId" />
                 </p>
 
             }

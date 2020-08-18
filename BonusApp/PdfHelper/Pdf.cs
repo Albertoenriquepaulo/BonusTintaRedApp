@@ -1,11 +1,8 @@
-﻿using Aspose.Pdf;
-using Aspose.Pdf.Forms;
-using BonusApp.Pages.ClientPages;
+﻿using BonusApp.Pages.ClientPages;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BonusApp.PdfHelper
 {
@@ -14,6 +11,7 @@ namespace BonusApp.PdfHelper
         public string CouponType { get; set; }
         public string CouponTRCId { get; set; }
         public string BaseDir { get; set; }
+
         public string PdfTemplate
         {
             get
@@ -24,21 +22,27 @@ namespace BonusApp.PdfHelper
                     case CouponTypes.BYN100:
                         pdfName = Templates.BYN100;
                         break;
+
                     case CouponTypes.BYN200:
                         pdfName = Templates.BYN200;
                         break;
+
                     case CouponTypes.BYN500:
                         pdfName = Templates.BYN500;
                         break;
+
                     case CouponTypes.COLOR50:
                         pdfName = Templates.COLOR50;
                         break;
+
                     case CouponTypes.COLOR150:
                         pdfName = Templates.COLOR150;
                         break;
+
                     case CouponTypes.COLOR350:
                         pdfName = Templates.COLOR350;
                         break;
+
                     default:
                         break;
                 }
@@ -46,13 +50,13 @@ namespace BonusApp.PdfHelper
             }
         }
 
-
         public Pdf(string baseDir, string couponType, string couponTRCId)
         {
             CouponType = couponType;
             CouponTRCId = couponTRCId;
             BaseDir = baseDir;
         }
+
         public Pdf()
         {
         }
@@ -80,19 +84,24 @@ namespace BonusApp.PdfHelper
             try
             {
                 // Open document
-                Document pdfDocument = new Document(path);
+                PdfDocument doc = PdfReader.Open(path, PdfDocumentOpenMode.Modify);
+                System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
-                // Get the fields
-                TextBoxField textBoxField1 = pdfDocument.Form["IDBONO"] as TextBoxField;
-
-                // Fill form fields' values
-                textBoxField1.Value = CouponTRCId;
+                // Get the fields And Fill form fields' values
+                doc.AcroForm.Fields["IDBONO"].Value = new PdfString(CouponTRCId);
+                if (doc.AcroForm.Elements.ContainsKey("/NeedAppearances"))
+                {
+                    doc.AcroForm.Elements["/ NeedAppearances"] = new PdfBoolean(true);
+                }
+                else
+                {
+                    doc.AcroForm.Elements.Add("/NeedAppearances", new PdfBoolean(true));
+                }
 
                 path = $"{BaseDir}/generated/{CouponTRCId}.pdf";
 
                 // Save updated document
-                //pdfDocument.Save(path);
-                pdfDocument.Save(stream);
+                doc.Save(stream);
             }
             catch (Exception)
             {
@@ -100,7 +109,6 @@ namespace BonusApp.PdfHelper
             }
 
             return stream;
-
         }
     }
 }

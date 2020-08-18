@@ -9,26 +9,29 @@ namespace BonusApp.Data
     public class ClientServices
     {
         #region Private members
+
         private BonusAppDbContext dbContext;
-        #endregion
+
+        #endregion Private members
 
         #region Constructor
+
         public ClientServices(BonusAppDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
-        #endregion
+
+        #endregion Constructor
 
         #region Public methods
 
         public async Task<List<Client>> GetAllClientAsync()
         {
-
             return await dbContext.Client.ToListAsync();
         }
+
         public async Task<Client> GetClientAsync(int id)
         {
-
             return await dbContext.Client.Include(ub => ub.ClientCoupons).ThenInclude(b => b.Coupon).FirstOrDefaultAsync(x => x.Id == id);
             //return await dbContext.Client.FindAsync(id);
         }
@@ -77,6 +80,7 @@ namespace BonusApp.Data
                 throw;
             }
         }
-        #endregion
+
+        #endregion Public methods
     }
 }

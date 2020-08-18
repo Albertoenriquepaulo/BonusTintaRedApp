@@ -9,17 +9,22 @@ namespace BonusApp.Data
     public class CouponServices
     {
         #region Private members
+
         private BonusAppDbContext dbContext;
-        #endregion
+
+        #endregion Private members
 
         #region Constructor
+
         public CouponServices(BonusAppDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
-        #endregion
+
+        #endregion Constructor
 
         #region Public methods
+
         public async Task<List<Coupon>> GetAllCouponAsync()
         {
             return await dbContext.Coupon.ToListAsync();
@@ -74,6 +79,7 @@ namespace BonusApp.Data
                 throw;
             }
         }
-        #endregion
+
+        #endregion Public methods
     }
 }

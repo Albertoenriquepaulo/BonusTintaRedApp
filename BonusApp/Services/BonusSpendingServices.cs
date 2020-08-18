@@ -10,17 +10,22 @@ namespace BonusApp.Services
     public class TransactionServices
     {
         #region Private members
+
         private BonusAppDbContext dbContext;
-        #endregion
+
+        #endregion Private members
 
         #region Constructor
+
         public TransactionServices(BonusAppDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
-        #endregion
+
+        #endregion Constructor
 
         #region Public methods
+
         public async Task<List<Transaction>> GetAllTransactionAsync()
         {
             return await dbContext.Transaction.ToListAsync();
@@ -51,6 +56,7 @@ namespace BonusApp.Services
             int sum = list.Sum(item => item.SpentPages);
             return (await dbContext.Transaction.Where(bs => bs.Id == transactionsId).ToListAsync()).Sum(item => item.SpentPages);
         }
-        #endregion
+
+        #endregion Public methods
     }
 }
