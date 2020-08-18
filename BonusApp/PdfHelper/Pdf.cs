@@ -99,6 +99,9 @@ namespace BonusApp.PdfHelper
                 }
 
                 path = $"{BaseDir}/generated/{CouponTRCId}.pdf";
+
+                // Save updated document to a MemoryStream type variable
+                doc.Save(stream);
             }
             catch (Exception)
             {
