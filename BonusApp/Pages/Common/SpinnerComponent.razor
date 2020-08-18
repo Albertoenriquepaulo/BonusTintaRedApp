@@ -1,0 +1,22 @@
+﻿@inject IModalService myModal
+
+<div class="is-horizontal-center">
+    @*<div class="spinner-border"></div>*@
+    <p class="mb-3">@Message</p>
+    <img src="image/spinner.gif" alt="Alternate Text" class="center" />
+    @*<button @onclick="SubmitForm" class="button is-success is-link is-outlined">Ok</button>*@
+</div>
+
+@code {
+
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
+
+    [Parameter] public string Message { get; set; }
+
+    void SubmitForm() => BlazoredModal.Close();
+
+    protected override void OnInitialized()
+    {
+        SubmitForm();
+    }
+}

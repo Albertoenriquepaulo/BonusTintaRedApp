@@ -81,12 +81,12 @@
 
         if (clientCouponServices.AddListClientCouponAsyncWithSQL(clientCouponList))
         {
-            var messageForm = myModal.Show<ConfirmCreateComponent>($"The coupon has been added to {client.Email}.");
+            var messageForm = myModal.Show<SpinnerComponent>($"The coupon has been added to {client.Email}. \nSending Email...");
             var result = await messageForm.Result;
         }
         else
         {
-            var messageForm = myModal.Show<ConfirmCreateComponent>($"ERROR: The coupons could not have been added.");
+            var messageForm = myModal.Show<SpinnerComponent>($"ERROR: The coupons could not have been added.");
             var result = await messageForm.Result;
         }
 
@@ -155,7 +155,7 @@
         {
             foreach (var item in strCouponsToAddToClient)
             {
-                MemoryStream stream = pdfHelper.Create(item, trcIdResultList[i]);
+                MemoryStream stream = pdfHelper.Create(item, trcIdResultList[i++]);
                 streamList.Add(stream);
             }
             emailHelper.SendStreamListByEmail(client.Email, $"Tu bono Tinta Red", "Aqui deberia estar tu bono", trcIdResultList, streamList);
