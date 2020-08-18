@@ -10,7 +10,7 @@ namespace BonusApp.PdfHelper
     {
         public string CouponType { get; set; }
         public string CouponTRCId { get; set; }
-        public string BaseDir { get; set; }
+        public string BaseDir { get; set; } = "pdfs";
 
         public string PdfTemplate
         {

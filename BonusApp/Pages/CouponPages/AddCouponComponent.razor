@@ -4,6 +4,7 @@
 @inject IModalService myModal
 @inject NavigationManager navManager
 @inject RefreshServices refreshServices
+@inject EmailHelper emailHelper
 
 <div>
     <div class="field is-horizontal mb-0">
@@ -42,11 +43,15 @@
     private List<int> intCouponsToAddToClient = new List<int>();
     List<ClientCoupon> clientCouponList = new List<ClientCoupon>();
 
+    private List<string> TRCIdBeforeAdd = new List<string>();
+    private List<string> TRCIdAfterAdd = new List<string>();
+
     List<Coupon> couponsToAddToClient = new List<Coupon>();
 
     protected async override Task OnInitializedAsync()
     {
         coupons = await couponServices.GetAllCouponAsync();
+
     }
 
     private void Clear()
@@ -59,6 +64,9 @@
 
     private async Task AddCoupon()
     {
+        TRCIdBeforeAdd = new List<string>();
+        TRCIdAfterAdd = new List<string>();
+        await LoadTRCId(TRCIdBeforeAdd);
         foreach (var coupon in couponsToAddToClient)
         {
             clientCouponList.Add(new ClientCoupon
@@ -71,7 +79,7 @@
         }
         client.ClientCoupons = clientCouponList;
 
-        if (clientCouponServices.AddListClientCouponAsyncWSQL(clientCouponList))
+        if (clientCouponServices.AddListClientCouponAsyncWithSQL(clientCouponList))
         {
             var messageForm = myModal.Show<ConfirmCreateComponent>($"The coupon has been added to {client.Email}.");
             var result = await messageForm.Result;
@@ -85,6 +93,12 @@
         coupons = await couponServices.GetAllCouponAsync();
         selected = true;
         refreshServices.CallRequestRefresh();
+        await LoadTRCId(TRCIdAfterAdd);
+
+        List<string> trcIdResultList = TRCIdAfterAdd.Where(p => !TRCIdBeforeAdd.Any(p2 => p2 == p)).ToList();
+
+        //SendEmails(trcIdResultList);
+        SendEmailWithVariousAttachment(trcIdResultList);
         Clear();
 
     }
@@ -110,4 +124,61 @@
     {
         return strCouponsToAddToClient.Count == 0 ? true : false;
     }
+
+    private bool SendEmails(List<string> trcIdResultList)
+    {
+        Pdf pdfHelper = new Pdf();
+        int i = 0;
+        try
+        {
+            foreach (var item in strCouponsToAddToClient)
+            {
+                MemoryStream stream = pdfHelper.Create(item, trcIdResultList[i]);
+                emailHelper.SendStreamByEmail(client.Email, $"Tu bono Tinta Red | Id: {trcIdResultList[i]}", "Aqui deberia estar tu bono", trcIdResultList[i++], stream);
+            }
+
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+    }
+
+    private bool SendEmailWithVariousAttachment(List<string> trcIdResultList)
+    {
+        Pdf pdfHelper = new Pdf();
+        int i = 0;
+        List<MemoryStream> streamList = new List<MemoryStream>();
+        try
+        {
+            foreach (var item in strCouponsToAddToClient)
+            {
+                MemoryStream stream = pdfHelper.Create(item, trcIdResultList[i]);
+                streamList.Add(stream);
+            }
+            emailHelper.SendStreamListByEmail(client.Email, $"Tu bono Tinta Red", "Aqui deberia estar tu bono", trcIdResultList, streamList);
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+    }
+
+    private async Task LoadTRCId(List<string> TRCIdList)
+    {
+        Client clientEmail = await clientServices.GetClientAsync(client.Id);
+
+        foreach (var clientCoupons in clientEmail.ClientCoupons)
+        {
+            TRCIdList.Add(clientCoupons.TRCId);
+        }
+    }
+
+
+
+
 }

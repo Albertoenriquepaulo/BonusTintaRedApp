@@ -1,5 +1,6 @@
 using Blazored.Modal;
 using BonusApp.Data;
+using BonusApp.EmailSender;
 using BonusApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,6 +36,7 @@ namespace BonusApp
             services.AddScoped<ClientCouponServices>();
             services.AddScoped<TransactionServices>();
             services.AddScoped<RefreshServices>();
+            services.AddScoped<EmailHelper>();
 
             services.AddBlazoredModal();
         }
