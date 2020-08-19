@@ -7,54 +7,45 @@
 
 @if (clients == null || clients.Count == 0)
 {
-    <h2>No client found</h2>
-    <a href="clients/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Create Client</a>
+<h2>No client found</h2>
+<a href="clients/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Create Client</a>
 }
 else
 {
-    <a href="clients/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Create Client</a>
-    <HandleDeleteButtonComponent OnAllowButtonStateChange="OnAllowButtonStateChange" />
+<a href="clients/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Create Client</a>
+<HandleDeleteButtonComponent OnAllowButtonStateChange="OnAllowButtonStateChange" />
 
-    <div class="table-container">
-        <table class="table is-striped" id="myTable">
-            <thead>
-                <tr class="th has-text-centered">
-                    <th></th>
-                    <th>Email</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var client in clients)
-                {
-                    url[0] = $"clients/edit/{client.Id}";
-                    url[1] = $"clients/details/{client.Id}";
-                    <tr class="has-text-centered">
-                        <td style="vertical-align: middle">@(index++)</td>
-                        <td style="vertical-align: middle">@client.Email</td>
-                        <td style="vertical-align: middle">
-                            <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration: none;">Add Coupon</a>
-                            <a href="@url[0]" class="button is-success is-small is-link is-outlined" style="text-decoration: none;">
-                                <span class="oi oi-pencil"></span> @*EDIT*@
-                            </a>
-                            <a href="@url[1]" class="button is-info is-small is-link is-outlined" style="text-decoration: none;">
-                                <span class="oi oi-magnifying-glass"></span> @*DETAILS*@
-                            </a>
-                            <a class="button is-danger is-small is-link is-outlined" style="text-decoration: none;"
-                               @onclick="@(()=>HandleDelete(client))" disabled=@disabled>
-                                <span class="oi oi-trash"></span> @*DELETE*@
-                            </a>
-                        </td>
-                    </tr>
+<RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
+            AllowSorting="true" Data="@radzenClientList" TItem="RadzenClient" ColumnWidth="150px">
+    <Columns>
+        <RadzenGridColumn TItem="RadzenClient" Width="80px" Property="Index" Title="#" />
+        <RadzenGridColumn TItem="RadzenClient" Property="Client.Email" Title="Email" />
+        <RadzenGridColumn TItem="RadzenClient" Property="Id" Title="" Filterable="false" Sortable="false">
+            <Template Context="data">
+                @{
+                        url[0] = $"clients/edit/{data.Client.Id}";
+                        url[1] = $"clients/details/{data.Client.Id}";
                 }
-            </tbody>
-        </table>
-    </div>
+                <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration: none;">Add Coupon</a>
+                <a href="@url[0]" class="button is-success is-small is-link is-outlined" style="text-decoration: none;">
+                    <span class="oi oi-pencil"></span> @*EDIT*@
+                </a>
+                <a href="@url[1]" class="button is-info is-small is-link is-outlined" style="text-decoration: none;">
+                    <span class="oi oi-magnifying-glass"></span> @*DETAILS*@
+                </a>
+                <a class="button is-danger is-small is-link is-outlined" style="text-decoration: none;"
+                   @onclick="@(()=>HandleDelete(data.Client))" disabled=@disabled>
+                    <span class="oi oi-trash"></span> @*DELETE*@
+                </a>
+            </Template>
+        </RadzenGridColumn>
+    </Columns>
+</RadzenGrid>
 }
 
 @code {
     List<Client> clients;
-    private int index = 1;
+    List<RadzenClient> radzenClientList;
     string[] url = new string[2];
 
     private bool disabled = true;
@@ -62,6 +53,7 @@ else
     protected async override Task OnInitializedAsync()
     {
         clients = await clientServices.GetAllClientAsync();
+        MapClientToRadzenClient();
     }
 
     private async Task HandleDelete(Client client)
@@ -82,12 +74,12 @@ else
         {
             await clientServices.DeleteClientAsync(client);
             clients = await clientServices.GetAllClientAsync();
+            MapClientToRadzenClient();
         }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        index = 1;
         await JSRuntime.InvokeAsync<object>("DataTable");
     }
 
@@ -95,4 +87,19 @@ else
     {
         disabled = value;
     }
+
+    private void MapClientToRadzenClient()
+    {
+        radzenClientList = new List<RadzenClient>();
+        for (int i = 0; i < clients.Count; i++)
+        {
+            RadzenClient radzenClient = new RadzenClient
+            {
+                Client = clients[i],
+                Index = i + 1
+            };
+            radzenClientList.Add(radzenClient);
+        }
+    }
 }
+

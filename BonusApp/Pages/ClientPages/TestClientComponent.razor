@@ -18,7 +18,7 @@ else
     <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
                 AllowSorting="true" Data="@radzenClientList" TItem="RadzenClient" ColumnWidth="150px">
         <Columns>
-            <RadzenGridColumn TItem="RadzenClient" Property="Index" Title="" />
+            <RadzenGridColumn TItem="RadzenClient" Property="Index" Title="#" />
             <RadzenGridColumn TItem="RadzenClient" Property="Client.Email" Title="Email" />
             <RadzenGridColumn TItem="RadzenClient" Property="Id" Title="" Filterable="false" Sortable="false">
                 <Template Context="data">
@@ -38,7 +38,6 @@ else
                         <span class="oi oi-trash"></span> @*DELETE*@
                     </a>
                 </Template>
-
             </RadzenGridColumn>
         </Columns>
     </RadzenGrid>
@@ -102,6 +101,5 @@ else
             radzenClientList.Add(radzenClient);
         }
     }
-}
 }
 
