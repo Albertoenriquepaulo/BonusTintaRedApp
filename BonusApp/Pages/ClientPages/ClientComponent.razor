@@ -15,11 +15,16 @@ else
     <a href="clients/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Create Client</a>
     <HandleDeleteButtonComponent OnAllowButtonStateChange="OnAllowButtonStateChange" />
 
-    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
+    <RadzenGrid @ref="radzenClientGrid" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
                 AllowSorting="true" Data="@radzenClientList" TItem="RadzenClient" ColumnWidth="150px">
         <Columns>
-            <RadzenGridColumn TItem="RadzenClient" Width="35px" Property="Index" Title="#" />
-            <RadzenGridColumn TItem="RadzenClient" Property="Client.Email" Title="Email" />
+            <RadzenGridColumn TItem="RadzenClient" Width="35px" Property="Index" Title="#">
+                <FooterTemplate>
+                    Total clients: <b>@radzenClientGrid.View.Count()</b>
+                </FooterTemplate>
+            </RadzenGridColumn>
+
+            <RadzenGridColumn TItem="RadzenClient" Property="Client.Email" Title="Client" />
             <RadzenGridColumn TItem="RadzenClient" Property="Id" Title="" Filterable="false" Sortable="false">
                 <Template Context="data">
                     @{
@@ -44,6 +49,7 @@ else
 }
 
 @code {
+    RadzenGrid<RadzenClient> radzenClientGrid;
     List<Client> clients;
     List<RadzenClient> radzenClientList;
     string[] url = new string[2];

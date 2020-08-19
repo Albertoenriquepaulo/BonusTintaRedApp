@@ -13,11 +13,16 @@
 else
 {
 
-    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
+    <RadzenGrid @ref="radzenCouponGrid" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
                 AllowSorting="true" Data="@radzenCouponList" TItem="RadzenCoupon" ColumnWidth="150px">
         <Columns>
             <RadzenGridColumn TItem="RadzenCoupon" Width="35px" Property="Index" Title="#" />
-            <RadzenGridColumn TItem="RadzenCoupon" Property="Coupon.Name" Title="Name" />
+            <RadzenGridColumn TItem="RadzenCoupon" Property="Coupon.Name" Title="Name">
+                <FooterTemplate>
+                    Total coupons: <b>@radzenCouponGrid.View.Count()</b>
+                </FooterTemplate>
+            </RadzenGridColumn>
+
             <RadzenGridColumn TItem="RadzenCoupon" Property="Coupon.Pages" Title="Pages" />
             <RadzenGridColumn TItem="RadzenCoupon" Property="Id" Title="" Filterable="false" Sortable="false">
                 <Template Context="data">
@@ -37,6 +42,7 @@ else
 }
 
 @code {
+    RadzenGrid<RadzenCoupon> radzenCouponGrid;
     List<Coupon> coupons;
     List<RadzenCoupon> radzenCouponList;
     string url;

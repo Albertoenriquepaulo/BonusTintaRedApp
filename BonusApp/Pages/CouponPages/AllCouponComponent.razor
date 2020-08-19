@@ -16,11 +16,15 @@ else
         <HandleDeleteButtonComponent OnAllowButtonStateChange="OnAllowButtonStateChange" />
     </div>
 
-    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
+    <RadzenGrid @ref="radzenClientCouponGrid" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
                 AllowSorting="true" Data="@radzenClientCouponList" TItem="RadzenClientCoupon" ColumnWidth="150px" Count="1">
         <Columns>
             <RadzenGridColumn TItem="RadzenClientCoupon" Width="35px" Property="Index" Title="#" />
-            <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="TRCId" Title="Coupon Id" />
+            <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="TRCId" Title="Coupon Id">
+                <FooterTemplate>
+                    Total coupons: <b>@radzenClientCouponGrid.View.Count()</b>
+                </FooterTemplate>
+            </RadzenGridColumn>
             <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="CouponName" Title="Coupon Type" />
             <RadzenGridColumn TItem="RadzenClientCoupon" Width="180px" Property="ClientEmail" Title="Client" />
             <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="CouponPages" Title="Pages" />
@@ -51,6 +55,7 @@ else
 }
 
 @code {
+    RadzenGrid<RadzenClientCoupon> radzenClientCouponGrid;
     private string colWidth = "100px";
     List<ClientCoupon> clientCoupons;
     List<RadzenClientCoupon> radzenClientCouponList;
