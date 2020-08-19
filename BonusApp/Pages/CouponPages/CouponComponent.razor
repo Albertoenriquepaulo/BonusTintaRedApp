@@ -12,50 +12,41 @@
 }
 else
 {
-    <div class="table-container">
-        <table class="table is-striped">
-            <thead>
-                <tr class="th has-text-centered">
-                    <th></th>
-                    <th>Name</th>
-                    <th>Pages</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var coupon in coupons)
-                {
-                    url = $"coupon/edit/{coupon.Id.ToString()}";
-                    <tr class="has-text-centered">
-                        <td style="vertical-align: middle">@(index++)</td>
-                        <td style="vertical-align: middle">@coupon.Name</td>
-                        <td style="vertical-align: middle">@coupon.Pages</td>
-                        <td style="vertical-align: middle">
-                            <a href="@url" class="button is-info is-small is-outlined" style="text-decoration:none;">
-                                <span class="oi oi-pencil"></span> @*EDIT*@
-                            </a>
-                            <a @onclick="@(()=>HandleDelete(coupon))" class="button is-danger is-link  is-small is-outlined" disabled=@disabled>
-                                <span class="oi oi-trash"></span> @*DELETE*@
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+
+    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
+                AllowSorting="true" Data="@radzenCouponList" TItem="RadzenCoupon" ColumnWidth="150px">
+        <Columns>
+            <RadzenGridColumn TItem="RadzenCoupon" Width="35px" Property="Index" Title="#" />
+            <RadzenGridColumn TItem="RadzenCoupon" Property="Coupon.Name" Title="Name" />
+            <RadzenGridColumn TItem="RadzenCoupon" Property="Coupon.Pages" Title="Pages" />
+            <RadzenGridColumn TItem="RadzenCoupon" Property="Id" Title="" Filterable="false" Sortable="false">
+                <Template Context="data">
+                    @{
+                        url = $"coupon/edit/{data.Coupon.Id.ToString()}";
+                    }
+                    <a href="@url" class="button is-info is-small is-outlined" style="text-decoration:none;">
+                        <span class="oi oi-pencil"></span> @*EDIT*@
+                    </a>
+                    <a @onclick="@(()=>HandleDelete(data.Coupon))" class="button is-danger is-link  is-small is-outlined" disabled=@disabled>
+                        <span class="oi oi-trash"></span> @*DELETE*@
+                    </a>
+                </Template>
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
 }
 
 @code {
     List<Coupon> coupons;
-    private int index;
+    List<RadzenCoupon> radzenCouponList;
     string url;
 
     private bool disabled = true;
 
     protected async override Task OnInitializedAsync()
     {
-        index = 1;
         coupons = await couponServices.GetAllCouponAsync();
+        MapClientToRadzenClient();
     }
 
     private async Task HandleDelete(Coupon coupon)
@@ -76,16 +67,26 @@ else
         {
             await couponServices.DeleteCouponAsync(coupon);
             coupons = await couponServices.GetAllCouponAsync();
+            MapClientToRadzenClient();
         }
-    }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        index = 1;
     }
 
     void OnAllowButtonStateChange(bool value)
     {
         disabled = value;
+    }
+
+    private void MapClientToRadzenClient()
+    {
+        radzenCouponList = new List<RadzenCoupon>();
+        for (int i = 0; i < coupons.Count; i++)
+        {
+            RadzenCoupon radzenClient = new RadzenCoupon
+            {
+                Coupon = coupons[i],
+                Index = i + 1
+            };
+            radzenCouponList.Add(radzenClient);
+        }
     }
 }

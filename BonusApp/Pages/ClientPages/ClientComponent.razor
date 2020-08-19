@@ -7,40 +7,40 @@
 
 @if (clients == null || clients.Count == 0)
 {
-<h2>No client found</h2>
-<a href="clients/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Create Client</a>
+    <h2>No client found</h2>
+    <a href="clients/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Create Client</a>
 }
 else
 {
-<a href="clients/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Create Client</a>
-<HandleDeleteButtonComponent OnAllowButtonStateChange="OnAllowButtonStateChange" />
+    <a href="clients/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Create Client</a>
+    <HandleDeleteButtonComponent OnAllowButtonStateChange="OnAllowButtonStateChange" />
 
-<RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
-            AllowSorting="true" Data="@radzenClientList" TItem="RadzenClient" ColumnWidth="150px">
-    <Columns>
-        <RadzenGridColumn TItem="RadzenClient" Width="80px" Property="Index" Title="#" />
-        <RadzenGridColumn TItem="RadzenClient" Property="Client.Email" Title="Email" />
-        <RadzenGridColumn TItem="RadzenClient" Property="Id" Title="" Filterable="false" Sortable="false">
-            <Template Context="data">
-                @{
+    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
+                AllowSorting="true" Data="@radzenClientList" TItem="RadzenClient" ColumnWidth="150px">
+        <Columns>
+            <RadzenGridColumn TItem="RadzenClient" Width="35px" Property="Index" Title="#" />
+            <RadzenGridColumn TItem="RadzenClient" Property="Client.Email" Title="Email" />
+            <RadzenGridColumn TItem="RadzenClient" Property="Id" Title="" Filterable="false" Sortable="false">
+                <Template Context="data">
+                    @{
                         url[0] = $"clients/edit/{data.Client.Id}";
                         url[1] = $"clients/details/{data.Client.Id}";
-                }
-                <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration: none;">Add Coupon</a>
-                <a href="@url[0]" class="button is-success is-small is-link is-outlined" style="text-decoration: none;">
-                    <span class="oi oi-pencil"></span> @*EDIT*@
-                </a>
-                <a href="@url[1]" class="button is-info is-small is-link is-outlined" style="text-decoration: none;">
-                    <span class="oi oi-magnifying-glass"></span> @*DETAILS*@
-                </a>
-                <a class="button is-danger is-small is-link is-outlined" style="text-decoration: none;"
-                   @onclick="@(()=>HandleDelete(data.Client))" disabled=@disabled>
-                    <span class="oi oi-trash"></span> @*DELETE*@
-                </a>
-            </Template>
-        </RadzenGridColumn>
-    </Columns>
-</RadzenGrid>
+                    }
+                    <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration: none;">Add Coupon</a>
+                    <a href="@url[0]" class="button is-success is-small is-link is-outlined" style="text-decoration: none;">
+                        <span class="oi oi-pencil"></span> @*EDIT*@
+                    </a>
+                    <a href="@url[1]" class="button is-info is-small is-link is-outlined" style="text-decoration: none;">
+                        <span class="oi oi-magnifying-glass"></span> @*DETAILS*@
+                    </a>
+                    <a class="button is-danger is-small is-link is-outlined" style="text-decoration: none;"
+                       @onclick="@(()=>HandleDelete(data.Client))" disabled=@disabled>
+                        <span class="oi oi-trash"></span> @*DELETE*@
+                    </a>
+                </Template>
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
 }
 
 @code {
@@ -76,11 +76,6 @@ else
             clients = await clientServices.GetAllClientAsync();
             MapClientToRadzenClient();
         }
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await JSRuntime.InvokeAsync<object>("DataTable");
     }
 
     void OnAllowButtonStateChange(bool value)

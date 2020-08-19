@@ -8,6 +8,7 @@ namespace BonusApp.Data.RadzenGridMapper
 {
     public class RadzenClientCoupon
     {
+        public int Index { get; set; }
         public string TRCId { get; set; }
         public string CouponName { get; set; }
         public string ClientEmail { get; set; }
