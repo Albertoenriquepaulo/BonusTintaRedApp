@@ -1,7 +1,13 @@
-﻿console.log("DataTable");
-function DataTable() {
+﻿function DataTable() {
     $(document).ready(function () {
+
         $('#myTable').DataTable();
+    });
+}
+
+function DataTablesRemove() {
+    $(document).ready(function () {
+        $('#myTable').DataTable().destroy();
     });
 }
 

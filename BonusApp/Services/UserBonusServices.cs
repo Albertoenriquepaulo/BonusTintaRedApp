@@ -49,7 +49,7 @@ namespace BonusApp.Data
             //return await dbContext.Client.FindAsync(id);
         }
 
-        public bool AddListClientCouponAsyncWSQL(List<ClientCoupon> clientCoupons)
+        public bool AddListClientCouponAsyncWithSQL(List<ClientCoupon> clientCoupons)
         {
             const string connection = "Data Source=ClientBondsDB.db;";
             string stringQuery;
