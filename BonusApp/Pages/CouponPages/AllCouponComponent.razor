@@ -82,6 +82,8 @@ else
 
     private async Task HandleDelete(ClientCoupon clientCoupon)
     {
+        //await JSRuntime.InvokeAsync<object>("DataTablesRemove");
+
         if (disabled)
         {
             return;
@@ -99,6 +101,7 @@ else
             await clientCouponServices.DeleteClientCouponAsync(clientCoupon);
             clientCoupons = await clientCouponServices.GetAllClientCouponAsync();
         }
+        this.StateHasChanged();
     }
 
     private void RemainingPages(int pages, int spentPages)
