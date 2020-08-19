@@ -8,37 +8,36 @@
 <HandleDeleteButtonComponent OnAllowButtonStateChange="OnAllowButtonStateChange" />
 @if (coupons == null || coupons.Count == 0)
 {
-    <h2>No Coupon found</h2>
+<h2>No Coupon found</h2>
 }
 else
 {
 
-    <RadzenGrid @ref="radzenCouponGrid" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
-                AllowSorting="true" Data="@radzenCouponList" TItem="RadzenCoupon" ColumnWidth="150px">
-        <Columns>
-            <RadzenGridColumn TItem="RadzenCoupon" Width="35px" Property="Index" Title="#" />
-            <RadzenGridColumn TItem="RadzenCoupon" Property="Coupon.Name" Title="Name">
-                <FooterTemplate>
-                    Total coupons: <b>@radzenCouponGrid.View.Count()</b>
-                </FooterTemplate>
-            </RadzenGridColumn>
+<RadzenGrid @ref="radzenCouponGrid" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
+            AllowSorting="true" Data="@radzenCouponList" TItem="RadzenCoupon" ColumnWidth="150px">
+    <Columns>
+        <RadzenGridColumn TItem="RadzenCoupon" Property="Coupon.Name" Title="Name">
+            <FooterTemplate>
+                Total coupons: <b>@radzenCouponGrid.View.Count()</b>
+            </FooterTemplate>
+        </RadzenGridColumn>
 
-            <RadzenGridColumn TItem="RadzenCoupon" Property="Coupon.Pages" Title="Pages" />
-            <RadzenGridColumn TItem="RadzenCoupon" Property="Id" Title="" Filterable="false" Sortable="false">
-                <Template Context="data">
-                    @{
+        <RadzenGridColumn TItem="RadzenCoupon" Property="Coupon.Pages" Title="Pages" />
+        <RadzenGridColumn TItem="RadzenCoupon" Property="Id" Title="" Filterable="false" Sortable="false">
+            <Template Context="data">
+                @{
                         url = $"coupon/edit/{data.Coupon.Id.ToString()}";
-                    }
-                    <a href="@url" class="button is-info is-small is-outlined" style="text-decoration:none;">
-                        <span class="oi oi-pencil"></span> @*EDIT*@
-                    </a>
-                    <a @onclick="@(()=>HandleDelete(data.Coupon))" class="button is-danger is-link  is-small is-outlined" disabled=@disabled>
-                        <span class="oi oi-trash"></span> @*DELETE*@
-                    </a>
-                </Template>
-            </RadzenGridColumn>
-        </Columns>
-    </RadzenGrid>
+                }
+                <a href="@url" class="button is-info is-small is-outlined" style="text-decoration:none;">
+                    <span class="oi oi-pencil"></span> @*EDIT*@
+                </a>
+                <a @onclick="@(()=>HandleDelete(data.Coupon))" class="button is-danger is-link  is-small is-outlined" disabled=@disabled>
+                    <span class="oi oi-trash"></span> @*DELETE*@
+                </a>
+            </Template>
+        </RadzenGridColumn>
+    </Columns>
+</RadzenGrid>
 }
 
 @code {
