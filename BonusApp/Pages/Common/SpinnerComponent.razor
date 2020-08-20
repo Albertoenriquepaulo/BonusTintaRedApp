@@ -12,7 +12,7 @@
 
     [Parameter] public string Message { get; set; }
 
-    void SubmitForm() => BlazoredModal.Close();
+    void SubmitForm() => BlazoredModal.Close(ModalResult.Ok<bool>(true));
 
     protected override void OnInitialized()
     {
