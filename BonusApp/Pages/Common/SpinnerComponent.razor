@@ -1,10 +1,9 @@
 ﻿@inject IModalService myModal
 
 <div class="is-horizontal-center">
-    @*<div class="spinner-border"></div>*@
     <p class="mb-3">@Message</p>
-    <img src="image/spinner.gif" alt="Alternate Text" class="center" />
-    @*<button @onclick="SubmitForm" class="button is-success is-link is-outlined">Ok</button>*@
+    @*<img src="image/spinner.gif" alt="Alternate Text" class="center" />*@
+    <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" Style="margin-bottom: 20px" />
 </div>
 
 @code {

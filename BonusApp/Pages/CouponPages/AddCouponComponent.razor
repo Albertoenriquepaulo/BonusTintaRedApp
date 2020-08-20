@@ -6,6 +6,8 @@
 @inject RefreshServices refreshServices
 @inject EmailHelper emailHelper
 
+@inject NotificationService notificationService
+
 <div>
     <div class="field is-horizontal mb-0">
         <label class="label" for="CouponInput">Coupon:</label>
@@ -30,11 +32,12 @@
             <p class="is-size-7 is-small mt-1 ml-3">@strCouponsToAddToClient.Count Coupons selected</p>
         </div>
     </div>
-
     <button class="button is-success is-link is-outlined mx-1 mt-0" @onclick="AddCoupon" disabled=@DisabledAddCouponButton()>Add Coupon</button>
 </div>
 
 @code {
+    Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
+
     [Parameter] public Client client { get; set; }
     List<Coupon> coupons = new List<Coupon>();
     private bool selected;
@@ -66,6 +69,9 @@
     {
         TRCIdBeforeAdd = new List<string>();
         TRCIdAfterAdd = new List<string>();
+        NotificationMessage notification;
+        int notificationDuration = 10000;
+
         await LoadTRCId(TRCIdBeforeAdd);
         foreach (var coupon in couponsToAddToClient)
         {
@@ -81,8 +87,26 @@
 
         if (clientCouponServices.AddListClientCouponAsyncWithSQL(clientCouponList))
         {
-            var messageForm = myModal.Show<SpinnerComponent>($"The coupon has been added to {client.Email}. \nSending Email...");
+
+            notification = new NotificationMessage
+            {
+                Severity = NotificationSeverity.Success,
+                Summary = client.Email,
+                Detail = "Coupon has been added",
+                Duration = notificationDuration
+            };
+            await ShowNotification(notification);
+
+            var options = new ModalOptions()
+            {
+                HideCloseButton = true,
+                DisableBackgroundCancel = true
+            };
+
+            var messageForm = myModal.Show<SpinnerComponent>($"Sending Email...", options);
             var result = await messageForm.Result;
+
+
         }
         else
         {
@@ -97,10 +121,19 @@
 
         List<string> trcIdResultList = TRCIdAfterAdd.Where(p => !TRCIdBeforeAdd.Any(p2 => p2 == p)).ToList();
 
-        //SendEmails(trcIdResultList);
-        SendEmailWithVariousAttachment(trcIdResultList);
-        Clear();
+        if (SendEmailWithVariousAttachment(trcIdResultList))
+        {
+            notification = new NotificationMessage()
+            {
+                Severity = NotificationSeverity.Info,
+                Summary = "Emails",
+                Detail = "have been sent",
+                Duration = notificationDuration
+            };
+            await ShowNotification(notification);
+        }
 
+        Clear();
     }
 
     private async Task AddCouponToSelectBoxAsync()
@@ -178,7 +211,12 @@
         }
     }
 
+    async Task ShowNotification(NotificationMessage message)
+    {
+        notificationService.Notify(message);
 
-
+        events.Add(DateTime.Now, $"{message.Severity} notification");
+        await InvokeAsync(() => { StateHasChanged(); });
+    }
 
 }

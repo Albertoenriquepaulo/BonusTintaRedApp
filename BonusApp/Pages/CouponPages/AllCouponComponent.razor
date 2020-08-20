@@ -51,11 +51,12 @@ else
         </RadzenGridColumn>
     </Columns>
 </RadzenGrid>
+<BackButtonComponent />
 }
 
 @code {
     RadzenGrid<RadzenClientCoupon> radzenClientCouponGrid;
-    private string colWidth = "100px";
+    private string colWidth = "120px";
     List<ClientCoupon> clientCoupons;
     List<RadzenClientCoupon> radzenClientCouponList;
     string[] url = new string[2];

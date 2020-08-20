@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Radzen;
 
 namespace BonusApp
 {
@@ -37,6 +38,7 @@ namespace BonusApp
             services.AddScoped<TransactionServices>();
             services.AddScoped<RefreshServices>();
             services.AddScoped<EmailHelper>();
+            services.AddScoped<NotificationService>();
 
             services.AddBlazoredModal();
         }
