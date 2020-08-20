@@ -3,6 +3,8 @@
 @inject CouponServices couponServices
 @inject IModalService myModal
 @inject NavigationManager navManager
+@inject EmailHelper emailHelper
+@inject NotificationService notificationService
 
 <h3>New Client</h3>
 
@@ -49,6 +51,7 @@
 </EditForm>
 
 @code {
+    Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
     private Client client = new Client();
     List<Coupon> coupons = new List<Coupon>();
 
@@ -64,6 +67,7 @@
 
     private async Task Create()
     {
+        int notificationDuration = 10000;
         List<ClientCoupon> clientCouponList = new List<ClientCoupon>();
         foreach (var coupon in couponsToAddToClient)
         {
@@ -76,10 +80,39 @@
             });
         }
         client.ClientCoupons = clientCouponList;
-        await clientServices.AddClientAsync(client);
 
-        var messageForm = myModal.Show<ConfirmCreateComponent>($"The client has been created under the ID {client.Id}");
+        if (await clientServices.AddClientAsync(client) == null)
+        {
+            await ShowNotificationAsync(BuildNotificationMessage(NotificationSeverity.Error, client.Email,
+                                                                "Error. User have not been created", notificationDuration));
+
+            return;
+        }
+
+        await ShowNotificationAsync(BuildNotificationMessage(NotificationSeverity.Success, client.Email,
+                                                                "User has been created", notificationDuration * 2));
+
+        if (clientCouponList.Count == 0)
+        {
+            navManager.NavigateTo($"clients/details/{client.Id}");
+            return;
+        }
+        var options = new ModalOptions()
+        {
+            HideCloseButton = true,
+            DisableBackgroundCancel = true
+        };
+
+        List<string> trcIdResultList = clientCouponList.Select(cp => cp.TRCId).ToList();
+
+        var messageForm = myModal.Show<SpinnerComponent>($"Sending Email...", options);
         var result = await messageForm.Result;
+
+        if (SendEmailWithVariousAttachment(trcIdResultList) && (bool)result.Data)
+        {
+            await ShowNotificationAsync(BuildNotificationMessage(NotificationSeverity.Info,
+                                                                    "Emails", "have been sent", notificationDuration));
+        }
 
         navManager.NavigateTo($"clients/details/{client.Id}");
     }
@@ -100,4 +133,46 @@
         intCouponsToAddToClient = new List<int>();
         strCouponsToAddToClient = new List<string>();
     }
+
+    private bool SendEmailWithVariousAttachment(List<string> trcIdResultList)
+    {
+        Pdf pdfHelper = new Pdf();
+        int i = 0;
+        List<MemoryStream> streamList = new List<MemoryStream>();
+        try
+        {
+            foreach (var item in strCouponsToAddToClient)
+            {
+                MemoryStream stream = pdfHelper.Create(item, trcIdResultList[i++]);
+                streamList.Add(stream);
+            }
+            emailHelper.SendStreamListByEmail(client.Email, $"Tu bono Tinta Red", "Aqui deberia estar tu bono", trcIdResultList, streamList);
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+    }
+
+    async Task ShowNotificationAsync(NotificationMessage message)
+    {
+        notificationService.Notify(message);
+
+        events.Add(DateTime.Now, $"{message.Severity} notification");
+        await InvokeAsync(() => { StateHasChanged(); });
+    }
+
+    NotificationMessage BuildNotificationMessage(NotificationSeverity notification, string summary, string detail, int duration)
+    {
+        return new NotificationMessage()
+        {
+            Severity = notification,
+            Summary = summary,
+            Detail = detail,
+            Duration = duration
+        };
+    }
+
 }

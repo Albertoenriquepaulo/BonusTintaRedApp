@@ -32,7 +32,7 @@
             <p class="is-size-7 is-small mt-1 ml-3">@strCouponsToAddToClient.Count Coupons selected</p>
         </div>
     </div>
-    <button class="button is-success is-link is-outlined mx-1 mt-0" @onclick="AddCoupon" disabled=@DisabledAddCouponButton()>Add Coupon</button>
+    <button class="button is-success is-link is-outlined mx-1 mt-0" @onclick="AddCouponAsync" disabled=@DisabledAddCouponButton()>Add Coupon</button>
 </div>
 
 @code {
@@ -65,14 +65,14 @@
         clientCouponList = new List<ClientCoupon>();
     }
 
-    private async Task AddCoupon()
+    private async Task AddCouponAsync()
     {
         TRCIdBeforeAdd = new List<string>();
         TRCIdAfterAdd = new List<string>();
         NotificationMessage notification;
         int notificationDuration = 10000;
 
-        await LoadTRCId(TRCIdBeforeAdd);
+        await LoadTRCIdAsync(TRCIdBeforeAdd);
         foreach (var coupon in couponsToAddToClient)
         {
             clientCouponList.Add(new ClientCoupon
@@ -87,15 +87,8 @@
 
         if (clientCouponServices.AddListClientCouponAsyncWithSQL(clientCouponList))
         {
-
-            notification = new NotificationMessage
-            {
-                Severity = NotificationSeverity.Success,
-                Summary = client.Email,
-                Detail = "Coupon has been added",
-                Duration = notificationDuration
-            };
-            await ShowNotification(notification);
+            await ShowNotificationAsync(BuildNotificationMessage(NotificationSeverity.Success,
+                                                                    client.Email, "Coupon has been added", notificationDuration));
 
             var options = new ModalOptions()
             {
@@ -117,20 +110,14 @@
         coupons = await couponServices.GetAllCouponAsync();
         selected = true;
         refreshServices.CallRequestRefresh();
-        await LoadTRCId(TRCIdAfterAdd);
+        await LoadTRCIdAsync(TRCIdAfterAdd);
 
         List<string> trcIdResultList = TRCIdAfterAdd.Where(p => !TRCIdBeforeAdd.Any(p2 => p2 == p)).ToList();
 
         if (SendEmailWithVariousAttachment(trcIdResultList))
         {
-            notification = new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Info,
-                Summary = "Emails",
-                Detail = "have been sent",
-                Duration = notificationDuration
-            };
-            await ShowNotification(notification);
+            await ShowNotificationAsync(BuildNotificationMessage(NotificationSeverity.Success,
+                                                                    "Emails", "have been sent", notificationDuration));
         }
 
         Clear();
@@ -183,7 +170,9 @@
     {
         Pdf pdfHelper = new Pdf();
         int i = 0;
-        List<MemoryStream> streamList = new List<MemoryStream>();
+        List<MemoryStream>
+            streamList = new List<MemoryStream>
+                ();
         try
         {
             foreach (var item in strCouponsToAddToClient)
@@ -201,7 +190,7 @@
 
     }
 
-    private async Task LoadTRCId(List<string> TRCIdList)
+    private async Task LoadTRCIdAsync(List<string> TRCIdList)
     {
         Client clientEmail = await clientServices.GetClientAsync(client.Id);
 
@@ -211,12 +200,23 @@
         }
     }
 
-    async Task ShowNotification(NotificationMessage message)
+    async Task ShowNotificationAsync(NotificationMessage message)
     {
         notificationService.Notify(message);
 
         events.Add(DateTime.Now, $"{message.Severity} notification");
         await InvokeAsync(() => { StateHasChanged(); });
+    }
+
+    NotificationMessage BuildNotificationMessage(NotificationSeverity notification, string summary, string detail, int duration)
+    {
+        return new NotificationMessage()
+        {
+            Severity = notification,
+            Summary = summary,
+            Detail = detail,
+            Duration = duration
+        };
     }
 
 }
