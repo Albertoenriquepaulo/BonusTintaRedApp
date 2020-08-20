@@ -7,51 +7,51 @@
 
 @if (clientCoupons == null || clientCoupons.Count == 0)
 {
-<h2>No Coupon Issued</h2>
-<a href="/" style="text-decoration: none;" class="button is-info  is-link is-outlined">Home</a>
+    <h2>No Coupon Issued</h2>
+    <a href="/" style="text-decoration: none;" class="button is-info  is-link is-outlined">Home</a>
 }
 else
 {
-<div style="display: flex; flex-direction: row-reverse;" class="mb-2">
-    <HandleDeleteButtonComponent OnAllowButtonStateChange="OnAllowButtonStateChange" />
-</div>
+    <div style="display: flex; flex-direction: row-reverse;" class="mb-2">
+        <HandleDeleteButtonComponent OnAllowButtonStateChange="OnAllowButtonStateChange" />
+    </div>
 
-<RadzenGrid @ref="radzenClientCouponGrid" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
-            AllowSorting="true" Data="@radzenClientCouponList" TItem="RadzenClientCoupon" ColumnWidth="150px" Count="1">
-    <Columns>
-        <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="TRCId" Title="Coupon Id">
-            <FooterTemplate>
-                Total coupons: <b>@radzenClientCouponGrid.View.Count()</b>
-            </FooterTemplate>
-        </RadzenGridColumn>
-        <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="CouponName" Title="Coupon Type" />
-        <RadzenGridColumn TItem="RadzenClientCoupon" Width="180px" Property="ClientEmail" Title="Client" />
-        <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="CouponPages" Title="Pages" />
-        <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="SpentPages" Title="Printed Pages" />
-        <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="RemainingPages" Title="Remaining Pages" />
-        <RadzenGridColumn TItem="RadzenClientCoupon" Property="ClientCoupon" Title="" Filterable="false" Sortable="false">
-            <Template Context="data">
-                @{
+    <RadzenGrid @ref="radzenClientCouponGrid" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
+                AllowSorting="true" Data="@radzenClientCouponList" TItem="RadzenClientCoupon" ColumnWidth="150px" Count="1" RowRender="@RowRender">
+        <Columns>
+            <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="TRCId" Title="Coupon Id">
+                <FooterTemplate>
+                    Total coupons: <b>@radzenClientCouponGrid.View.Count()</b>
+                </FooterTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="CouponName" Title="Coupon Type" />
+            <RadzenGridColumn TItem="RadzenClientCoupon" Width="180px" Property="ClientEmail" Title="Client" />
+            <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="CouponPages" Title="Pages" />
+            <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="SpentPages" Title="Printed Pages" />
+            <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="RemainingPages" Title="Remaining Pages" />
+            <RadzenGridColumn TItem="RadzenClientCoupon" Property="ClientCoupon" Title="" Filterable="false" Sortable="false">
+                <Template Context="data">
+                    @{
                         url[0] = $"couponpurchased/discountpages/{data.ClientCoupon.Id}";
                         url[1] = $"couponpurchased/details/{data.ClientCoupon.Id}";
-                }
-                <a href="@(remainingPages == 0 ? "javascript:function() { return false; }": url[0])"
-                   class="button is-success is-small is-link is-outlined" style="text-decoration:none;"
-                   disabled=@(remainingPages == 0 ? true: false)>
-                    Set Pages
-                </a>
-                <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration:none;">
-                    <span class="oi oi-magnifying-glass"></span>
-                </a>
-                <a @onclick="@(()=>HandleDelete(data.ClientCoupon))" class="button is-danger is-small is-link is-outlined" disabled=@disabled>
-                    <span class="oi oi-trash"></span>
-                </a>
-            </Template>
+                    }
+                    <a href="@(remainingPages == 0 ? "javascript:function() { return false; }": url[0])"
+                       class="button is-success is-small is-link is-outlined" style="text-decoration:none;"
+                       disabled=@(remainingPages == 0 ? true: false)>
+                        Set Pages
+                    </a>
+                    <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration:none;">
+                        <span class="oi oi-magnifying-glass"></span>
+                    </a>
+                    <a @onclick="@(()=>HandleDelete(data.ClientCoupon))" class="button is-danger is-small is-link is-outlined" disabled=@disabled>
+                        <span class="oi oi-trash"></span>
+                    </a>
+                </Template>
 
-        </RadzenGridColumn>
-    </Columns>
-</RadzenGrid>
-<BackButtonComponent />
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+    <BackButtonComponent />
 }
 
 @code {
@@ -124,5 +124,10 @@ else
             radzenClientCouponList.Add(radzenClientCoupon);
             index++;
         }
+    }
+
+    void RowRender(RowRenderEventArgs<RadzenClientCoupon> args)
+    {
+        args.Attributes.Add("style", $"font-weight: {(args.Data.RemainingPages == 0 ? "bold" : "normal")};");
     }
 }

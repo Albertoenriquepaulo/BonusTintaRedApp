@@ -7,7 +7,6 @@ namespace BonusApp.Data
     {
         [Required]
         public int Id { get; set; }
-
         public int ClientId { get; set; }
         public int CouponId { get; set; }
         public int SpentPages { get; set; }

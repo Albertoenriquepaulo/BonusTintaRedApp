@@ -69,7 +69,6 @@
     {
         TRCIdBeforeAdd = new List<string>();
         TRCIdAfterAdd = new List<string>();
-        NotificationMessage notification;
         int notificationDuration = 10000;
 
         await LoadTRCIdAsync(TRCIdBeforeAdd);
@@ -114,7 +113,7 @@
 
         List<string> trcIdResultList = TRCIdAfterAdd.Where(p => !TRCIdBeforeAdd.Any(p2 => p2 == p)).ToList();
 
-        if (SendEmailWithVariousAttachment(trcIdResultList))
+        if (SendEmailWithHtmTemplate(trcIdResultList))//if (SendEmailWithVariousAttachment(trcIdResultList))
         {
             await ShowNotificationAsync(BuildNotificationMessage(NotificationSeverity.Success,
                                                                     "Emails", "have been sent", notificationDuration));
@@ -170,9 +169,7 @@
     {
         Pdf pdfHelper = new Pdf();
         int i = 0;
-        List<MemoryStream>
-            streamList = new List<MemoryStream>
-                ();
+        List<MemoryStream> streamList = new List<MemoryStream>();
         try
         {
             foreach (var item in strCouponsToAddToClient)
@@ -188,6 +185,29 @@
             return false;
         }
 
+    }
+
+    private bool SendEmailWithHtmTemplate(List<string> trcIdResultList)
+    {
+        Pdf pdfHelper = new Pdf();
+        int i = 0;
+        List<EmailBody> emailBodies = new List<EmailBody>();
+        try
+        {
+            foreach (var item in strCouponsToAddToClient)
+            {
+                EmailBody emailBody = new EmailBody();
+                emailBody.CreateBody(trcIdResultList[i++], 500, "Blanco y negro");
+                emailBodies.Add(emailBody);
+            }
+            emailHelper.SendHtmTemplateListByEmail(client.Email, $"Tu bono Tinta Red", emailBodies);
+        }
+
+        catch (Exception)
+        {
+            return false;
+        }
+        return true;
     }
 
     private async Task LoadTRCIdAsync(List<string> TRCIdList)

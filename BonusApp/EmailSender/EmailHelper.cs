@@ -104,6 +104,42 @@ namespace BonusApp.EmailSender
                 return false;
             }
         }
+        public bool SendHtmTemplateListByEmail(string to, string subject, List<EmailBody> emailBodies)
+        {
+            if (emailBodies == null || emailBodies.Count == 0)
+            {
+                return false;
+            }
+
+            try
+            {
+                var smtpClient = new SmtpClient
+                {
+                    Host = GmailData.Host,
+                    Port = GmailData.Port,
+                    EnableSsl = GmailData.Enable,
+                    Credentials = new NetworkCredential(GmailData.UserName, GmailData.Password)
+                };
+
+                var mailMessage = new MailMessage(GmailData.UserName, to);
+                mailMessage.Subject = subject;
+                mailMessage.IsBodyHtml = true;
+                ContentType contentType = new ContentType(MediaTypeNames.Application.Pdf);
+
+                foreach (var body in emailBodies)
+                {
+                    mailMessage.Body = body.Body;
+                    smtpClient.Send(mailMessage);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message;
+                return false;
+            }
+        }
 
         public string GetSender()
         {
