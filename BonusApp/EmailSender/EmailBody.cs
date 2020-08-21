@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -16,7 +17,7 @@ namespace BonusApp.EmailSender
         {
             try
             {
-                using (StreamReader reader = new StreamReader("pdfs/templates/ToTest.htm"))
+                using (StreamReader reader = new StreamReader("pdfs/templates/EmailTemplate.html"))
                 {
                     Body = reader.ReadToEnd();
                 }

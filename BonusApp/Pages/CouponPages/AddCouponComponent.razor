@@ -32,11 +32,15 @@
             <p class="is-size-7 is-small mt-1 ml-3">@strCouponsToAddToClient.Count Coupons selected</p>
         </div>
     </div>
+
     <button class="button is-success is-link is-outlined mx-1 mt-0" @onclick="AddCouponAsync" disabled=@DisabledAddCouponButton()>Add Coupon</button>
+    <RadzenCheckBox TValue="bool" @bind-Value="@SentEmailCheckBoxValue" />
+    <RadzenLabel Text="Sent email" Component="SentEmailCheckBox" />
 </div>
 
 @code {
     Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
+    bool SentEmailCheckBoxValue = true;
 
     [Parameter] public Client client { get; set; }
     List<Coupon> coupons = new List<Coupon>();
@@ -95,10 +99,11 @@
                 DisableBackgroundCancel = true
             };
 
-            var messageForm = myModal.Show<SpinnerComponent>($"Sending Email...", options);
-            var result = await messageForm.Result;
-
-
+            if (SentEmailCheckBoxValue)
+            {
+                var messageForm = myModal.Show<SpinnerComponent>($"Sending Email...", options);
+                var result = await messageForm.Result;
+            }
         }
         else
         {
@@ -113,7 +118,7 @@
 
         List<string> trcIdResultList = TRCIdAfterAdd.Where(p => !TRCIdBeforeAdd.Any(p2 => p2 == p)).ToList();
 
-        if (SendEmailWithHtmTemplate(trcIdResultList))//if (SendEmailWithVariousAttachment(trcIdResultList))
+        if (SentEmailCheckBoxValue && SendEmailWithHtmTemplate(trcIdResultList))//if (SendEmailWithVariousAttachment(trcIdResultList))
         {
             await ShowNotificationAsync(BuildNotificationMessage(NotificationSeverity.Success,
                                                                     "Emails", "have been sent", notificationDuration));
@@ -197,7 +202,7 @@
             foreach (var item in strCouponsToAddToClient)
             {
                 EmailBody emailBody = new EmailBody();
-                emailBody.CreateBody(trcIdResultList[i++], 500, "Blanco y negro");
+                emailBody.CreateBody(trcIdResultList[i++], 999, "Blanco y negro");
                 emailBodies.Add(emailBody);
             }
             emailHelper.SendHtmTemplateListByEmail(client.Email, $"Tu bono Tinta Red", emailBodies);

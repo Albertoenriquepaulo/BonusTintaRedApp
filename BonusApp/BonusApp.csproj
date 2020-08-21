@@ -28,8 +28,13 @@
 </ItemGroup>
 
   <ItemGroup>
-    <None Remove="pdfs\templates\EmailTemplate.htm" />
-    <None Remove="pdfs\templates\ToTest.htm" />
+    <None Remove="pdfs\image002.png" />
+    <None Remove="pdfs\image003.png" />
+    <None Remove="pdfs\image004.png" />
+    <None Remove="pdfs\image005.png" />
+    <None Remove="pdfs\image006.jpg" />
+    <None Remove="pdfs\templates\EmailTemplate.html" />
+    <None Remove="pdfs\templates\ToTest.html" />
   </ItemGroup>
 
 </Project>

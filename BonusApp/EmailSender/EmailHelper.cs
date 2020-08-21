@@ -126,6 +126,15 @@ namespace BonusApp.EmailSender
                 mailMessage.IsBodyHtml = true;
                 ContentType contentType = new ContentType(MediaTypeNames.Application.Pdf);
 
+                //https://stackoverflow.com/questions/18358534/send-inline-image-in-email
+                //https://stackoverflow.com/questions/16442196/email-html-document-embedding-images-using-c-sharp
+
+                mailMessage.Attachments.Add(IncludeImageInlineAttachment("pdfs/templates/image002.png", "image002"));
+                mailMessage.Attachments.Add(IncludeImageInlineAttachment("pdfs/templates/image003.png", "image003"));
+                mailMessage.Attachments.Add(IncludeImageInlineAttachment("pdfs/templates/image004.png", "image004"));
+                mailMessage.Attachments.Add(IncludeImageInlineAttachment("pdfs/templates/image005.png", "image005"));
+                mailMessage.Attachments.Add(IncludeImageInlineAttachment("pdfs/templates/image006.jpg", "image006"));
+
                 foreach (var body in emailBodies)
                 {
                     mailMessage.Body = body.Body;
@@ -140,10 +149,27 @@ namespace BonusApp.EmailSender
                 return false;
             }
         }
-
         public string GetSender()
         {
             return GmailData.UserName;
+        }
+
+        public Attachment IncludeImageInlineAttachment(string path, string imageNameInHtml)
+        {
+            Attachment inlineLogo;
+            try
+            {
+                inlineLogo = new Attachment(path);
+                inlineLogo.ContentId = imageNameInHtml;
+
+                inlineLogo.ContentDisposition.Inline = true;
+                inlineLogo.ContentDisposition.DispositionType = DispositionTypeNames.Inline;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            return inlineLogo;
         }
     }
 }
