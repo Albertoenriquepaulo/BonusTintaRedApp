@@ -40,6 +40,10 @@ namespace BonusApp.Data
         {
             try
             {
+                if (dbContext.Client.Where(c => String.Equals(c.Email, client.Email, StringComparison.OrdinalIgnoreCase)) != null)
+                {
+                    return null;
+                }
                 dbContext.Client.Add(client);
                 await dbContext.SaveChangesAsync();
             }
