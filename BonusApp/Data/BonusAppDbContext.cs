@@ -29,7 +29,9 @@ namespace BonusApp.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Client>().HasData(GetClients());
+            modelBuilder.Entity<Client>().HasIndex(u => u.Email).IsUnique();
             modelBuilder.Entity<Coupon>().HasData(GetCoupons());
+
             base.OnModelCreating(modelBuilder);
         }
 

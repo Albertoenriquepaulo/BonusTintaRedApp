@@ -45,7 +45,7 @@ namespace BonusApp.Data
             }
             catch (Exception)
             {
-                throw;
+                return null;
             }
             return client;
         }
