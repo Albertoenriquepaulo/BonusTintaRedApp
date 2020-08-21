@@ -10,13 +10,13 @@ namespace BonusApp.Data
     {
         #region Private members
 
-        private BonusAppDbContext dbContext;
+        private CouponAppDbContext dbContext;
 
         #endregion Private members
 
         #region Constructor
 
-        public CouponServices(BonusAppDbContext dbContext)
+        public CouponServices(CouponAppDbContext dbContext)
         {
             this.dbContext = dbContext;
         }

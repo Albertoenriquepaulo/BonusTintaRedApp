@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BonusApp.Migrations
 {
-    [DbContext(typeof(BonusAppDbContext))]
+    [DbContext(typeof(CouponAppDbContext))]
     [Migration("20200815104224_FirstMigration")]
     partial class FirstMigration
     {

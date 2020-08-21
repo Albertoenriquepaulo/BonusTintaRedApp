@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BonusApp.Migrations
 {
-    [DbContext(typeof(BonusAppDbContext))]
+    [DbContext(typeof(CouponAppDbContext))]
     partial class BonusAppDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

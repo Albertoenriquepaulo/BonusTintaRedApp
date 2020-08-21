@@ -10,13 +10,13 @@ namespace BonusApp.Data
     {
         #region Private members
 
-        private BonusAppDbContext dbContext;
+        private CouponAppDbContext dbContext;
 
         #endregion Private members
 
         #region Constructor
 
-        public ClientServices(BonusAppDbContext dbContext)
+        public ClientServices(CouponAppDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
@@ -40,7 +40,7 @@ namespace BonusApp.Data
         {
             try
             {
-                if (dbContext.Client.Where(c => String.Equals(c.Email, client.Email, StringComparison.OrdinalIgnoreCase)) != null)
+                if (dbContext.Client.Where(c => c.Email.ToLower() == client.Email.ToLower()).FirstOrDefault() != null)
                 {
                     return null;
                 }

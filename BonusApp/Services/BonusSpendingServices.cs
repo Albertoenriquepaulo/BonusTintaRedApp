@@ -11,13 +11,13 @@ namespace BonusApp.Services
     {
         #region Private members
 
-        private BonusAppDbContext dbContext;
+        private CouponAppDbContext dbContext;
 
         #endregion Private members
 
         #region Constructor
 
-        public TransactionServices(BonusAppDbContext dbContext)
+        public TransactionServices(CouponAppDbContext dbContext)
         {
             this.dbContext = dbContext;
         }

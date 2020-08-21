@@ -28,7 +28,7 @@ namespace BonusApp
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            services.AddDbContext<BonusAppDbContext>(options =>
+            services.AddDbContext<CouponAppDbContext>(options =>
             {
                 options.UseSqlite("Data Source = ClientBondsDB.db");
             });

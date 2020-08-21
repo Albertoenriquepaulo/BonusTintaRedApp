@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace BonusApp.Data
 {
-    public class BonusAppDbContext : DbContext
+    public class CouponAppDbContext : DbContext
     {
         #region Contructor
 
-        public BonusAppDbContext(DbContextOptions<BonusAppDbContext> options) : base(options)
+        public CouponAppDbContext(DbContextOptions<CouponAppDbContext> options) : base(options)
         {
             Database.EnsureCreated();
         }
