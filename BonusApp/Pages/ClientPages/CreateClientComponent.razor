@@ -20,7 +20,7 @@
 
     <div class="card mb-3" style="width: 33rem;">
         <div class="card-body is-vcentered is-centered">
-            <div class="field is-horizontal">
+            <div class="field is-horizontal mb-0 pb-0">
                 <label class="label mx-1" for="CouponInput">Coupon</label>
                 <div class="control">
                     <select name="coupon" id="CouponInput" @onchange="((arg)=> selectedValue = Convert.ToInt32(arg.Value))">
@@ -42,6 +42,11 @@
                     <a class="button is-danger is-small  is-link is-outlined mx-2" @onclick="Clear">Clear</a>
                     <p class="is-size-7 is-small mt-1 ml-3">@strCouponsToAddToClient.Count Coupons selected</p>
                 </div>
+
+            </div>
+            <div>
+                <RadzenCheckBox TValue="bool" @bind-Value="@SentEmailCheckBoxValue" />
+                <RadzenLabel Text="Send email" Component="SentEmailCheckBox" />
             </div>
         </div>
     </div>
@@ -52,6 +57,7 @@
 
 @code {
     Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
+    bool SentEmailCheckBoxValue = true;
     private Client client = new Client();
     List<Coupon> coupons = new List<Coupon>();
 
@@ -59,6 +65,7 @@
     private List<int> intCouponsToAddToClient = new List<int>();
     List<Coupon> couponsToAddToClient = new List<Coupon>();
     private List<string> strCouponsToAddToClient = new List<string>();
+    List<ClientCoupon> clientCouponList;
 
     protected async override Task OnInitializedAsync()
     {
@@ -68,7 +75,7 @@
     private async Task Create()
     {
         int notificationDuration = 10000;
-        List<ClientCoupon> clientCouponList = new List<ClientCoupon>();
+        clientCouponList = new List<ClientCoupon>();
         foreach (var coupon in couponsToAddToClient)
         {
             clientCouponList.Add(new ClientCoupon
@@ -105,13 +112,16 @@
 
         List<string> trcIdResultList = clientCouponList.Select(cp => cp.TRCId).ToList();
 
-        var messageForm = myModal.Show<SpinnerComponent>($"Sending Email...", options);
-        var result = await messageForm.Result;
-
-        if (SendEmailWithVariousAttachment(trcIdResultList) && (bool)result.Data)
+        if (SentEmailCheckBoxValue)
         {
-            await ShowNotificationAsync(BuildNotificationMessage(NotificationSeverity.Info,
-                                                                    "Emails", "have been sent", notificationDuration));
+            var messageForm = myModal.Show<SpinnerComponent>($"Sending Email...", options);
+            var result = await messageForm.Result;
+
+            if (SendEmailWithHtmTemplate(trcIdResultList) && (bool)result.Data)
+            {
+                await ShowNotificationAsync(BuildNotificationMessage(NotificationSeverity.Info,
+                                                                        "Emails", "have been sent", notificationDuration));
+            }
         }
 
         navManager.NavigateTo($"clients/details/{client.Id}");
@@ -155,6 +165,30 @@
         }
 
     }
+
+    private bool SendEmailWithHtmTemplate(List<string> trcIdResultList)
+    {
+        Pdf pdfHelper = new Pdf();
+        List<EmailBody> emailBodies = new List<EmailBody>();
+        try
+        {
+            foreach (var clientCoupon in clientCouponList)
+            {
+                EmailBody emailBody = new EmailBody();
+                emailBody.CreateBody(clientCoupon.TRCId, clientCoupon.Coupon.Pages, clientCoupon.Coupon.Name.Contains("COLOR") ? "Color" : "Blanco y Negro");
+                emailBodies.Add(emailBody);
+            }
+            emailHelper.SendHtmTemplateListByEmail(client.Email, $"Tu bono Tinta Red - HMTL Format", emailBodies);
+        }
+
+        catch (Exception)
+        {
+            return false;
+        }
+        return true;
+    }
+
+
 
     async Task ShowNotificationAsync(NotificationMessage message)
     {

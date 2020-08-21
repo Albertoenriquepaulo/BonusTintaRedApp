@@ -35,7 +35,7 @@
 
     <button class="button is-success is-link is-outlined mx-1 mt-0" @onclick="AddCouponAsync" disabled=@DisabledAddCouponButton()>Add Coupon</button>
     <RadzenCheckBox TValue="bool" @bind-Value="@SentEmailCheckBoxValue" />
-    <RadzenLabel Text="Sent email" Component="SentEmailCheckBox" />
+    <RadzenLabel Text="Send email" Component="SentEmailCheckBox" />
 </div>
 
 @code {
@@ -114,6 +114,7 @@
         coupons = await couponServices.GetAllCouponAsync();
         selected = true;
         refreshServices.CallRequestRefresh();
+        clientCouponList.RemoveAll(c => c.TRCId == "TRCB0000"); //When refresh the other component bring or add data that is not neccessary
         await LoadTRCIdAsync(TRCIdAfterAdd);
 
         List<string> trcIdResultList = TRCIdAfterAdd.Where(p => !TRCIdBeforeAdd.Any(p2 => p2 == p)).ToList();
@@ -195,17 +196,16 @@
     private bool SendEmailWithHtmTemplate(List<string> trcIdResultList)
     {
         Pdf pdfHelper = new Pdf();
-        int i = 0;
         List<EmailBody> emailBodies = new List<EmailBody>();
         try
         {
-            foreach (var item in strCouponsToAddToClient)
+            foreach (var clientCoupon in clientCouponList)
             {
                 EmailBody emailBody = new EmailBody();
-                emailBody.CreateBody(trcIdResultList[i++], 999, "Blanco y negro");
+                emailBody.CreateBody(clientCoupon.TRCId, clientCoupon.Coupon.Pages, clientCoupon.Coupon.Name.Contains("COLOR") ? "Color" : "Blanco y Negro");
                 emailBodies.Add(emailBody);
             }
-            emailHelper.SendHtmTemplateListByEmail(client.Email, $"Tu bono Tinta Red", emailBodies);
+            emailHelper.SendHtmTemplateListByEmail(client.Email, $"Tu bono Tinta Red - HMTL Format", emailBodies);
         }
 
         catch (Exception)
