@@ -150,49 +150,6 @@
         return strCouponsToAddToClient.Count == 0 ? true : false;
     }
 
-    private bool SendEmails(List<string> trcIdResultList)
-    {
-        Pdf pdfHelper = new Pdf();
-        int i = 0;
-        try
-        {
-            foreach (var item in strCouponsToAddToClient)
-            {
-                MemoryStream stream = pdfHelper.Create(item, trcIdResultList[i]);
-                emailHelper.SendStreamByEmail(client.Email, $"Tu bono Tinta Red | Id: {trcIdResultList[i]}", "Aqui deberia estar tu bono", trcIdResultList[i++], stream);
-            }
-
-            return true;
-        }
-        catch (Exception)
-        {
-            return false;
-        }
-
-    }
-
-    private bool SendEmailWithVariousAttachment(List<string> trcIdResultList)
-    {
-        Pdf pdfHelper = new Pdf();
-        int i = 0;
-        List<MemoryStream> streamList = new List<MemoryStream>();
-        try
-        {
-            foreach (var item in strCouponsToAddToClient)
-            {
-                MemoryStream stream = pdfHelper.Create(item, trcIdResultList[i++]);
-                streamList.Add(stream);
-            }
-            emailHelper.SendStreamListByEmail(client.Email, $"Tu bono Tinta Red", "Aqui deberia estar tu bono", trcIdResultList, streamList);
-            return true;
-        }
-        catch (Exception)
-        {
-            return false;
-        }
-
-    }
-
     private bool SendEmailWithHtmTemplate(List<string> trcIdResultList)
     {
         Pdf pdfHelper = new Pdf();
