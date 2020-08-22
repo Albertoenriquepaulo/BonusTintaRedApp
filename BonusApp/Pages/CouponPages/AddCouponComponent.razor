@@ -34,13 +34,13 @@
     </div>
 
     <button class="button is-success is-link is-outlined mx-1 mt-0" @onclick="AddCouponAsync" disabled=@DisabledAddCouponButton()>Add Coupon</button>
-    <RadzenCheckBox TValue="bool" @bind-Value="@SentEmailCheckBoxValue" />
+    <RadzenCheckBox TValue="bool" @bind-Value="@SendEmailCheckBoxValue" />
     <RadzenLabel Text="Send email" Component="SentEmailCheckBox" />
 </div>
 
 @code {
     Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
-    bool SentEmailCheckBoxValue = true;
+    bool SendEmailCheckBoxValue = true;
 
     [Parameter] public Client client { get; set; }
     List<Coupon> coupons = new List<Coupon>();
@@ -99,7 +99,7 @@
                 DisableBackgroundCancel = true
             };
 
-            if (SentEmailCheckBoxValue)
+            if (SendEmailCheckBoxValue)
             {
                 var messageForm = myModal.Show<SpinnerComponent>($"Sending Email...", options);
                 var result = await messageForm.Result;
@@ -119,7 +119,7 @@
 
         List<string> trcIdResultList = TRCIdAfterAdd.Where(p => !TRCIdBeforeAdd.Any(p2 => p2 == p)).ToList();
 
-        if (SentEmailCheckBoxValue && SendEmailWithHtmTemplate(trcIdResultList))//if (SendEmailWithVariousAttachment(trcIdResultList))
+        if (SendEmailCheckBoxValue && SendEmailWithHtmTemplate(trcIdResultList))//if (SendEmailWithVariousAttachment(trcIdResultList))
         {
             await ShowNotificationAsync(BuildNotificationMessage(NotificationSeverity.Success,
                                                                     "Emails", "have been sent", notificationDuration));
@@ -153,16 +153,19 @@
     private bool SendEmailWithHtmTemplate(List<string> trcIdResultList)
     {
         Pdf pdfHelper = new Pdf();
+        List<string> emailSubjectList = new List<string>();
         List<EmailBody> emailBodies = new List<EmailBody>();
         try
         {
             foreach (var clientCoupon in clientCouponList)
             {
                 EmailBody emailBody = new EmailBody();
+                emailSubjectList.Add(clientCoupon.TRCId);
                 emailBody.CreateBody(clientCoupon.TRCId, clientCoupon.Coupon.Pages, clientCoupon.Coupon.Name.Contains("COLOR") ? "Color" : "Blanco y Negro");
                 emailBodies.Add(emailBody);
+
             }
-            emailHelper.SendHtmTemplateListByEmail(client.Email, $"Tu bono Tinta Red - HMTL Format", emailBodies);
+            emailHelper.SendHtmTemplateListByEmail(client.Email, emailSubjectList, emailBodies);
         }
 
         catch (Exception)

@@ -104,7 +104,7 @@ namespace BonusApp.EmailSender
                 return false;
             }
         }
-        public bool SendHtmTemplateListByEmail(string to, string subject, List<EmailBody> emailBodies)
+        public bool SendHtmTemplateListByEmail(string to, List<string> emailSubjectList, List<EmailBody> emailBodies)
         {
             if (emailBodies == null || emailBodies.Count == 0)
             {
@@ -122,21 +122,24 @@ namespace BonusApp.EmailSender
                 };
 
                 var mailMessage = new MailMessage(GmailData.UserName, to);
-                mailMessage.Subject = subject;
+                //mailMessage.Subject = subject;
                 mailMessage.IsBodyHtml = true;
                 ContentType contentType = new ContentType(MediaTypeNames.Application.Pdf);
 
                 //https://stackoverflow.com/questions/18358534/send-inline-image-in-email
                 //https://stackoverflow.com/questions/16442196/email-html-document-embedding-images-using-c-sharp
 
-                mailMessage.Attachments.Add(IncludeImageInlineAttachment("pdfs/templates/image002.png", "image002"));
-                mailMessage.Attachments.Add(IncludeImageInlineAttachment("pdfs/templates/image003.png", "image003"));
-                mailMessage.Attachments.Add(IncludeImageInlineAttachment("pdfs/templates/image004.png", "image004"));
                 mailMessage.Attachments.Add(IncludeImageInlineAttachment("pdfs/templates/image005.png", "image005"));
-                mailMessage.Attachments.Add(IncludeImageInlineAttachment("pdfs/templates/image006.jpg", "image006"));
+                //mailMessage.Attachments.Add(IncludeImageInlineAttachment("pdfs/templates/image002.png", "image002"));
+                //mailMessage.Attachments.Add(IncludeImageInlineAttachment("pdfs/templates/image003.png", "image003"));
+                //mailMessage.Attachments.Add(IncludeImageInlineAttachment("pdfs/templates/image004.png", "image004"));
 
+                //mailMessage.Attachments.Add(IncludeImageInlineAttachment("pdfs/templates/image006.jpg", "image006"));
+
+                int i = 0;
                 foreach (var body in emailBodies)
                 {
+                    mailMessage.Subject = $"Bono de impresion {emailSubjectList[i++]}";
                     mailMessage.Body = body.Body;
                     smtpClient.Send(mailMessage);
                 }

@@ -147,16 +147,18 @@
     private bool SendEmailWithHtmTemplate(List<string> trcIdResultList)
     {
         Pdf pdfHelper = new Pdf();
+        List<string> emailSubjectList = new List<string>();
         List<EmailBody> emailBodies = new List<EmailBody>();
         try
         {
             foreach (var clientCoupon in clientCouponList)
             {
                 EmailBody emailBody = new EmailBody();
+                emailSubjectList.Add(clientCoupon.TRCId);
                 emailBody.CreateBody(clientCoupon.TRCId, clientCoupon.Coupon.Pages, clientCoupon.Coupon.Name.Contains("COLOR") ? "Color" : "Blanco y Negro");
                 emailBodies.Add(emailBody);
             }
-            emailHelper.SendHtmTemplateListByEmail(client.Email, $"Tu bono Tinta Red - HMTL Format", emailBodies);
+            emailHelper.SendHtmTemplateListByEmail(client.Email, emailSubjectList, emailBodies);
         }
 
         catch (Exception)
