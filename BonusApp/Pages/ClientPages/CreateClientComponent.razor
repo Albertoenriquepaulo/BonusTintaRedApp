@@ -5,13 +5,14 @@
 @inject NavigationManager navManager
 @inject EmailHelper emailHelper
 @inject NotificationService notificationService
+@inject IStringLocalizer<Resource> localizer
 
-<h3>New Client</h3>
+<h3>@localizer["NewClient"]</h3>
 
 <EditForm Model="client" OnValidSubmit="Create">
     <DataAnnotationsValidator />
     <div class="field">
-        <label class="label">Email</label>
+        <label class="label">@localizer["Email"]</label>
         <div class="control">
             <InputText class="input" type="text" placeholder="Client email" @bind-Value="@client.Email" />
             <ValidationMessage For="@(()=>client.Email)" />
@@ -31,7 +32,7 @@
                         }
                     </select>
                 </div>
-                <a class="button is-success is-small  is-link is-outlined mx-2" @onclick="AddCouponAsync">Add</a>
+                <a class="button is-success is-small  is-link is-outlined mx-2" @onclick="AddCouponAsync">@localizer["Add"]</a>
                 <select name="coupon-selected" size="5" style="width:100px;" multiple>
                     @foreach (var coupon in strCouponsToAddToClient)
                     {
@@ -39,19 +40,19 @@
                     }
                 </select>
                 <div>
-                    <a class="button is-danger is-small  is-link is-outlined mx-2" @onclick="Clear">Clear</a>
-                    <p class="is-size-7 is-small mt-1 ml-3">@strCouponsToAddToClient.Count Coupons selected</p>
+                    <a class="button is-danger is-small  is-link is-outlined mx-2" @onclick="Clear">@localizer["Clear"]</a>
+                    <p class="is-size-7 is-small mt-1 ml-3">@strCouponsToAddToClient.Count @localizer["CouponsSelected"]</p>
                 </div>
 
             </div>
             <div>
                 <RadzenCheckBox TValue="bool" @bind-Value="@SentEmailCheckBoxValue" />
-                <RadzenLabel Text="Send email" Component="SentEmailCheckBox" />
+                <RadzenLabel Text="@localizer["SendEmail"]" Component="SentEmailCheckBox" />
             </div>
         </div>
     </div>
 
-    <button class="button is-success  is-link is-outlined mx-1" type="submit">Create</button>
+    <button class="button is-success  is-link is-outlined mx-1" type="submit">@localizer["Create"]</button>
     <BackButtonComponent />
 </EditForm>
 
@@ -91,13 +92,13 @@
         if (await clientServices.AddClientAsync(client) == null)
         {
             await ShowNotificationAsync(BuildNotificationMessage(NotificationSeverity.Error, client.Email,
-                                                                "Error. User have not been created", notificationDuration));
+                                                                localizer["ErrorCreatingUser"], notificationDuration));
 
             return;
         }
 
         await ShowNotificationAsync(BuildNotificationMessage(NotificationSeverity.Success, client.Email,
-                                                                "User has been created", notificationDuration * 2));
+                                                                localizer["OkCreatingUser"], notificationDuration * 2));
 
         if (clientCouponList.Count == 0)
         {
@@ -114,13 +115,13 @@
 
         if (SentEmailCheckBoxValue)
         {
-            var messageForm = myModal.Show<SpinnerComponent>($"Sending Email...", options);
+            var messageForm = myModal.Show<SpinnerComponent>(localizer["SendingEmail"], options);
             var result = await messageForm.Result;
 
             if (SendEmailWithHtmTemplate(trcIdResultList) && (bool)result.Data)
             {
                 await ShowNotificationAsync(BuildNotificationMessage(NotificationSeverity.Info,
-                                                                        "Emails", "have been sent", notificationDuration));
+                                                                        localizer["Emails"], localizer["HaveBeenSent"], notificationDuration));
             }
         }
 

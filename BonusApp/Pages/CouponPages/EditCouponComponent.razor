@@ -1,26 +1,27 @@
 ﻿@page "/coupon/edit/{Id:int}"
 @inject CouponServices couponServices
 @inject NavigationManager navManager
+@inject IStringLocalizer<Resource> localizer
 
-<h3>Edit Coupon</h3>
+<h3>@localizer["EditCoupon"]</h3>
 
 @if (coupon != null)
 {
     <EditForm Model="coupon" OnValidSubmit="Update">
         <DataAnnotationsValidator />
         <div class="field">
-            <label class="label">Name</label>
+            <label class="label">@localizer["Name"]</label>
             <div class="control">
                 <InputText class="input" type="text" placeholder="Text input" @bind-Value="@coupon.Name" />
                 <ValidationMessage For="@(()=>coupon.Name)" />
             </div>
-            <label class="label mt-2">Pages</label>
+            <label class="label mt-2">@localizer["Pages"]</label>
             <div class="control">
                 <InputNumber class="input" type="number" placeholder="Text input" @bind-Value="@coupon.Pages" />
                 <ValidationMessage For="@(()=>coupon.Pages)" />
             </div>
         </div>
-        <button class="button is-success  is-link is-outlined" type="submit">Update</button>
+        <button class="button is-success  is-link is-outlined" type="submit">@localizer["Update"]</button>
         <BackButtonComponent />
     </EditForm>
 }

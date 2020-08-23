@@ -1,8 +1,9 @@
 ﻿@page "/clients/edit/{Id:int}"
 @inject ClientServices clientServices
 @inject NavigationManager navManager
+@inject IStringLocalizer<Resource> localizer
 
-<h3>Edit Client</h3>
+<h3>@localizer["EditClient"]</h3>
 
 <EditForm Model="client" OnValidSubmit="Update">
     <DataAnnotationsValidator />
@@ -13,7 +14,7 @@
             <ValidationMessage For="@(()=>client.Email)" />
         </div>
     </div>
-    <button class="button is-success  is-link is-outlined" type="submit">Update</button>
+    <button class="button is-success  is-link is-outlined" type="submit">@localizer["Update"]</button>
     <BackButtonComponent />
 </EditForm>
 

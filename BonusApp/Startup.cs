@@ -4,11 +4,14 @@ using BonusApp.EmailSender;
 using BonusApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Radzen;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace BonusApp
 {
@@ -32,6 +35,8 @@ namespace BonusApp
             {
                 options.UseSqlite("Data Source = ClientBondsDB.db");
             });
+
+            services.AddLocalization();
             services.AddScoped<ClientServices>();
             services.AddScoped<CouponServices>();
             services.AddScoped<ClientCouponServices>();
@@ -58,6 +63,24 @@ namespace BonusApp
             }
 
             app.UseHttpsRedirection();
+
+            // Begin I18N configuration
+            var supportedCultures = new List<CultureInfo>
+            {
+                new CultureInfo("en"),
+                new CultureInfo("es")
+            };
+
+            var options = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            };
+
+            app.UseRequestLocalization(options);
+            // End I18N configuration
+
             app.UseStaticFiles();
 
             app.UseRouting();
