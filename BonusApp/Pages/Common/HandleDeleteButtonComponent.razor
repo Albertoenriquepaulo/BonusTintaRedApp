@@ -1,10 +1,11 @@
 ﻿@inject IModalService myModal
 @inject IJSRuntime JSRuntime
+@inject IStringLocalizer<Resource> localizer
 
 <div style="float: right; ">
     <button class="button @(disabled ? "is-success" : "is-danger") is-success is-small is-link is-outlined" style="text-decoration:none;"
             @onclick="@(() => disabled ? EnableDeleteButton() : DisableDeleteButton())">
-        @(disabled ? "Enable delete" : "Disable delete")
+        @(disabled ? localizer["EnableDelete"] : localizer["DisableDelete"])
     </button>
 </div>
 
@@ -16,7 +17,7 @@
 
     private async Task EnableDeleteButton()
     {
-        var messageForm = myModal.Show<LoginComponent>("Please Sign In");
+        var messageForm = myModal.Show<LoginComponent>(localizer["PleaseSignIn"]);
         var result = await messageForm.Result;
 
         if (result.Cancelled)

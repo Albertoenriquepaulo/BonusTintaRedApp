@@ -2,12 +2,13 @@
 @inject ClientCouponServices clientCouponServices
 @inject IJSRuntime JSRuntime
 @inject IModalService myModal
+@inject IStringLocalizer<Resource> localizer
 
-<h3>Coupon List</h3>
+<h3>@localizer["CouponList"]</h3>
 
 @if (clientCoupons == null || clientCoupons.Count == 0)
 {
-    <h2>No Coupon Issued</h2>
+    <h2>@localizer["NoCouponIssued"]</h2>
     <a href="/" style="text-decoration: none;" class="button is-info  is-link is-outlined">Home</a>
 }
 else
@@ -19,16 +20,16 @@ else
     <RadzenGrid @ref="radzenClientCouponGrid" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
                 AllowSorting="true" Data="@radzenClientCouponList" TItem="RadzenClientCoupon" ColumnWidth="150px" Count="1" RowRender="@RowRender">
         <Columns>
-            <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="TRCId" Title="Coupon Id">
+            <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="TRCId" Title="@localizer["CouponId"]">
                 <FooterTemplate>
-                    Total coupons: <b>@radzenClientCouponGrid.View.Count()</b>
+                    @localizer["TotalCoupons"]: <b>@radzenClientCouponGrid.View.Count()</b>
                 </FooterTemplate>
             </RadzenGridColumn>
-            <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="CouponName" Title="Coupon Type" />
-            <RadzenGridColumn TItem="RadzenClientCoupon" Width="180px" Property="ClientEmail" Title="Client" />
-            <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="CouponPages" Title="Pages" />
-            <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="SpentPages" Title="Printed Pages" />
-            <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="RemainingPages" Title="Remaining Pages" />
+            <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="CouponName" Title="@localizer["CouponType"]" />
+            <RadzenGridColumn TItem="RadzenClientCoupon" Width="180px" Property="ClientEmail" Title="@localizer["Client"]" />
+            <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="CouponPages" Title="@localizer["Pages"]" />
+            <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="SpentPages" Title="@localizer["PrintedPages"]" />
+            <RadzenGridColumn TItem="RadzenClientCoupon" Width="@colWidth" Property="RemainingPages" Title="@localizer["RemainingPages"]" />
             <RadzenGridColumn TItem="RadzenClientCoupon" Property="ClientCoupon" Title="" Filterable="false" Sortable="false">
                 <Template Context="data">
                     @{
@@ -38,7 +39,7 @@ else
                     <a href="@(remainingPages == 0 ? "javascript:function() { return false; }": url[0])"
                        class="button is-success is-small is-link is-outlined" style="text-decoration:none;"
                        disabled=@(remainingPages == 0 ? true: false)>
-                        Set Pages
+                        @localizer["SetPages"]
                     </a>
                     <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration:none;">
                         <span class="oi oi-magnifying-glass"></span>
@@ -76,7 +77,7 @@ else
         {
             return;
         }
-        var messageForm = myModal.Show<ConfirmDeleteComponent>($"Are you sure you want to delete {clientCoupon.TRCId} coupon?");
+        var messageForm = myModal.Show<ConfirmDeleteComponent>(localizer["AreYouSureToDeleteCoupon"] + $" {clientCoupon.TRCId}?");
         var result = await messageForm.Result;
 
         if (result.Cancelled)

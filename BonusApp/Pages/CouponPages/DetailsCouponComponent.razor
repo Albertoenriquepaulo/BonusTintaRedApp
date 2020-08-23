@@ -2,15 +2,17 @@
 @inject CouponServices couponServices
 @inject ClientCouponServices clientCouponServices
 @inject TransactionServices transactionsServices
-<h3>Coupon Details</h3>
+@inject IStringLocalizer<Resource> localizer
+
+<h3>@localizer["CouponDetails"]</h3>
 
 <div class="content">
     <p><strong>Client: </strong>@clientCoupon.Client.Email</p>
     <div class="card mb-3" style="width: 18rem;">
         <div class="card-body">
             <h5 class="card-title">
-                Coupon Id:
-                <a style="text-decoration:underline" data-toggle="tooltip" data-placement="top" title="Click to set pages"
+                @localizer["CouponId"]:
+                <a style="text-decoration:underline" data-toggle="tooltip" data-placement="top" title="@localizer["ClickToSetPages"]"
                    href=@($"couponpurchased/discountpages/{clientCoupon.Id}")>
                     @clientCoupon.TRCId
                 </a>
@@ -19,14 +21,14 @@
                     <PdfDownloadComponent CouponName="@coupon.Name" TRCId="@clientCoupon.TRCId" />
                 }
             </h5>
-            <h6 class="card-subtitle mb-2 text-muted">Coupon Type: @coupon.Name</h6>
-            <h6 class="card-subtitle mb-2 text-muted">Total coupon pages:  @totalCouponPages</h6>
-            <h6 class="card-subtitle mb-2 text-muted">Issued:  @clientCoupon.Date</h6>
-            <p class="card-text has-text-link mb-0 pb-0">Remaining pages: @totalRemainingPages </p>
-            <p class="card-text has-text-danger mt-0 pt-0">Printed pages: @(totalCouponPages - totalRemainingPages) </p>
+            <h6 class="card-subtitle mb-2 text-muted">@localizer["CouponType"]: @coupon.Name</h6>
+            <h6 class="card-subtitle mb-2 text-muted">@localizer["TotalCouponPages"]:  @totalCouponPages</h6>
+            <h6 class="card-subtitle mb-2 text-muted">@localizer["IssuedDate"]:  @clientCoupon.Date</h6>
+            <p class="card-text has-text-link mb-0 pb-0">@localizer["RemainingPages"]: @totalRemainingPages </p>
+            <p class="card-text has-text-danger mt-0 pt-0">@localizer["PrintedPages"]: @(totalCouponPages - totalRemainingPages) </p>
         </div>
     </div>
-    <p class="mb-2 pt-3 has-text-grey-light is-italic">Total Transactions: @transactions.Count</p>
+    <p class="mb-2 pt-3 has-text-grey-light is-italic">@localizer["TotalTransactions"]: @transactions.Count</p>
     @if (transactions.Count != 0)
     {
         <div class="table-container mt-0">
@@ -42,8 +44,8 @@
                         <tr>
                             <td>
                                 <div>
-                                    <p class="is-marginless"><strong>Transaction Date:     </strong>@item.Date</p>
-                                    <p class="is-marginless"><strong>Printed pages: </strong>@item.SpentPages</p>
+                                    <p class="is-marginless"><strong>@localizer["TransactionDate"]:     </strong>@item.Date</p>
+                                    <p class="is-marginless"><strong>@localizer["PrintedPages"]: </strong>@item.SpentPages</p>
                                 </div>
                             </td>
                         </tr>
@@ -59,7 +61,7 @@
         <a href="@(totalRemainingPages == 0 ? "javascript:function() { return false; }": url)"
            class="button is-success is-link is-outlined" style="text-decoration:none;"
            disabled=@(totalRemainingPages == 0 ? true: false)>
-            Set Pages to Discount
+            @localizer["SetPagesToDiscount"]
         </a>
     </p>
     <p class="control">

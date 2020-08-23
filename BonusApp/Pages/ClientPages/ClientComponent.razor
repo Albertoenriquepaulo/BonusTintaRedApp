@@ -2,49 +2,50 @@
 @inject ClientServices clientServices
 @inject IModalService myModal
 @inject IJSRuntime JSRuntime
+@inject IStringLocalizer<Resource> localizer
 
-<h3>Clients List</h3>
+<h3>@localizer["ClientList"]</h3>
 
 @if (clients == null || clients.Count == 0)
 {
-<h2>No client found</h2>
-<a href="clients/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Create Client</a>
+    <h2>@localizer["NoClient"]</h2>
+    <a href="clients/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">@localizer["CreateClient"]</a>
 }
 else
 {
-<a href="clients/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">Create Client</a>
-<HandleDeleteButtonComponent OnAllowButtonStateChange="OnAllowButtonStateChange" />
+    <a href="clients/create" style="text-decoration: none;" class="button is-primary is-link is-outlined is-small mb-3">@localizer["CreateClient"]</a>
+    <HandleDeleteButtonComponent OnAllowButtonStateChange="OnAllowButtonStateChange" />
 
-<RadzenGrid @ref="radzenClientGrid" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
-            AllowSorting="true" Data="@radzenClientList" TItem="RadzenClient" ColumnWidth="150px">
-    <Columns>
-        <RadzenGridColumn TItem="RadzenClient" Property="Client.Email" Title="Client">
-            <FooterTemplate>
-                Total clients: <b>@radzenClientGrid.View.Count()</b>
-            </FooterTemplate>
-        </RadzenGridColumn>
-        <RadzenGridColumn TItem="RadzenClient" Property="Id" Title="" Filterable="false" Sortable="false">
-            <Template Context="data">
-                @{
+    <RadzenGrid @ref="radzenClientGrid" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
+                AllowSorting="true" Data="@radzenClientList" TItem="RadzenClient" ColumnWidth="150px">
+        <Columns>
+            <RadzenGridColumn TItem="RadzenClient" Property="Client.Email" Title="@localizer["Client"]">
+                <FooterTemplate>
+                    @localizer["TotalClients"]: <b>@radzenClientGrid.View.Count()</b>
+                </FooterTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RadzenClient" Property="Id" Title="" Filterable="false" Sortable="false">
+                <Template Context="data">
+                    @{
                         url[0] = $"clients/edit/{data.Client.Id}";
                         url[1] = $"clients/details/{data.Client.Id}";
-                }
-                <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration: none;">Add Coupon</a>
-                <a href="@url[0]" class="button is-success is-small is-link is-outlined" style="text-decoration: none;">
-                    <span class="oi oi-pencil"></span> @*EDIT*@
-                </a>
-                <a href="@url[1]" class="button is-info is-small is-link is-outlined" style="text-decoration: none;">
-                    <span class="oi oi-magnifying-glass"></span> @*DETAILS*@
-                </a>
-                <a class="button is-danger is-small is-link is-outlined" style="text-decoration: none;"
-                   @onclick="@(()=>HandleDelete(data.Client))" disabled=@disabled>
-                    <span class="oi oi-trash"></span> @*DELETE*@
-                </a>
-            </Template>
-        </RadzenGridColumn>
-    </Columns>
-</RadzenGrid>
-<BackButtonComponent />
+                    }
+                    <a href="@url[1]" class="button is-primary is-small is-link is-outlined" style="text-decoration: none;">@localizer["AddCoupon"]</a>
+                    <a href="@url[0]" class="button is-success is-small is-link is-outlined" style="text-decoration: none;">
+                        <span class="oi oi-pencil"></span> @*EDIT*@
+                    </a>
+                    <a href="@url[1]" class="button is-info is-small is-link is-outlined" style="text-decoration: none;">
+                        <span class="oi oi-magnifying-glass"></span> @*DETAILS*@
+                    </a>
+                    <a class="button is-danger is-small is-link is-outlined" style="text-decoration: none;"
+                       @onclick="@(()=>HandleDelete(data.Client))" disabled=@disabled>
+                        <span class="oi oi-trash"></span> @*DELETE*@
+                    </a>
+                </Template>
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+    <BackButtonComponent />
 }
 
 @code {
@@ -67,7 +68,7 @@ else
         {
             return;
         }
-        var messageForm = myModal.Show<ConfirmDeleteComponent>($"Are you sure you want to delete the {client.Email} Client?");
+        var messageForm = myModal.Show<ConfirmDeleteComponent>(localizer["AreYouSureToDelete"] + $" {client.Email}?");
         var result = await messageForm.Result;
 
         if (result.Cancelled)

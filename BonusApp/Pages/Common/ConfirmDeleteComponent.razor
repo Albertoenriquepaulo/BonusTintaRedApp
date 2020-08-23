@@ -1,11 +1,12 @@
 ﻿@inject IModalService myModal
+@inject IStringLocalizer<Resource> localizer
 
 <div class="pt-2">
 
     <p>@Message</p>
 
-    <button @onclick="SubmitForm" class="button is-danger is-link is-outlined">Yes</button>
-    <button @onclick="Cancel" class="button is-primary is-link is-outlined">Cancel</button>
+    <button @onclick="SubmitForm" class="button is-danger is-link is-outlined">@localizer["Yes"]</button>
+    <button @onclick="Cancel" class="button is-primary is-link is-outlined">@localizer["Cancel"]</button>
 </div>
 
 @code {

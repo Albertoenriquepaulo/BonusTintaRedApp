@@ -5,22 +5,23 @@
 @inject NavigationManager navManager
 @inject RefreshServices refreshServices
 @inject EmailHelper emailHelper
+@inject IStringLocalizer<Resource> localizer
 
 @inject NotificationService notificationService
 
 <div>
     <div class="field is-horizontal mb-0">
-        <label class="label" for="CouponInput">Coupon:</label>
+        <label class="label" for="CouponInput">@localizer["Coupon"]:</label>
         <div class="control">
             <select name="coupon" id="CouponInput" @onchange="((arg)=> selectedValue = Convert.ToInt32(arg.Value))">
-                <option value="0" selected=@selected>Select coupon</option>
+                <option value="0" selected=@selected>@localizer["SelectCoupon"]</option>
                 @foreach (var coupon in coupons)
                 {
                     <option value="@coupon.Id">@coupon.Name</option>
                 }
             </select>
         </div>
-        <a class="button is-success is-small is-link is-outlined mx-2" @onclick="AddCouponToSelectBoxAsync">Add</a>
+        <a class="button is-success is-small is-link is-outlined mx-2" @onclick="AddCouponToSelectBoxAsync">@localizer["Add"]</a>
         <select name="coupon-selected mb-0" size="5" style="width:100px;" multiple>
             @foreach (var coupon in strCouponsToAddToClient)
             {
@@ -28,14 +29,14 @@
             }
         </select>
         <div>
-            <a class="button is-danger is-small  is-link is-outlined mx-2" @onclick="Clear">Clear</a>
-            <p class="is-size-7 is-small mt-1 ml-3">@strCouponsToAddToClient.Count Coupons selected</p>
+            <a class="button is-danger is-small  is-link is-outlined mx-2" @onclick="Clear">@localizer["Clear"]</a>
+            <p class="is-size-7 is-small mt-1 ml-3">@strCouponsToAddToClient.Count @localizer["CouponsSelected"]</p>
         </div>
     </div>
 
-    <button class="button is-success is-link is-outlined mx-1 mt-0" @onclick="AddCouponAsync" disabled=@DisabledAddCouponButton()>Add Coupon</button>
+    <button class="button is-success is-link is-outlined mx-1 mt-0" @onclick="AddCouponAsync" disabled=@DisabledAddCouponButton()>@localizer["AddCoupon"]</button>
     <RadzenCheckBox TValue="bool" @bind-Value="@SendEmailCheckBoxValue" />
-    <RadzenLabel Text="Send email" Component="SentEmailCheckBox" />
+    <RadzenLabel Text="@localizer["SendEmail"]" Component="SentEmailCheckBox" />
 </div>
 
 @code {
@@ -91,7 +92,7 @@
         if (clientCouponServices.AddListClientCouponAsyncWithSQL(clientCouponList))
         {
             await ShowNotificationAsync(BuildNotificationMessage(NotificationSeverity.Success,
-                                                                    client.Email, "Coupon has been added", notificationDuration));
+                                                                    client.Email, localizer["OkAddingCoupon"], notificationDuration));
 
             var options = new ModalOptions()
             {
@@ -101,13 +102,13 @@
 
             if (SendEmailCheckBoxValue)
             {
-                var messageForm = myModal.Show<SpinnerComponent>($"Sending Email...", options);
+                var messageForm = myModal.Show<SpinnerComponent>(localizer["SendingEmail"], options);
                 var result = await messageForm.Result;
             }
         }
         else
         {
-            var messageForm = myModal.Show<SpinnerComponent>($"ERROR: The coupons could not have been added.");
+            var messageForm = myModal.Show<SpinnerComponent>(localizer["ErrorAddingCoupon"]);
             var result = await messageForm.Result;
         }
 
@@ -122,7 +123,7 @@
         if (SendEmailCheckBoxValue && SendEmailWithHtmTemplate(trcIdResultList))//if (SendEmailWithVariousAttachment(trcIdResultList))
         {
             await ShowNotificationAsync(BuildNotificationMessage(NotificationSeverity.Success,
-                                                                    "Emails", "have been sent", notificationDuration));
+                                                                    localizer["Emails"], localizer["HaveBeenSent"], notificationDuration));
         }
 
         Clear();
