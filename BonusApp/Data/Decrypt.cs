@@ -16,8 +16,16 @@ namespace BonusApp.Data
 
         public string GetBase64DecodeString()
         {
-            var base64EncodedBytes = System.Convert.FromBase64String(Base64EncodedData);
-            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+            try
+            {
+                var base64EncodedBytes = System.Convert.FromBase64String(Base64EncodedData);
+                return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+
         }
     }
 }

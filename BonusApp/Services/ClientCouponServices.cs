@@ -51,7 +51,7 @@ namespace BonusApp.Data
 
         public bool AddListClientCouponAsyncWithSQL(List<ClientCoupon> clientCoupons)
         {
-            const string connection = "Data Source=ClientBondsDB.db;";
+            const string connection = "Data Source=ClientCouponsDB.db;";
             string stringQuery;
 
             SqliteConnection sqlite_conn = new SqliteConnection(connection);

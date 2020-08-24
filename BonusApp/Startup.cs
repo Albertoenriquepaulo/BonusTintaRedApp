@@ -2,6 +2,8 @@ using Blazored.Modal;
 using BonusApp.Data;
 using BonusApp.EmailSender;
 using BonusApp.Services;
+using ElectronNET.API;
+using ElectronNET.API.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -12,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Radzen;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace BonusApp
 {
@@ -33,7 +36,7 @@ namespace BonusApp
 
             services.AddDbContext<CouponAppDbContext>(options =>
             {
-                options.UseSqlite("Data Source = ClientBondsDB.db");
+                options.UseSqlite("Data Source = ClientCouponsDB.db");
             });
 
             services.AddLocalization();
@@ -90,6 +93,15 @@ namespace BonusApp
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+            var opt = new BrowserWindowOptions
+            {
+                Icon = @"resources\bin\pdfs\templates\favicon.ico",
+                AutoHideMenuBar = true,
+                Title = "Tinta Red A Coruña - Coupon Control",
+            };
+
+            Task.Run(async () => await Electron.WindowManager.CreateWindowAsync(opt));
         }
     }
 }
