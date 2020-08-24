@@ -17,7 +17,7 @@ else
     <RadzenGrid @ref="radzenCouponGrid" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="15"
                 AllowSorting="true" Data="@radzenCouponList" TItem="RadzenCoupon" ColumnWidth="150px">
         <Columns>
-            <RadzenGridColumn TItem="RadzenCoupon" Property="Coupon.Name" Title="@localizer["Name"]">
+            <RadzenGridColumn TItem="RadzenCoupon" Property="Coupon.Name" Title="@localizer["CouponType"]">
                 <FooterTemplate>
                     @localizer["TotalCoupons"]: <b>@radzenCouponGrid.View.Count()</b>
                 </FooterTemplate>
