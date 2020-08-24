@@ -216,6 +216,9 @@
   <data name="EditCoupon" xml:space="preserve">
     <value>Edit Coupon</value>
   </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
   <data name="Emails" xml:space="preserve">
     <value>Emails</value>
   </data>
@@ -269,6 +272,9 @@
   </data>
   <data name="Pages" xml:space="preserve">
     <value>Pages</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
   </data>
   <data name="PasswordError" xml:space="preserve">
     <value>Password Incorrect</value>

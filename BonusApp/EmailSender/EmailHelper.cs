@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using BonusApp.Data;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,85 +25,9 @@ namespace BonusApp.EmailSender
                 Host = _configuration["Gmail:Host"],
                 Port = int.Parse(_configuration["Gmail:Port"]),
                 UserName = _configuration["Gmail:UserName"],
-                Password = _configuration["Gmail:Password"],
-                Enable = bool.Parse(_configuration["Gmail:SMTP:starttls:enable"]),
+                Password = (new Decrypt(_configuration["Gmail:Password"])).GetBase64DecodeString(),
+                Enable = bool.Parse(_configuration["Gmail:SMTP:starttls:enable"])
             };
-        }
-
-        public bool SendStreamByEmail(string to, string subject, string body, string attachmentFileName, MemoryStream stream)
-        {
-            if (stream == null)
-            {
-                return false;
-            }
-
-            try
-            {
-                var smtpClient = new SmtpClient
-                {
-                    Host = GmailData.Host,
-                    Port = GmailData.Port,
-                    EnableSsl = GmailData.Enable,
-                    Credentials = new NetworkCredential(GmailData.UserName, GmailData.Password)
-                };
-
-                var mailMessage = new MailMessage(GmailData.UserName, to);
-                mailMessage.Subject = subject;
-                mailMessage.Body = body;
-
-                stream.Position = 0;
-                ContentType contentType = new ContentType(MediaTypeNames.Application.Pdf);
-                Attachment reportAttachment = new Attachment(stream, contentType);
-                reportAttachment.ContentDisposition.FileName = $"{attachmentFileName}.pdf";
-                mailMessage.Attachments.Add(reportAttachment);
-                smtpClient.Send(mailMessage);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                string message = ex.Message;
-                return false;
-            }
-        }
-        public bool SendStreamListByEmail(string to, string subject, string body, List<string> attachmentFileName, List<MemoryStream> streamList)
-        {
-            if (streamList == null || streamList.Count == 0)
-            {
-                return false;
-            }
-
-            try
-            {
-                var smtpClient = new SmtpClient
-                {
-                    Host = GmailData.Host,
-                    Port = GmailData.Port,
-                    EnableSsl = GmailData.Enable,
-                    Credentials = new NetworkCredential(GmailData.UserName, GmailData.Password)
-                };
-
-                var mailMessage = new MailMessage(GmailData.UserName, to);
-                mailMessage.Subject = subject;
-                mailMessage.Body = body;
-                ContentType contentType = new ContentType(MediaTypeNames.Application.Pdf);
-                int i = 0;
-                foreach (MemoryStream stream in streamList)
-                {
-                    stream.Position = 0;
-                    Attachment reportAttachment = new Attachment(stream, contentType);
-                    reportAttachment.ContentDisposition.FileName = $"{attachmentFileName[i++]}.pdf";
-                    mailMessage.Attachments.Add(reportAttachment);
-                }
-                smtpClient.Send(mailMessage);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                string message = ex.Message;
-                return false;
-            }
         }
         public bool SendHtmTemplateListByEmail(string to, List<string> emailSubjectList, List<EmailBody> emailBodies)
         {
@@ -156,7 +81,6 @@ namespace BonusApp.EmailSender
         {
             return GmailData.UserName;
         }
-
         public Attachment IncludeImageInlineAttachment(string path, string imageNameInHtml)
         {
             Attachment inlineLogo;
@@ -173,6 +97,11 @@ namespace BonusApp.EmailSender
                 return null;
             }
             return inlineLogo;
+        }
+        private string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
     }
 }

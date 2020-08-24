@@ -14,7 +14,7 @@
     <div class="field">
         <label class="label">@localizer["Email"]</label>
         <div class="control">
-            <InputText class="input" type="text" placeholder="Client email" @bind-Value="@client.Email" />
+            <InputText class="input" type="text" placeholder="@(localizer["Client"] + " " + localizer["Email"])" @bind-Value="@client.Email" />
             <ValidationMessage For="@(()=>client.Email)" />
         </div>
     </div>
@@ -22,10 +22,10 @@
     <div class="card mb-3" style="width: 33rem;">
         <div class="card-body is-vcentered is-centered">
             <div class="field is-horizontal mb-0 pb-0">
-                <label class="label mx-1" for="CouponInput">Coupon</label>
+                <label class="label mx-1" for="CouponInput">@localizer["Coupon"]</label>
                 <div class="control">
                     <select name="coupon" id="CouponInput" @onchange="((arg)=> selectedValue = Convert.ToInt32(arg.Value))">
-                        <option value="0">Select coupon</option>
+                        <option value="0">@localizer["SelectCoupon"]</option>
                         @foreach (var coupon in coupons)
                         {
                             <option value="@coupon.Id">@coupon.Name</option>
