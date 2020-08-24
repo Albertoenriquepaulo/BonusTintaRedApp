@@ -1,0 +1,38 @@
+﻿@inject NavigationManager NavigationManager
+
+<div class="d-flex justify-content-end mt-2">
+    <select @onchange="OnSelected">
+        <option value="en-US" selected="@selectedEn">English</option>
+        <option value="es-ES" selected="@selectedSp">Spanish</option>
+    </select>
+</div>
+
+@code {
+    private bool selectedSp;
+    private bool selectedEn;
+    protected override void OnInitialized()
+    {
+        if (CultureInfo.CurrentCulture.Name == "es")
+        {
+            selectedSp = true;
+            selectedEn = false;
+        }
+        else
+        {
+            selectedSp = false;
+            selectedEn = true;
+        }
+        base.OnInitialized();
+    }
+
+    private void OnSelected(ChangeEventArgs e)
+    {
+        var culture = (string)e.Value;
+        var uri = new Uri(NavigationManager.Uri)
+            .GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped);
+        var query = $"?culture={Uri.EscapeDataString(culture)}&" +
+            $"redirectUri={Uri.EscapeDataString(uri)}";
+
+        NavigationManager.NavigateTo("/Culture/SetCulture" + query, forceLoad: true);
+    }
+}
